@@ -4,8 +4,9 @@ import { database, ref, onValue, update } from "./firebase-config.js";
 // Get the initial last reading date and time
 const lastReadingRef = ref(database, 'GreenHouse Raiwind/ESP1/ESP_20240622030452/data_time');
 onValue(lastReadingRef, (snapshot) => {
+  console.log("Snapshot value (data_time):", snapshot.val()); // Debugging
   const data = snapshot.val();
-  if (data && data.timestamp) { // Assuming 'timestamp' is the field holding the date/time
+  if (data && data.timestamp) {
     const lastReadingTime = new Date(data.timestamp);
     document.getElementById('last-reading').innerText = lastReadingTime.toLocaleString('en-US', {
       hour: 'numeric',
@@ -59,6 +60,7 @@ const humidityGauge = new JustGage({
 
 // Function to update gauges and last reading from Firebase
 function updateData(snapshot) {
+  console.log("Snapshot value (ESP data):", snapshot.val()); // Debugging
   const data = snapshot.val();
   if (data) {
     soilMoistureGauge.refresh(data.soilMoisture || 0);
