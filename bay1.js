@@ -19,6 +19,7 @@ onValue(lastReadingRef, (snapshot) => {
     });
   } else {
     console.log("No data or lastReading field not found.");
+    document.getElementById('last-reading').innerText = "Data not available"; // Display a message if no data found
   }
 });
 
