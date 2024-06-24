@@ -1,22 +1,27 @@
-const firebaseConfig = {
-  apiKey: "AIzaSyAlcdyemR4pi-ImLUurDmSvZNToqoosvfY",
-  "type": "service_account",
-  "project_id": "test-a85e5",
-  "private_key_id": "cd9d6c02b1de5d46ca6cb9103c8a424df43ff711",
-  "private_key": "-----BEGIN PRIVATE KEY-----\nMIIEvQIBADANBgkqhkiG9w0BAQEFAASCBKcwggSjAgEAAoIBAQDCvI2VQ3WkmXso\n6L5Ctdl6KD5OWekZVvy1VuCFSWArT/qh10PPaUfmb4S92uIk+a8YB6z3Jd4vTbz6\nCZ4rqa8oS/BOYt3cBbYLSXdlDZTbNAQZkft4HH7vDYLa2pw0AC8hm6lyPlRwJloM\nSj8wttltcgtnTvQUEYP+N4dCVCddMbhn5+JeIROZwIiMMl7JIwFoKIy/tv5jM0KC\nLtxluOE/Kl88o2OLMSThGTke05GDRAd0x/DUQxx0+jb7susXksWQFoTiilloPHgd\nAR34WTCvNICA3rWO8N+kssz8IX3xliGjjvcPcEi4ElZot1eWhRfS5QeHdCzo7tu9\npTZSUA71AgMBAAECggEAFrhVg332ppDioev/sLxTRpGV7WHHlLWFr+mWMe7U6dC/\nwuyg5HzZzuyhbd4xBtPbxh+1IjO4l8fH3dtL6Te3sCml/JtD28UNz4TPiYp7XNTV\nip8x2fpnI+BtbTfWxClmVlM5QpM7mkcbN/Zcp4QZ249T/cZkK0g84GbdoNM9MX3k\ns9epMWiFPHA11/xHNRKWoYoro2uZGyWdN6lFEGq1AgtIf8OOddmsM6j3VYPpfCvv\n+joHWPkEliqLb9Kk37RvlRySPauoGFhQS44MxIuBkE+yHNXtopea2KXUzjSNDadE\nQ5wCZg0c18JA8x8Z4yN/0x+y5XIk6eg9G8ZtFEZxcQKBgQDjw4CYxK67HoQoUx9L\nMnOoDCWd+w1vtNhtSoiNOMbL9Cmf6XmAx591arAG+pUsYAwA+xbjfLLpkB2AtNP4\nUUPAKSdC6f8FDunQESm6y721kjnuoRkJhRhGvk49ctGtUq8aGWAwFI7S1y9tge2c\ncikKVb/ZKdQKId7pHdT2uWSlRQKBgQDa4N+um46hvO9HFLgR9iC7ccwRqQIHUdlr\nLxQ+Qv3ngAJtpc7rlK8BEYMNJXL8B/5TOUzTa7kX3FhpF5GTp0DoaArtBdkJgNdc\nJF749Ez/wrLKTevoXpxPM3V6byBhlZNoCN0X0QnB+95OvrGGPCBKkeCSEvZ2KLHR\nIGkomQ+l8QKBgEzn6Zcr6lgSgMtg7dMlUPowR89lQu8yIFYe8abFwhKB+kAdxMIg\nJY6vHIrut8oJEGSQY/UiWQMWf2/DH0PcpMTQ4InumwapN3fjI7UIMKGLo3YY/WxC\nfaT9g0uqZnRg0/E7GkiB2IwGzuPqGEJYJdVwiNwaDJfzQeJzCULZ7MsFAoGBAJTw\nuMVkbSZ6HojL/IWcaqGiyi6qRwscE0rwemHzzDsfzIc4cRm1z3B2rirf9OKzvch8\nEV88ynMGKdM5ioJjKbP8OJMZi5r/5Yx543adJ1hS8L7hT0qMNuleJu7td6dv1SLS\nBUETqgQqlBgZg0vI1mBn69z6smOtRXL9DxHlNdTBAoGAUT5pLbNEcwrcy2Td4mT3\nUl/cv7wi1MKoux4P2zwxRICuth3imUXE+LCm6RxA4UCC2jNbgG9lX4zdu+gMTZDd\nc6KF8769tbeZvLVCx6QQ7Uo1Q6qFMtlEBavyRfPQkVQzkJ1lY3aADSI3u8uV2BqI\nhmfRkUn4caSeTcojVU5a9nA=\n-----END PRIVATE KEY-----\n",
-  "client_email": "firebase-adminsdk-icsnu@test-a85e5.iam.gserviceaccount.com",
-  "client_id": "108807891615257943103",
-  "auth_uri": "https://accounts.google.com/o/oauth2/auth",
-  "token_uri": "https://oauth2.googleapis.com/token",
-  "auth_provider_x509_cert_url": "https://www.googleapis.com/oauth2/v1/certs",
-  "client_x509_cert_url": "https://www.googleapis.com/robot/v1/metadata/x509/firebase-adminsdk-icsnu%40test-a85e5.iam.gserviceaccount.com",
-  "universe_domain": "googleapis.com"
-}
+<script type="module">
+  // Import the functions you need from the SDKs you need
+  import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+  import { getAnalytics } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-analytics.js";
+  // TODO: Add SDKs for Firebase products that you want to use
+  // https://firebase.google.com/docs/web/setup#available-libraries
 
+  // Your web app's Firebase configuration
+  // For Firebase JS SDK v7.20.0 and later, measurementId is optional
+  const firebaseConfig = {
+    apiKey: "AIzaSyAmVSOm8g6p4F3ZY4jxIEUTQH_oFllo1hg",
+    authDomain: "greenhouse-raiwind.firebaseapp.com",
+    databaseURL: "https://greenhouse-raiwind-default-rtdb.firebaseio.com",
+    projectId: "greenhouse-raiwind",
+    storageBucket: "greenhouse-raiwind.appspot.com",
+    messagingSenderId: "338760023791",
+    appId: "1:338760023791:web:667a022e8b69459eb2651a",
+    measurementId: "G-CPD0XFLYN5"
+  };
 
-// Initialize Firebase
-const app = initializeApp(firebaseConfig);
-const analytics = getAnalytics(app);
+  // Initialize Firebase
+  const app = initializeApp(firebaseConfig);
+  const analytics = getAnalytics(app);
+</script>
 
     // Initialize Firebase
     firebase.initializeApp(firebaseConfig);
