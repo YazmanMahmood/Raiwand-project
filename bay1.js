@@ -4,9 +4,11 @@ import { database, ref, onValue, update } from "./firebase-config.js";
 // Get the initial last reading date and time
 const lastReadingRef = ref(database, 'GreenHouse Raiwind/ESP1/ESP_20240622030452/data_time');
 onValue(lastReadingRef, (snapshot) => {
+  console.log("Snapshot value:", snapshot.val()); // Debugging
   const data = snapshot.val();
   if (data && data.lastReading) {
     const lastReadingTime = new Date(data.lastReading);
+    console.log("Last reading time:", lastReadingTime); // Debugging
     document.getElementById('last-reading').innerText = lastReadingTime.toLocaleString('en-US', {
       hour: 'numeric',
       minute: 'numeric',
@@ -15,6 +17,8 @@ onValue(lastReadingRef, (snapshot) => {
       month: 'long',
       year: 'numeric'
     });
+  } else {
+    console.log("No data or lastReading field not found.");
   }
 });
 
@@ -57,24 +61,12 @@ const humidityGauge = new JustGage({
 
 // Function to update gauges and last reading from Firebase
 function updateData(snapshot) {
+  console.log("Snapshot value (updateData):", snapshot.val()); // Debugging
   const data = snapshot.val();
   if (data) {
     soilMoistureGauge.refresh(data.soilMoisture || 0);
     temperatureGauge.refresh(data.temperature || 0);
     humidityGauge.refresh(data.humidity || 0);
-
-    // Update last reading time
-    if (data.lastReading) {
-      const lastReadingTime = new Date(data.lastReading);
-      document.getElementById('last-reading').innerText = lastReadingTime.toLocaleString('en-US', {
-        hour: 'numeric',
-        minute: 'numeric',
-        hour12: true,
-        day: 'numeric',
-        month: 'long',
-        year: 'numeric'
-      });
-    }
   }
 }
 
