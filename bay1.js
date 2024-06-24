@@ -1,6 +1,16 @@
 // Import Firebase database functions
 import { database, ref, onValue, update } from "./firebase-config.js";
 
+// Function to update gauges and last reading from Firebase
+function updateData(snapshot) {
+  const data = snapshot.val();
+  if (data) {
+    soilMoistureGauge.refresh(data.soilMoisture || 0);
+    temperatureGauge.refresh(data.temperature || 0);
+    humidityGauge.refresh(data.humidity || 0);
+  }
+}
+
 // Get the initial last reading date and time
 const lastReadingRef = ref(database, 'GreenHouse Raiwind/ESP1/ESP_20240622030452/data_time');
 onValue(lastReadingRef, (snapshot) => {
@@ -54,16 +64,6 @@ const humidityGauge = new JustGage({
   gaugeWidthScale: 0.6,
   levelColors: ["#00ff00", "#ff0000"]
 });
-
-// Function to update gauges and last reading from Firebase
-function updateData(snapshot) {
-  const data = snapshot.val();
-  if (data) {
-    soilMoistureGauge.refresh(data.soilMoisture || 0);
-    temperatureGauge.refresh(data.temperature || 0);
-    humidityGauge.refresh(data.humidity || 0);
-  }
-}
 
 // Listen for changes in Firebase
 const espDataRef = ref(database, 'GreenHouse Raiwind/ESP1/ESP_20240622030452');
