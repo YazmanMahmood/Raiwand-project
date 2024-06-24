@@ -1,19 +1,4 @@
 document.addEventListener('DOMContentLoaded', () => {
-    // Get the current date and time
-    const now = new Date();
-    const formattedDate = now.toLocaleString('en-US', {
-        hour: 'numeric',
-        minute: 'numeric',
-        hour12: true,
-        day: 'numeric',
-        month: 'long',
-        year: 'numeric'
-    });
-
-    // Set the last reading date and time
-    document.getElementById('last-reading').innerText = formattedDate;
-
-    // Chart.js setup
     const summaryCtx = document.getElementById('summary-chart').getContext('2d');
     const summaryChart = new Chart(summaryCtx, {
         type: 'line',
@@ -21,7 +6,7 @@ document.addEventListener('DOMContentLoaded', () => {
             labels: ['09:00', '11:00', '13:00', '15:00', '17:00', '19:00', '21:00'],
             datasets: [{
                 label: 'Temperature',
-                data: [30, 32, 31, 29, 28, 27, 25],
+                data: [30, 25, 28, 26, 27, 29, 32],
                 backgroundColor: 'rgba(26, 188, 156, 0.2)',
                 borderColor: 'rgba(26, 188, 156, 1)',
                 borderWidth: 2,
@@ -38,8 +23,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 },
                 y: {
                     beginAtZero: true,
-                    min: 0,  // Set minimum value for y-axis
-                    max: 50  // Set maximum value for y-axis
+                    max: 50
                 }
             }
         }
@@ -81,4 +65,19 @@ document.addEventListener('DOMContentLoaded', () => {
         gaugeWidthScale: 0.6,
         levelColors: ["#00ff00", "#ff0000"]
     });
+
+    // Update last reading date
+    const now = new Date();
+    document.getElementById('last-reading').innerText = `${now.toLocaleTimeString()}, ${now.toLocaleDateString()}`;
 });
+
+function toggleWater() {
+    const button = document.getElementById('water-button');
+    if (button.innerText === 'Turn Water On') {
+        button.innerText = 'Turn Water Off';
+        console.log('Water is now ON');
+    } else {
+        button.innerText = 'Turn Water On';
+        console.log('Water is now OFF');
+    }
+}
