@@ -5,8 +5,8 @@ import { database, ref, onValue, update } from "./firebase-config.js";
 const lastReadingRef = ref(database, 'GreenHouse Raiwind/ESP1/ESP_20240622030452/data_time');
 onValue(lastReadingRef, (snapshot) => {
   const data = snapshot.val();
-  if (data && data.lastReading) {
-    const lastReadingTime = new Date(data.lastReading);
+  if (data && data.timestamp) { // Assuming 'timestamp' is the field holding the date/time
+    const lastReadingTime = new Date(data.timestamp);
     document.getElementById('last-reading').innerText = lastReadingTime.toLocaleString('en-US', {
       hour: 'numeric',
       minute: 'numeric',
