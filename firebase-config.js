@@ -16,4 +16,8 @@
 
   // Initialize Firebase
   const app = initializeApp(firebaseConfig);
-  const analytics = getAnalytics(app);
+const database = getDatabase(app); // Get the database instance
+
+export { database, ref, onValue, update };
+
+
