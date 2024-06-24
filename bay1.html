@@ -1,64 +1,59 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Greenhouse Monitoring - Bay 1</title>
-    <link rel="stylesheet" href="bay1.css">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Greenhouse Monitoring - Bay 1</title>
+  <link rel="stylesheet" href="bay1.css">
 </head>
 <body>
-    <!-- Sidebar and main content -->
-    <div class="sidebar">
-        <!-- Sidebar content -->
-        <!-- Replace with your sidebar content -->
-        <div class="sidebar-header">
-            <h2>SmartSpace Agri</h2>
-        </div>
-        <a href="#">Home</a>
-        <a href="#">Temperature</a>
-        <a href="#">Humidity</a>
-        <a href="#">Soil Moisture</a>
-        <a href="#">Reports</a>
-        <a href="#">Controls</a>
-        <a href="#">Settings</a>
+  <div class="sidebar">
+    <div class="sidebar-header">
+      <h2>SmartSpace Agri</h2>
     </div>
-    <div class="main-content">
-        <!-- Main content -->
-        <!-- Replace with your main content -->
-        <div class="header">
-            <h1>Bay 1</h1>
-            <p>Last Reading as of <span id="last-reading"></span></p>
-            <div class="water-control">
-                <button id="water-button" onclick="toggleWater()">Turn Water On</button>
-            </div>
-        </div>
-        <div class="widgets">
-            <div class="widget">
-                <h3>Soil Moisture</h3>
-                <div id="soil-moisture-gauge" class="gauge"></div>
-            </div>
-            <div class="widget">
-                <h3>Temperature</h3>
-                <div id="temperature-gauge" class="gauge"></div>
-            </div>
-            <div class="widget">
-                <h3>Humidity</h3>
-                <div id="humidity-gauge" class="gauge"></div>
-            </div>
-        </div>
-        <div class="summary">
-            <h3>Daily Summary</h3>
-            <canvas id="summary-chart"></canvas>
-        </div>
-        <div class="last-logged">
-            <h3>Last Logged</h3>
-            <ul>
-                <li>Harold - 6 hours ago</li>
-                <li>Hanzo Miguel - 7 hours ago</li>
-                <li>Hendrix Michael - 12 hours ago</li>
-            </ul>
-        </div>
+    <a href="#">Home</a>
+    <a href="#">Temperature</a>
+    <a href="#">Humidity</a>
+    <a href="#">Soil Moisture</a>
+    <a href="#">Reports</a>
+    <a href="#">Controls</a>
+    <a href="#">Settings</a>
+  </div>
+  <div class="main-content">
+    <div class="header">
+      <h1>Bay 1</h1>
+      <p>Last Reading as of <span id="last-reading">Loading...</span></p>
+      <div class="water-control">
+        <button id="water-button" onclick="toggleWater()">Turn Water On</button>
+      </div>
     </div>
-    <script src="bay1.js"></script>
+    <div class="widgets">
+      <div class="widget">
+        <h3>Soil Moisture</h3>
+        <div id="soil-moisture-gauge" class="gauge"></div>
+      </div>
+      <div class="widget">
+        <h3>Temperature</h3>
+        <div id="temperature-gauge" class="gauge"></div>
+      </div>
+      <div class="widget">
+        <h3>Humidity</h3>
+        <div id="humidity-gauge" class="gauge"></div>
+      </div>
+    </div>
+    <div class="summary">
+      <h3>Daily Summary</h3>
+      <canvas id="summary-chart"></canvas>
+    </div>
+    <div class="last-logged">
+      <h3>Last Logged</h3>
+      <ul>
+        <li>Harold - 6 hours ago</li>
+        <li>Hanzo Miguel - 7 hours ago</li>
+        <li>Hendrix Michael - 12 hours ago</li>
+      </ul>
+    </div>
+  </div>
+  <script src="bay1.js"></script>
 </body>
 </html>
