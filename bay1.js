@@ -131,3 +131,11 @@ function toggleWater() {
     // Update water state in Firebase
     firebase.database().ref('bay1/water').set(isWaterOn);
 }
+firebase.initializeApp(firebaseConfig);
+const database = firebase.database();
+
+// Call updateData initially to display last reading on load
+database.ref('bay1').once('value', updateData);
+
+// Listen for future changes as well
+database.ref('bay1').on('value', updateData);
