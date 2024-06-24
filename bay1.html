@@ -45,16 +45,24 @@
       <h3>Daily Summary</h3>
       <canvas id="summary-chart"></canvas>
     </div>
-    <div class="last-logged">
-      <h3>Last Logged</h3>
-      <ul>
-        <li>Harold - 6 hours ago</li>
-        <li>Hanzo Miguel - 7 hours ago</li>
-        <li>Hendrix Michael - 12 hours ago</li>
-      </ul>
-    </div>
   </div>
-const firebaseConfig = {
+
+  <!-- Include Firebase SDKs -->
+  <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-database.js"></script>
+  <!-- Include Chart.js and JustGage libraries -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/justgage"></script>
+ <script type="module">
+  // Import the functions you need from the SDKs you need
+  import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+  import { getAnalytics } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-analytics.js";
+  // TODO: Add SDKs for Firebase products that you want to use
+  // https://firebase.google.com/docs/web/setup#available-libraries
+
+  // Your web app's Firebase configuration
+  // For Firebase JS SDK v7.20.0 and later, measurementId is optional
+  const firebaseConfig = {
     apiKey: "AIzaSyAmVSOm8g6p4F3ZY4jxIEUTQH_oFllo1hg",
     authDomain: "greenhouse-raiwind.firebaseapp.com",
     databaseURL: "https://greenhouse-raiwind-default-rtdb.firebaseio.com",
@@ -69,5 +77,6 @@ const firebaseConfig = {
   const app = initializeApp(firebaseConfig);
   const analytics = getAnalytics(app);
 </script>
+  <script src="bay1.js"></script>
 </body>
 </html>
