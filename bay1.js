@@ -1,5 +1,5 @@
 // Import Firebase database functions
-import { database, ref, onValue, update } from "./firebase-config.js";
+import { database, ref, onValue, update } from './firebase-config.js';
 
 // Function to update gauges and last reading from Firebase
 function updateData(snapshot) {
@@ -30,39 +30,39 @@ onValue(lastReadingRef, (snapshot) => {
 
 // Initialize gauges (dummy initialization)
 const soilMoistureGauge = new JustGage({
-  id: "soil-moisture-gauge",
+  id: 'soil-moisture-gauge',
   value: 87.5,
   min: 0,
   max: 100,
-  title: "Soil Moisture",
-  label: "%",
+  title: 'Soil Moisture',
+  label: '%',
   pointer: true,
   gaugeWidthScale: 0.6,
-  levelColors: ["#00ff00", "#ff0000"]
+  levelColors: ['#00ff00', '#ff0000']
 });
 
 const temperatureGauge = new JustGage({
-  id: "temperature-gauge",
+  id: 'temperature-gauge',
   value: 32.5,
   min: 0,
   max: 50,
-  title: "Temperature",
-  label: "°C",
+  title: 'Temperature',
+  label: '°C',
   pointer: true,
   gaugeWidthScale: 0.6,
-  levelColors: ["#00ff00", "#ff0000"]
+  levelColors: ['#00ff00', '#ff0000']
 });
 
 const humidityGauge = new JustGage({
-  id: "humidity-gauge",
+  id: 'humidity-gauge',
   value: 85,
   min: 0,
   max: 100,
-  title: "Humidity",
-  label: "%",
+  title: 'Humidity',
+  label: '%',
   pointer: true,
   gaugeWidthScale: 0.6,
-  levelColors: ["#00ff00", "#ff0000"]
+  levelColors: ['#00ff00', '#ff0000']
 });
 
 // Listen for changes in Firebase
