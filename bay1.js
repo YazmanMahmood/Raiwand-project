@@ -1,4 +1,35 @@
 document.addEventListener('DOMContentLoaded', () => {
+    // Firebase configuration
+   const firebaseConfig = {
+  apiKey: "AIzaSyAmVSOm8g6p4F3ZY4jxIEUTQH_oFllo1hg",
+  authDomain: "greenhouse-raiwind.firebaseapp.com",
+  databaseURL: "https://greenhouse-raiwind-default-rtdb.firebaseio.com",
+  projectId: "greenhouse-raiwind",
+  storageBucket: "greenhouse-raiwind.appspot.com",
+  messagingSenderId: "338760023791",
+  appId: "1:338760023791:web:667a022e8b69459eb2651a",
+  measurementId: "G-CPD0XFLYN5"
+};
+
+    // Initialize Firebase
+    firebase.initializeApp(firebaseConfig);
+    const database = firebase.database();
+
+    // Get the current date and time
+    const now = new Date();
+    const formattedDate = now.toLocaleString('en-US', {
+        hour: 'numeric',
+        minute: 'numeric',
+        hour12: true,
+        day: 'numeric',
+        month: 'long',
+        year: 'numeric'
+    });
+
+    // Set the last reading date and time
+    document.getElementById('last-reading').innerText = formattedDate;
+
+    // Chart.js setup
     const summaryCtx = document.getElementById('summary-chart').getContext('2d');
     const summaryChart = new Chart(summaryCtx, {
         type: 'line',
@@ -6,7 +37,7 @@ document.addEventListener('DOMContentLoaded', () => {
             labels: ['09:00', '11:00', '13:00', '15:00', '17:00', '19:00', '21:00'],
             datasets: [{
                 label: 'Temperature',
-                data: [30, 25, 28, 26, 27, 29, 32],
+                data: [30, 32, 31, 29, 28, 27, 25],
                 backgroundColor: 'rgba(26, 188, 156, 0.2)',
                 borderColor: 'rgba(26, 188, 156, 1)',
                 borderWidth: 2,
@@ -23,7 +54,8 @@ document.addEventListener('DOMContentLoaded', () => {
                 },
                 y: {
                     beginAtZero: true,
-                    max: 50
+                    min: 0,  // Set minimum value for y-axis
+                    max: 50  // Set maximum value for y-axis
                 }
             }
         }
@@ -66,18 +98,34 @@ document.addEventListener('DOMContentLoaded', () => {
         levelColors: ["#00ff00", "#ff0000"]
     });
 
-    // Update last reading date
-    const now = new Date();
-    document.getElementById('last-reading').innerText = `${now.toLocaleTimeString()}, ${now.toLocaleDateString()}`;
+    // Function to update gauges and last reading from Firebase
+    function updateData(snapshot) {
+        const data = snapshot.val();
+        soilMoistureGauge.refresh(data.soilMoisture);
+        temperatureGauge.refresh(data.temperature);
+        humidityGauge.refresh(data.humidity);
+
+        const lastReadingTime = new Date(data.lastReading);
+        document.getElementById('last-reading').innerText = lastReadingTime.toLocaleString('en-US', {
+            hour: 'numeric',
+            minute: 'numeric',
+            hour12: true,
+            day: 'numeric',
+            month: 'long',
+            year: 'numeric'
+        });
+    }
+
+    // Listen for changes in Firebase
+    database.ref('bay1').on('value', updateData);
 });
 
 function toggleWater() {
     const button = document.getElementById('water-button');
-    if (button.innerText === 'Turn Water On') {
-        button.innerText = 'Turn Water Off';
-        console.log('Water is now ON');
-    } else {
-        button.innerText = 'Turn Water On';
-        console.log('Water is now OFF');
-    }
+    const isWaterOn = button.innerText === 'Turn Water On';
+    button.innerText = isWaterOn ? 'Turn Water Off' : 'Turn Water On';
+    console.log(`Water is now ${isWaterOn ? 'ON' : 'OFF'}`);
+
+    // Update water state in Firebase
+    firebase.database().ref('bay1/water').set(isWaterOn);
 }
