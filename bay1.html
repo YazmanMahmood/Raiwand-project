@@ -14,7 +14,6 @@
         <div class="sidebar-header">
             <h2>SmartSpace Agri</h2>
         </div>
-        <input type="text" placeholder="Search...">
         <a href="#">Home</a>
         <a href="#">Temperature</a>
         <a href="#">Humidity</a>
@@ -27,6 +26,9 @@
         <div class="header">
             <h1>Bay 1</h1>
             <p>Last Reading as of <span id="last-reading"></span></p>
+            <div class="water-control">
+                <button id="water-button" onclick="toggleWater()">Turn Water On</button>
+            </div>
         </div>
         <div class="widgets">
             <div class="widget">
@@ -53,10 +55,6 @@
                 <li>Hanzo Miguel - 7 hours ago</li>
                 <li>Hendrix Michael - 12 hours ago</li>
             </ul>
-        </div>
-        <div class="water-control">
-            <h3>Water Control</h3>
-            <button id="water-button" onclick="toggleWater()">Turn Water On</button>
         </div>
     </div>
     <script src="bay1.js"></script>
