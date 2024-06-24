@@ -1,42 +1,68 @@
-// Your web app's Firebase configuration
-const firebaseConfig = {
-  apiKey: "AIzaSyAmVSOm8g6p4F3ZY4jxIEUTQH_oFllo1hg",
-  authDomain: "greenhouse-raiwind.firebaseapp.com",
-  databaseURL: "https://greenhouse-raiwind-default-rtdb.firebaseio.com",
-  projectId: "greenhouse-raiwind",
-  storageBucket: "greenhouse-raiwind.appspot.com",
-  messagingSenderId: "338760023791",
-  appId: "1:338760023791:web:667a022e8b69459eb2651a",
-  measurementId: "G-CPD0XFLYN5"
-};
+// Import Firebase database functions
+import { database, ref, onValue, update } from "./firebase-config.js";
 
-// Initialize Firebase
-const app = initializeApp(firebaseConfig);
-const database = getDatabase(app); // Get the database instance
-
-// Set the initial last reading date and time
+// Get the initial last reading date and time
 const lastReadingRef = ref(database, 'GreenHouse Raiwind/ESP1/ESP_20240622030452/data_time');
 onValue(lastReadingRef, (snapshot) => {
   const data = snapshot.val();
-  const lastReadingTime = new Date(data.lastReading);
-  document.getElementById('last-reading').innerText = lastReadingTime.toLocaleString('en-US', {
-    hour: 'numeric',
-    minute: 'numeric',
-    hour12: true,
-    day: 'numeric',
-    month: 'long',
-    year: 'numeric'
-  });
+  if (data && data.lastReading) {
+    const lastReadingTime = new Date(data.lastReading);
+    document.getElementById('last-reading').innerText = lastReadingTime.toLocaleString('en-US', {
+      hour: 'numeric',
+      minute: 'numeric',
+      hour12: true,
+      day: 'numeric',
+      month: 'long',
+      year: 'numeric'
+    });
+  }
+});
+
+// Initialize gauges (dummy initialization)
+const soilMoistureGauge = new JustGage({
+  id: "soil-moisture-gauge",
+  value: 87.5,
+  min: 0,
+  max: 100,
+  title: "Soil Moisture",
+  label: "%",
+  pointer: true,
+  gaugeWidthScale: 0.6,
+  levelColors: ["#00ff00", "#ff0000"]
+});
+
+const temperatureGauge = new JustGage({
+  id: "temperature-gauge",
+  value: 32.5,
+  min: 0,
+  max: 50,
+  title: "Temperature",
+  label: "°C",
+  pointer: true,
+  gaugeWidthScale: 0.6,
+  levelColors: ["#00ff00", "#ff0000"]
+});
+
+const humidityGauge = new JustGage({
+  id: "humidity-gauge",
+  value: 85,
+  min: 0,
+  max: 100,
+  title: "Humidity",
+  label: "%",
+  pointer: true,
+  gaugeWidthScale: 0.6,
+  levelColors: ["#00ff00", "#ff0000"]
 });
 
 // Function to update gauges and last reading from Firebase
 function updateData(snapshot) {
   const data = snapshot.val();
-  soilMoistureGauge.refresh(data.soilMoisture);
-  temperatureGauge.refresh(data.temperature);
-  humidityGauge.refresh(data.humidity);
-
-  // You can update other UI elements based on 'data' here if needed
+  if (data) {
+    soilMoistureGauge.refresh(data.soilMoisture || 0);
+    temperatureGauge.refresh(data.temperature || 0);
+    humidityGauge.refresh(data.humidity || 0);
+  }
 }
 
 // Listen for changes in Firebase
@@ -49,7 +75,7 @@ function toggleWater() {
   button.innerText = isWaterOn ? 'Turn Water Off' : 'Turn Water On';
   console.log(`Water is now ${isWaterOn ? 'ON' : 'OFF'}`);
 
-  // Update water state in Firebase (dummy implementation)
+  // Update water state in Firebase
   const waterState = isWaterOn ? 'On' : 'Off';
   update(ref(database, 'GreenHouse Raiwind/ESP1/ESP_20240622030452'), {
     waterState: waterState
