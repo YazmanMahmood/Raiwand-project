@@ -14,14 +14,6 @@ const firebaseConfig = {
   measurementId: "G-CPD0XFLYN5"
 };
 
-
-
-// firebase-config.js
-
-import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
-import { getDatabase } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-database.js";
-
-
 // Initialize Firebase
 const app = initializeApp(firebaseConfig);
 const database = getDatabase(app); // Get the database instance
