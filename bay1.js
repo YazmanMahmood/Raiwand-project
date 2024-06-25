@@ -1,4 +1,3 @@
-// Import Firebase database functions
 import { database, ref, onValue, update } from "./firebase-config.js";
 
 // Initialize Firebase references
