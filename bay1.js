@@ -2,7 +2,7 @@
 import { database, ref, onValue, update } from "./firebase-config.js";
 
 // Initialize Firebase references
-const waterFlowRef = ref(database, 'GreenHouse Raiwind/ESP1/ESP_20240622030456/water_flow');
+const waterFlowRef = ref(database, 'GreenHouse Raiwind/ESP1/ESP_20240622030456');
 
 // Function to toggle water state and count clicks
 let clickCount = 0;
@@ -14,15 +14,10 @@ function toggleWater() {
   button.innerText = isWaterOn ? 'Turn Water Off' : 'Turn Water On';
   console.log(`Water is now ${isWaterOn ? 'ON' : 'OFF'}`);
 
-  // Update water state in Firebase
-  const waterState = isWaterOn ? 1 : 0; // Change here to send 1 or 0
-  update(ref(database, '/GreenHouse Raiwind/ESP1/ESP_20240622030456/water_flow'), {
-    waterState: waterState
-  });
-
-  // Update click count in Firebase
+  // Update water state and click count in Firebase
   update(waterFlowRef, {
-    water_flow: clickCount
+    water_flow: clickCount,
+    waterState: isWaterOn ? 1 : 0
   });
 }
 
