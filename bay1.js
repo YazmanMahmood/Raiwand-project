@@ -1,9 +1,7 @@
-/GreenHouse Raiwind/ESP1/ESP_20240622030452/waterflow
-
 import { database, ref, onValue, update } from "./firebase-config.js";
 
 // Initialize Firebase references
-const waterFlowRef = ref(database, 'GreenHouse Raiwind/ESP1/ESP_20240622030456');
+const waterFlowRef = ref(database, 'GreenHouse Raiwind/ESP1/ESP_20240622030452/waterflow'); // Updated path
 
 // Function to toggle water state and count clicks
 let clickCount = 0;
@@ -13,14 +11,13 @@ function toggleWater() {
   const button = document.getElementById('water-button');
   const isWaterOn = button.innerText === 'Turn Water On';
   button.innerText = isWaterOn ? 'Turn Water Off' : 'Turn Water On';
-  console.log(Water is now ${isWaterOn ? 'ON' : 'OFF'});
+  console.log(`Water is now ${isWaterOn ? 'ON' : 'OFF'}`);
 
   update(waterFlowRef, {
     water_flow: clickCount,
     waterState: isWaterOn ? 1 : 0
   });
 }
-
 
 // Listen for changes in Firebase (if needed)
 onValue(waterFlowRef, (snapshot) => {
@@ -30,7 +27,7 @@ onValue(waterFlowRef, (snapshot) => {
   } else {
     clickCount = 0; // Initialize click count if not available
   }
-  console.log(Current click count: ${clickCount});
+  console.log(`Current click count: ${clickCount}`);
 });
 
 // Get the initial last reading date and time
@@ -53,7 +50,6 @@ onValue(lastReadingRef, (snapshot) => {
   }
   updateData(data);
 });
-
 
 // Initialize gauges (dummy initialization)
 const soilMoistureGauge = new JustGage({
@@ -102,8 +98,6 @@ function updateData(data) {
 }
 
 console.log("Snapshot value (ESP data):", snapshot.val());
-console.log(Water is now ${isWaterOn ? 'ON' : 'OFF'});
-console.log(Current click count: ${clickCount});
+console.log(`Water is now ${isWaterOn ? 'ON' : 'OFF'}`);
+console.log(`Current click count: ${clickCount}`);
 console.log("Update data:", data);
-
-
