@@ -77,9 +77,9 @@ function toggleWater() {
   console.log(`Water is now ${isWaterOn ? 'ON' : 'OFF'}`);
 
   // Update water state in Firebase
-  const waterState = isWaterOn ? 'On' : 'Off';
+  const waterState = isWaterOn ? 1 : 0;
   update(ref(database, 'GreenHouse Raiwind/ESP1/ESP_20240622030456'), {
-    waterState: waterState
+    waterFlow: waterState
   });
 }
 
