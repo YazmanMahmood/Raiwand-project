@@ -22,15 +22,15 @@ function toggleWater() {
 
   // Update click count in Firebase
   update(waterFlowRef, {
-    clickCount: clickCount
+    water_flow: clickCount
   });
 }
 
 // Listen for changes in Firebase (if needed)
 onValue(waterFlowRef, (snapshot) => {
   const data = snapshot.val();
-  if (data && data.clickCount) {
-    clickCount = data.clickCount;
+  if (data && data.water_flow) {
+    clickCount = data.water_flow;
   } else {
     clickCount = 0; // Initialize click count if not available
   }
