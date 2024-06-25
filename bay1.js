@@ -77,14 +77,11 @@ function toggleWater() {
   console.log(`Water is now ${isWaterOn ? 'ON' : 'OFF'}`);
 
   // Update water state in Firebase
-  const waterState = isWaterOn ? 1 : 0;
-  update(ref(database, 'GreenHouse Raiwind/ESP1/ESP_20240622030456'), {
-    waterFlow: waterState
+  const waterState = isWaterOn ? 'On' : 'Off';
+  update(ref(database, 'GreenHouse Raiwind/ESP1/ESP_20240622030452'), {
+    waterState: waterState
   });
 }
-
-// Make toggleWater globally available
-window.toggleWater = toggleWater;
 
 // Listen for changes in Firebase
 const espDataRef = ref(database, 'GreenHouse Raiwind/ESP1/ESP_20240622030452');
