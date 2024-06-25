@@ -1,3 +1,5 @@
+/GreenHouse Raiwind/ESP1/ESP_20240622030452/waterflow
+
 import { database, ref, onValue, update } from "./firebase-config.js";
 
 // Initialize Firebase references
@@ -11,7 +13,7 @@ function toggleWater() {
   const button = document.getElementById('water-button');
   const isWaterOn = button.innerText === 'Turn Water On';
   button.innerText = isWaterOn ? 'Turn Water Off' : 'Turn Water On';
-  console.log(`Water is now ${isWaterOn ? 'ON' : 'OFF'}`);
+  console.log(Water is now ${isWaterOn ? 'ON' : 'OFF'});
 
   update(waterFlowRef, {
     water_flow: clickCount,
@@ -28,7 +30,7 @@ onValue(waterFlowRef, (snapshot) => {
   } else {
     clickCount = 0; // Initialize click count if not available
   }
-  console.log(`Current click count: ${clickCount}`);
+  console.log(Current click count: ${clickCount});
 });
 
 // Get the initial last reading date and time
@@ -100,7 +102,8 @@ function updateData(data) {
 }
 
 console.log("Snapshot value (ESP data):", snapshot.val());
-console.log(`Water is now ${isWaterOn ? 'ON' : 'OFF'}`);
-console.log(`Current click count: ${clickCount}`);
+console.log(Water is now ${isWaterOn ? 'ON' : 'OFF'});
+console.log(Current click count: ${clickCount});
 console.log("Update data:", data);
+
 
