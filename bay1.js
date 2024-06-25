@@ -1,6 +1,42 @@
 // Import Firebase database functions
 import { database, ref, onValue, update } from "./firebase-config.js";
 
+// Initialize Firebase references
+const waterFlowRef = ref(database, 'GreenHouse Raiwind/ESP1/ESP_20240622030456/water_flow');
+
+// Function to toggle water state and count clicks
+let clickCount = 0;
+
+function toggleWater() {
+  clickCount++;
+  const button = document.getElementById('water-button');
+  const isWaterOn = button.innerText === 'Turn Water On';
+  button.innerText = isWaterOn ? 'Turn Water Off' : 'Turn Water On';
+  console.log(`Water is now ${isWaterOn ? 'ON' : 'OFF'}`);
+
+  // Update water state in Firebase
+  const waterState = isWaterOn ? 'On' : 'Off';
+  update(ref(database, 'GreenHouse Raiwind/ESP1/ESP_20240622030456'), {
+    waterState: waterState
+  });
+
+  // Update click count in Firebase
+  update(waterFlowRef, {
+    clickCount: clickCount
+  });
+}
+
+// Listen for changes in Firebase (if needed)
+onValue(waterFlowRef, (snapshot) => {
+  const data = snapshot.val();
+  if (data && data.clickCount) {
+    clickCount = data.clickCount;
+  } else {
+    clickCount = 0; // Initialize click count if not available
+  }
+  console.log(`Current click count: ${clickCount}`);
+});
+
 // Get the initial last reading date and time
 const lastReadingRef = ref(database, 'GreenHouse Raiwind/ESP1/ESP_20240622030452');
 onValue(lastReadingRef, (snapshot) => {
@@ -68,23 +104,3 @@ function updateData(data) {
     humidityGauge.refresh(data.humidity || 0);
   }
 }
-
-// Function to toggle water state
-function toggleWater() {
-  const button = document.getElementById('water-button');
-  const isWaterOn = button.innerText === 'Turn Water On';
-  button.innerText = isWaterOn ? 'Turn Water Off' : 'Turn Water On';
-  console.log(`Water is now ${isWaterOn ? 'ON' : 'OFF'}`);
-
-  // Update water state in Firebase
-  const waterState = isWaterOn ? 'On' : 'Off';
-  update(ref(database, 'GreenHouse Raiwind/ESP1/ESP_20240622030452'), {
-    waterState: waterState
-  });
-}
-
-// Listen for changes in Firebase
-const espDataRef = ref(database, 'GreenHouse Raiwind/ESP1/ESP_20240622030452');
-onValue(espDataRef, (snapshot) => {
-  updateData(snapshot.val());
-});
