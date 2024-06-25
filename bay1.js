@@ -83,6 +83,9 @@ function toggleWater() {
   });
 }
 
+// Make toggleWater globally available
+window.toggleWater = toggleWater;
+
 // Listen for changes in Firebase
 const espDataRef = ref(database, 'GreenHouse Raiwind/ESP1/ESP_20240622030452');
 onValue(espDataRef, (snapshot) => {
