@@ -1,4 +1,4 @@
-<<<<<<< HEAD
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -198,67 +198,3 @@
   <script src="summary-chart.js"></script>
 </body>
 </html>
-=======
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Greenhouse Monitoring - Bay 1</title>
-  <link rel="stylesheet" href="bay1.css">
-</head>
-<body>
-  <div class="sidebar">
-    <div class="sidebar-header">
-      <h2>SmartSpace Agri</h2>
-    </div>
-    <a href="#">Home</a>
-    <a href="#">Temperature</a>
-    <a href="#">Humidity</a>
-    <a href="#">Soil Moisture</a>
-    <a href="#">Reports</a>
-    <a href="#">Controls</a>
-    <a href="#">Settings</a>
-  </div>
-  <div class="main-content">
-    <div class="header">
-      <h1>Bay 1</h1>
-      <p>Last Reading as of <span id="last-reading">Loading...</span></p>
-      <div class="water-control">
-        <button id="water-button" onclick="toggleWater()">Turn Water On</button>
-      </div>
-    </div>
-    <div class="widgets">
-      <div class="widget">
-        <h3>Soil Moisture</h3>
-        <div id="soil-moisture-gauge" class="gauge"></div>
-      </div>
-      <div class="widget">
-        <h3>Temperature</h3>
-        <div id="temperature-gauge" class="gauge"></div>
-      </div>
-      <div class="widget">
-        <h3>Humidity</h3>
-        <div id="humidity-gauge" class="gauge"></div>
-      </div>
-    </div>
-    <div class="summary">
-      <h3>Daily Summary</h3>
-      <canvas id="summary-chart"></canvas>
-    </div>
-  </div>
-
-  <!-- Include Firebase SDKs -->
-  <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-database.js"></script>
-  <!-- Include Chart.js and JustGage libraries -->
-  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/justgage"></script>
-  <!-- Include your Firebase configuration and main JavaScript file -->
-  <script type="module" src="firebase-config.js"></script>
-  <script type="module" src="bay1.js"></script>
-
-
-</body>
-</html>
->>>>>>> 4b397de718962720f73ea2cb07c879404d7b6142

@@ -1,4 +1,4 @@
-<<<<<<< HEAD
+
 document.addEventListener('DOMContentLoaded', () => {
     const summaryCtx = document.getElementById('summary-chart').getContext('2d');
     const summaryChart = new Chart(summaryCtx, {
@@ -169,4 +169,3 @@ const humidityGauge = new JustGage({
   gaugeWidthScale: 0.6,
   levelColors: ["#00ff00", "#ff0000"]
 });
->>>>>>> 4b397de718962720f73ea2cb07c879404d7b6142
