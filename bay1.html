@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Greenhouse Monitoring - Bay 1</title>
+  <link rel="stylesheet" href="bay1.css">
+</head>
+<body>
+  <div class="sidebar">
+    <div class="sidebar-header">
+      <h2>SmartSpace Agri</h2>
+    </div>
+    <a href="#">Home</a>
+    <a href="#">Temperature</a>
+    <a href="#">Humidity</a>
+    <a href="#">Soil Moisture</a>
+    <a href="#">Reports</a>
+    <a href="#">Controls</a>
+    <a href="#">Settings</a>
+  </div>
+  <div class="main-content">
+    <div class="header">
+      <h1>Bay 1</h1>
+      <p>Last Reading as of <span id="last-reading">Loading...</span></p>
+      <div class="water-control">
+        <button id="water-button" onclick="toggleWater()">Turn Water On</button>
+      </div>
+    </div>
+    <div class="widgets">
+      <div class="widget">
+        <h3>Soil Moisture</h3>
+        <div id="soil-moisture-gauge" class="gauge">
+          <!-- Arc Gauge for Soil Moisture -->
+          <div id="major-ticks">
+            <span>10%</span>
+            <span>50%</span>
+            <span>100%</span>
+          </div>
+          <div id="minor-ticks">
+            <span title="--i:1"></span>
+            <span title="--i:2"></span>
+            <span title="--i:3"></span>
+            <span title="--i:4"></span>
+            <span title="--i:5"></span>
+            <span title="--i:6"></span>
+            <span title="--i:7"></span>
+            <span title="--i:8"></span>
+            <span title="--i:9"></span>
+            <span title="--i:10"></span>
+            <span title="--i:11"></span>
+            <span title="--i:12"></span>
+            <span title="--i:13"></span>
+            <span title="--i:14"></span>
+            <span title="--i:15"></span>
+            <span title="--i:16"></span>
+            <span title="--i:17"></span>
+            <span title="--i:18"></span>
+            <span title="--i:19"></span>
+            <span title="--i:20"></span>
+          </div>
+          <div id="minor-ticks-bottom-mask"></div>
+          <div id="bottom-circle"></div>
+          <svg version="1.1" baseProfile="full" width="190" height="190" xmlns="http://www.w3.org/2000/svg">
+            <linearGradient id="gradient" x1="0" x2="1" y1="0" y2="0">
+              <stop offset="0%" stop-color="#b96e85"/>
+              <stop offset="100%" stop-color="#ae69bb"/>
+            </linearGradient>
+            <path d="M5 95 A80 80 0 0 1 185 95" stroke="url(#gradient)" fill="none" stroke-width="10"
+            stroke-linecap="round" stroke-dasharray="0 282.78"/>
+          </svg>
+          <div id="center-circle">
+            <span id="name">SOIL MOISTURE</span>
+            <span id="temperature">10</span>
+            <img src="leaf.svg" alt="">
+          </div>
+        </div>
+      </div>
+      <div class="widget">
+        <h3>Temperature</h3>
+        <div id="temperature-gauge" class="gauge">
+          <!-- Arc Gauge for Temperature -->
+          <div id="major-ticks">
+            <span>10℃</span>
+            <span>20℃</span>
+            <span>30℃</span>
+          </div>
+          <div id="minor-ticks">
+            <span title="--i:1"></span>
+            <span title="--i:2"></span>
+            <span title="--i:3"></span>
+            <span title="--i:4"></span>
+            <span title="--i:5"></span>
+            <span title="--i:6"></span>
+            <span title="--i:7"></span>
+            <span title="--i:8"></span>
+            <span title="--i:9"></span>
+            <span title="--i:10"></span>
+            <span title="--i:11"></span>
+            <span title="--i:12"></span>
+            <span title="--i:13"></span>
+            <span title="--i:14"></span>
+            <span title="--i:15"></span>
+            <span title="--i:16"></span>
+            <span title="--i:17"></span>
+            <span title="--i:18"></span>
+            <span title="--i:19"></span>
+            <span title="--i:20"></span>
+          </div>
+          <div id="minor-ticks-bottom-mask"></div>
+          <div id="bottom-circle"></div>
+          <svg version="1.1" baseProfile="full" width="190" height="190" xmlns="http://www.w3.org/2000/svg">
+            <linearGradient id="gradient" x1="0" x2="1" y1="0" y2="0">
+              <stop offset="0%" stop-color="#b96e85"/>
+              <stop offset="100%" stop-color="#ae69bb"/>
+            </linearGradient>
+            <path d="M5 95 A80 80 0 0 1 185 95" stroke="url(#gradient)" fill="none" stroke-width="10"
+            stroke-linecap="round" stroke-dasharray="0 282.78"/>
+          </svg>
+          <div id="center-circle">
+            <span id="name">TEMPERATURE</span>
+            <span id="temperature">10</span>
+            <img src="leaf.svg" alt="">
+          </div>
+        </div>
+      </div>
+      <div class="widget">
+        <h3>Humidity</h3>
+        <div id="humidity-gauge" class="gauge">
+          <!-- Arc Gauge for Humidity -->
+          <div id="major-ticks">
+            <span>10%</span>
+            <span>50%</span>
+            <span>100%</span>
+          </div>
+          <div id="minor-ticks">
+            <span title="--i:1"></span>
+            <span title="--i:2"></span>
+            <span title="--i:3"></span>
+            <span title="--i:4"></span>
+            <span title="--i:5"></span>
+            <span title="--i:6"></span>
+            <span title="--i:7"></span>
+            <span title="--i:8"></span>
+            <span title="--i:9"></span>
+            <span title="--i:10"></span>
+            <span title="--i:11"></span>
+            <span title="--i:12"></span>
+            <span title="--i:13"></span>
+            <span title="--i:14"></span>
+            <span title="--i:15"></span>
+            <span title="--i:16"></span>
+            <span title="--i:17"></span>
+            <span title="--i:18"></span>
+            <span title="--i:19"></span>
+            <span title="--i:20"></span>
+          </div>
+          <div id="minor-ticks-bottom-mask"></div>
+          <div id="bottom-circle"></div>
+          <svg version="1.1" baseProfile="full" width="190" height="190" xmlns="http://www.w3.org/2000/svg">
+            <linearGradient id="gradient" x1="0" x2="1" y1="0" y2="0">
+              <stop offset="0%" stop-color="#b96e85"/>
+              <stop offset="100%" stop-color="#ae69bb"/>
+            </linearGradient>
+            <path d="M5 95 A80 80 0 0 1 185 95" stroke="url(#gradient)" fill="none" stroke-width="10"
+            stroke-linecap="round" stroke-dasharray="0 282.78"/>
+          </svg>
+          <div id="center-circle">
+            <span id="name">HUMIDITY</span>
+            <span id="temperature">10</span>
+            <img src="leaf.svg" alt="">
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="summary">
+      <h3>Daily Summary</h3>
+      <canvas id="summary-chart"></canvas>
+    </div>
+  </div>
+
+  <!-- Include Firebase SDKs -->
+  <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-database.js"></script>
+  <!-- Include Chart.js and JustGage libraries -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/justgage"></script>
+  <!-- Include your Firebase configuration -->
+  <script type="module" src="firebase-config.js"></script>
+  <a href="controls.html">Controls</a>
+
+
+  <!-- Include separate JavaScript files for gauges and summary chart -->
+  <script src="temperature-gauge.js"></script>
+  <script src="soil-moisture-gauge.js"></script>
+  <script src="humidity-gauge.js"></script>
+  <script src="summary-chart.js"></script>
+</body>
+</html>

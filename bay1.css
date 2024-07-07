@@ -1,0 +1,204 @@
+/* Add your custom styles here */
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    display: flex;
+  }
+  
+  .sidebar {
+    width: 200px;
+    background-color: #333;
+    color: white;
+    padding: 15px;
+  }
+  
+  .sidebar a {
+    display: block;
+    color: white;
+    padding: 10px;
+    text-decoration: none;
+    margin-bottom: 5px;
+  }
+  
+  .sidebar a:hover {
+    background-color: #555;
+  }
+  
+  .main-content {
+    flex: 1;
+    padding: 20px;
+  }
+  
+  .header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+  }
+  
+  .water-control {
+    text-align: right;
+  }
+  
+  .widgets {
+    display: flex;
+    gap: 20px;
+  }
+  
+  .widget {
+    flex: 1;
+    background-color: #f0f0f0;
+    padding: 15px;
+    border-radius: 5px;
+  }
+  
+  /* Gauge Styles */
+  .gauge {
+    position: relative;
+    width: 100%;
+    height: 200px;
+    background: #fff;
+    border-radius: 10px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+  
+  .gauge #major-ticks {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    padding: 5px;
+  }
+  
+  .gauge #major-ticks span {
+    position: absolute;
+    font-size: 0.7em;
+    color: #afafaf;
+  }
+  
+  .gauge #major-ticks span:nth-child(1) {
+    top: 50%;
+    transform: translateY(-50%);
+  }
+  
+  .gauge #major-ticks span:nth-child(2) {
+    left: 50%;
+    transform: translateX(-50%);
+  }
+  
+  .gauge #major-ticks span:nth-child(3) {
+    top: 50%;
+    right: 5px;
+    transform: translateY(-50%);
+  }
+  
+  .gauge #minor-ticks {
+    position: absolute;
+    width: 80%;
+    height: 80%;
+    background: #fff;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+  
+  .gauge #minor-ticks span {
+    position: absolute;
+    width: 100%;
+    height: 1px;
+    border-top: 1px solid #afafaf;
+    transform: rotate(calc((var(--i) - 1) * 9 * 1deg));
+  }
+  
+  .gauge #minor-ticks::after {
+    content: '';
+    position: absolute;
+    width: 93%;
+    height: 93%;
+    background: #fff;
+    border-radius: 50%;
+  }
+  
+  .gauge #minor-ticks-bottom-mask {
+    position: absolute;
+    width: 80%;
+    height: 49%;
+    bottom: 0;
+    background: #fff;
+  }
+  
+  .gauge #bottom-circle {
+    position: absolute;
+    width: 70%;
+    height: 70%;
+    background: linear-gradient(#efefef, #ffffff);
+    border-radius: 50%;
+    box-shadow: inset 0 5px 5px #e7e7e7;
+  }
+  
+  .gauge svg {
+    position: absolute;
+  }
+  
+  .gauge svg path {
+    transition: 1s;
+  }
+  
+  .gauge #center-circle {
+    position: absolute;
+    width: 170px;
+    height: 170px;
+    background: linear-gradient(180deg, #ffffff 0%, #e7ecf1 100%);
+    border-radius: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    box-shadow: 0px 10px 10px rgba(0,0,0,0.1);
+  }
+  
+  .gauge #center-circle::before {
+    content: '';
+    position: absolute;
+    width: 145px;
+    height: 145px;
+    background: linear-gradient(0deg, #ffffff 0%, #e7ecf1 100%);
+    border-radius: 50%;
+  }
+  
+  .gauge #name {
+    position: absolute;
+    font-size: 1em;
+    color: #7f7f7f;
+    font-weight: 700;
+    top: 40px;
+  }
+  
+  .gauge #center-circle img {
+    position: absolute;
+    width: 30px;
+    height: 30px;
+    bottom: 20px;
+  }
+  
+  .gauge #temperature {
+    position: absolute;
+    font-size: 3em;
+    color: #afafaf;
+  }
+  
+  .gauge #temperature::after {
+    content: '°C';
+    font-size: 0.5em;
+    margin-left: 3px;
+  }
+  .summary {
+    margin-top: 20px;
+  }
+  
+  #summary-chart {
+    width: 100%;
+    height: 400px;
+  }
+  

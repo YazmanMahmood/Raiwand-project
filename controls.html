@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Greenhouse Monitoring - Controls</title>
+  <link rel="stylesheet" href="controls.css"> <!-- Include your CSS file for controls styling -->
+</head>
+<body>
+  <div class="sidebar">
+    <div class="sidebar-header">
+      <h2>SmartSpace Agri</h2>
+    </div>
+    <a href="bay1.html">Home</a> <!-- Link back to bay1.html -->
+    <a href="#">Temperature</a>
+    <a href="#">Humidity</a>
+    <a href="#">Soil Moisture</a>
+    <a href="#">Reports</a>
+    <a href="controls.html">Controls</a> <!-- Current page, no need to link -->
+    <a href="#">Settings</a>
+  </div>
+  <div class="main-content">
+    <div class="header">
+      <h1>Bay 1 Controls</h1>
+    </div>
+    <div class="controls">
+      <h2>Water Control</h2>
+      <button onclick="toggleWater()">Turn Water On</button>
+      <button onclick="toggleWater()">Turn Water Off</button>
+      <h2>Fan Control</h2>
+      <button onclick="turnOnFan(1)">Turn On Fan 1</button>
+      <button onclick="turnOnFan(2)">Turn On Fan 2</button>
+      <button onclick="turnOnFan(3)">Turn On Fan 3</button>
+    </div>
+  </div>
+</body>
+</html>
