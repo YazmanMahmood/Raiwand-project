@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 body {
     font-family: 'Arial', sans-serif;
     background-color: #f0f4f8; /* Light grey background */
@@ -76,3 +77,79 @@ h1 {
 .dimmed {
     background-color: #002d22; /* Darker color for dimmed bays */
 }
+=======
+body {
+    font-family: 'Arial', sans-serif;
+    background-color: #f0f4f8; /* Light grey background */
+    color: #333;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    flex-direction: column;
+}
+
+.container {
+    width: 90%;
+    max-width: 1200px;
+    text-align: center;
+}
+
+h1 {
+    margin-bottom: 20px;
+    color: #00796b; /* Dark teal for heading */
+}
+
+.bays {
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    grid-template-rows: repeat(2, 1fr);
+    gap: 20px;
+}
+
+.bay {
+    background: #004d40; /* Dark teal background */
+    border: 1px solid #ccc;
+    border-radius: 10px;
+    height: 150px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: relative;
+    cursor: pointer;
+    color: white;
+    font-size: 20px;
+    transition: transform 0.3s ease, height 0.3s ease;
+}
+
+.bay:hover {
+    background: #00796b; /* Lighter teal on hover */
+}
+
+.bay.expanded {
+    transform: scale(1.2);
+    height: 300px;
+}
+
+.bay-data {
+    display: none;
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.8);
+    color: #fff;
+    border-radius: 10px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+}
+
+.bay.expanded .bay-data {
+    display: flex;
+}
+>>>>>>> 4b397de718962720f73ea2cb07c879404d7b6142

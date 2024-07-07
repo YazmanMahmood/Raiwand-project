@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 /* Add your custom styles here */
 body {
     font-family: Arial, sans-serif;
@@ -202,3 +203,64 @@ body {
     height: 400px;
   }
   
+=======
+/* Add your custom styles here */
+body {
+  font-family: Arial, sans-serif;
+  margin: 0;
+  padding: 0;
+  display: flex;
+}
+
+.sidebar {
+  width: 200px;
+  background-color: #333;
+  color: white;
+  padding: 15px;
+}
+
+.sidebar a {
+  display: block;
+  color: white;
+  padding: 10px;
+  text-decoration: none;
+  margin-bottom: 5px;
+}
+
+.sidebar a:hover {
+  background-color: #555;
+}
+
+.main-content {
+  flex: 1;
+  padding: 20px;
+}
+
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+}
+
+.water-control {
+  text-align: right;
+}
+
+.widgets {
+  display: flex;
+  gap: 20px;
+}
+
+.widget {
+  flex: 1;
+  background-color: #f0f0f0;
+  padding: 15px;
+  border-radius: 5px;
+}
+
+.gauge {
+  width: 100%;
+  height: 200px;
+}
+>>>>>>> 4b397de718962720f73ea2cb07c879404d7b6142
