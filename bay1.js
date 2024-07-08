@@ -1,69 +1,51 @@
-// Import Firebase modules and configurations
-import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js';
-import { getDatabase, ref, onValue } from 'https://www.gstatic.com/firebasejs/10.12.2/firebase-database.js';
+import { database, ref, onValue } from "./firebase-config.js";
 
-// Firebase configuration
-const firebaseConfig = {
-  // Your Firebase project config here
-};
-
-// Initialize Firebase app
-const app = initializeApp(firebaseConfig);
-
-// Get a reference to the Firebase database service
-const database = getDatabase(app);
-
-// Function to format date and time
-function formatDateTime(timestamp) {
-  const date = new Date(timestamp);
-  return date.toLocaleString('en-US', {
-    hour: 'numeric',
-    minute: 'numeric',
-    hour12: true,
-    day: 'numeric',
-    month: 'long',
-    year: 'numeric'
-  });
-}
-
-// Function to handle Firebase data updates
-function handleDataUpdate(elementId, snapshot) {
-  const element = document.getElementById(elementId);
-  const data = snapshot.val();
-  if (data !== null) {
-    element.innerText = `${data.toFixed(1)} %`;
-  } else {
-    element.innerText = 'Data not available';
-  }
-}
-
-// DOMContentLoaded event listener
 document.addEventListener('DOMContentLoaded', () => {
-  // Firebase references
-  const temperatureRef = ref(database, 'https://greenhouse-raiwind-default-rtdb.firebaseio.com/Esp1/temperature');
-  const soilMoistureRef = ref(database, 'https://greenhouse-raiwind-default-rtdb.firebaseio.com/Esp1/soil_moisture');
-  const humidityRef = ref(database, 'https://greenhouse-raiwind-default-rtdb.firebaseio.com/Esp1/humidity');
-  const lastReadingRef = ref(database, 'GreenHouse Raiwind/ESP1/ESP_20240622030452');
+    // Initialize Firebase references
+    const lastReadingRef = ref(database, 'GreenHouse Raiwind/ESP1/ESP_20240622030452');
+    const temperatureRef = ref(database, 'GreenHouse Raiwind/Esp1/temperature');
+    const soilMoistureRef = ref(database, 'GreenHouse Raiwind/Esp1/soil_moisture');
+    const humidityRef = ref(database, 'GreenHouse Raiwind/Esp1/humidity');
 
-  // Fetch and display last reading time
-  onValue(lastReadingRef, (snapshot) => {
-    const lastReadingTime = snapshot.val().data_time;
-    const formattedDateTime = formatDateTime(lastReadingTime);
-    document.getElementById('last-reading').innerText = `Last Reading as of ${formattedDateTime}`;
-  });
+    // Get the initial last reading date and time
+    onValue(lastReadingRef, (snapshot) => {
+        const data = snapshot.val();
+        if (data && data.data_time) {
+            const lastReadingTime = new Date(data.data_time);
+            document.getElementById('last-reading').innerText = lastReadingTime.toLocaleString('en-US', {
+                hour: 'numeric',
+                minute: 'numeric',
+                hour12: true,
+                day: 'numeric',
+                month: 'long',
+                year: 'numeric'
+            });
+        } else {
+            document.getElementById('last-reading').innerText = "Data not available";
+        }
+    });
 
-  // Listen for changes in temperature
-  onValue(temperatureRef, (snapshot) => {
-    handleDataUpdate('temperature-box', snapshot);
-  });
+    // Listen for changes in the temperature data
+    onValue(temperatureRef, (snapshot) => {
+        const temperature = snapshot.val();
+        if (temperature !== null) {
+            document.getElementById('temperature-box').textContent = `${temperature.toFixed(1)} °C`;
+        }
+    });
 
-  // Listen for changes in soil moisture
-  onValue(soilMoistureRef, (snapshot) => {
-    handleDataUpdate('soil-moisture-box', snapshot);
-  });
+    // Listen for changes in the soil moisture data
+    onValue(soilMoistureRef, (snapshot) => {
+        const soilMoisture = snapshot.val();
+        if (soilMoisture !== null) {
+            document.getElementById('soil-moisture-box').textContent = `${soilMoisture.toFixed(1)} %`;
+        }
+    });
 
-  // Listen for changes in humidity
-  onValue(humidityRef, (snapshot) => {
-    handleDataUpdate('humidity-box', snapshot);
-  });
+    // Listen for changes in the humidity data
+    onValue(humidityRef, (snapshot) => {
+        const humidity = snapshot.val();
+        if (humidity !== null) {
+            document.getElementById('humidity-box').textContent = `${humidity.toFixed(1)} %`;
+        }
+    });
 });
