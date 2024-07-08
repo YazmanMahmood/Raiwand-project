@@ -1,60 +1,55 @@
-body {
-    font-family: Arial, sans-serif;
-    background-color: #f0f4f8;
+/* Reset default styles */
+* {
+    box-sizing: border-box;
     margin: 0;
     padding: 0;
+}
+
+/* Body styles */
+body {
+    font-family: Arial, sans-serif;
     display: flex;
-    justify-content: center;
-    align-items: center;
-    height: 100vh;
+    min-height: 100vh; /* Full viewport height */
 }
 
-.container {
-    width: 90%;
-    max-width: 600px;
-    text-align: center;
-    margin-top: 20px;
+/* Sidebar styles */
+.sidebar {
+    width: 200px;
+    height: 100vh; /* Full viewport height */
+    background-color: #333;
+    color: white;
+    padding: 15px;
+    position: fixed; /* Fixed position */
 }
 
-h1 {
-    margin-bottom: 20px;
-    color: #00796b;
+.sidebar a {
+    display: block;
+    color: white;
+    padding: 10px;
+    text-decoration: none;
+    margin-bottom: 5px;
 }
 
-.controls {
-    background-color: #fff;
-    border-radius: 10px;
+.sidebar a:hover {
+    background-color: #555;
+}
+
+/* Main content styles */
+.main-content {
+    margin-left: 200px; /* Adjusted for sidebar width */
+    flex: 1;
     padding: 20px;
-    box-shadow: 0px 0px 20px rgba(0, 0, 0, 0.1);
 }
 
-.controls h2 {
-    color: #333;
-    font-size: 24px;
-    margin-bottom: 15px;
-}
+/* Responsive adjustments */
+@media (max-width: 767px) {
+    .sidebar {
+        width: 100%; /* Sidebar spans full width */
+        height: auto; /* Auto height */
+        position: static; /* Normal flow */
+    }
 
-.control-buttons {
-    display: flex;
-    justify-content: space-around;
-    margin-top: 15px;
-}
-
-.control-buttons button {
-    padding: 10px 20px;
-    font-size: 16px;
-    background-color: #00796b;
-    color: #fff;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
-    transition: background-color 0.3s ease;
-}
-
-.control-buttons button:hover {
-    background-color: #004d40;
-}
-
-.fan-controls {
-    margin-top: 20px;
+    .main-content {
+        margin-left: 0; /* No margin */
+    }
 }

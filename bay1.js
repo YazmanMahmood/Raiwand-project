@@ -1,37 +1,11 @@
-import { database, ref, onValue, update } from "./firebase-config.js";
+import { database, ref, onValue } from "./firebase-config.js";
 
 document.addEventListener('DOMContentLoaded', () => {
     // Initialize Firebase references
-    const waterFlowRef = ref(database, 'GreenHouse Raiwind/ESP1/ESP_20240622030456');
-    const waterFlowCounterRef = ref(database, 'GreenHouse Raiwind/ESP1/ESP_20240622030452/waterflow');
     const lastReadingRef = ref(database, 'GreenHouse Raiwind/ESP1/ESP_20240622030452');
-    const temperatureRef = ref(database, 'GreenHouse Raiwind/ESP1/temperature');
-
-    // Initialize click count
-    let clickCount = 0;
-
-    // Function to update click count and Firebase on button click
-    function handleWaterButtonClick() {
-        clickCount++;
-
-        // Update button text
-        const button = document.getElementById('water-button');
-        button.innerText = `Water Clicks: ${clickCount}`;
-
-        // Update Firebase with new click count
-        update(waterFlowRef, {
-            water_flow: clickCount,
-            waterState: clickCount % 2 === 1 ? 1 : 0 // Example of updating water state
-        });
-
-        // Update waterflow in another location
-        update(waterFlowCounterRef, {
-            waterflow: clickCount
-        });
-    }
-
-    // Add event listener to the water button
-    document.getElementById('water-button').addEventListener('click', handleWaterButtonClick);
+    const temperatureRef = ref(database, 'GreenHouse Raiwind/Esp1/temperature');
+    const soilMoistureRef = ref(database, 'GreenHouse Raiwind/Esp1/soil_moisture');
+    const humidityRef = ref(database, 'GreenHouse Raiwind/Esp1/humidity');
 
     // Get the initial last reading date and time
     onValue(lastReadingRef, (snapshot) => {
@@ -46,87 +20,32 @@ document.addEventListener('DOMContentLoaded', () => {
                 month: 'long',
                 year: 'numeric'
             });
-            updateData(data); // Update gauges with initial data
         } else {
             document.getElementById('last-reading').innerText = "Data not available";
         }
     });
 
+    // Listen for changes in the temperature data
     onValue(temperatureRef, (snapshot) => {
         const temperature = snapshot.val();
         if (temperature !== null) {
-            // Update the temperature gauge
-            temperatureGauge.refresh(temperature);
+            document.getElementById('temperature-box').textContent = `${temperature.toFixed(1)} °C`;
         }
     });
 
-   // Listen for changes in the temperature data
-   onValue(temperatureRef, (snapshot) => {
-    const temperature = snapshot.val();
-    if (temperature !== null) {
-        // Update the temperature gauge
-        updateTemperatureGauge(temperature);
-    }
-});
-
-// Function to update the temperature gauge
-function updateTemperatureGauge(temperature) {
-    // Update the gauge value
-    document.getElementById('temperature').textContent = temperature.toFixed(1);
-
-    // Calculate the angle for the gauge (assuming 0-50°C range)
-    const angle = (temperature / 50) * 280;
-    const dashArray = `${angle} ${280 - angle}`;
-
-    // Update the SVG path
-    const path = document.querySelector('#temperature-gauge svg path');
-    path.style.strokeDasharray = dashArray;
-}
-
-
-    // Function to update gauges from Firebase data
-    function updateData(data) {
-        if (data) {
-            soilMoistureGauge.refresh(data.soilMoisture || 0);
-            temperatureGauge.refresh(data.temperature || 0);
-            humidityGauge.refresh(data.humidity || 0);
+    // Listen for changes in the soil moisture data
+    onValue(soilMoistureRef, (snapshot) => {
+        const soilMoisture = snapshot.val();
+        if (soilMoisture !== null) {
+            document.getElementById('soil-moisture-box').textContent = `${soilMoisture.toFixed(1)} %`;
         }
-    }
-
-    // Initialize gauges (dummy initialization)
-    const soilMoistureGauge = new JustGage({
-        id: "soil-moisture-gauge",
-        value: 0,
-        min: 0,
-        max: 100,
-        title: "Soil Moisture",
-        label: "%",
-        pointer: true,
-        gaugeWidthScale: 0.6,
-        levelColors: ["#00ff00", "#ff0000"]
     });
 
-    const temperatureGauge = new JustGage({
-        id: "temperature-gauge",
-        value: 0,
-        min: 0,
-        max: 50,
-        title: "Temperature",
-        label: "°C",
-        pointer: true,
-        gaugeWidthScale: 0.6,
-        levelColors: ["#00ff00", "#ff0000"]
-    });
-
-    const humidityGauge = new JustGage({
-        id: "humidity-gauge",
-        value: 0,
-        min: 0,
-        max: 100,
-        title: "Humidity",
-        label: "%",
-        pointer: true,
-        gaugeWidthScale: 0.6,
-        levelColors: ["#00ff00", "#ff0000"]
+    // Listen for changes in the humidity data
+    onValue(humidityRef, (snapshot) => {
+        const humidity = snapshot.val();
+        if (humidity !== null) {
+            document.getElementById('humidity-box').textContent = `${humidity.toFixed(1)} %`;
+        }
     });
 });

@@ -1,5 +1,5 @@
-import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
-import { getDatabase, ref, onValue, update } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-database.js";
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.3/firebase-app.js";
+import { getDatabase, ref, onValue } from "https://www.gstatic.com/firebasejs/10.12.3/firebase-database.js";
 
 // Your Firebase configuration
 const firebaseConfig = {
@@ -17,5 +17,4 @@ const firebaseConfig = {
 const app = initializeApp(firebaseConfig);
 const database = getDatabase(app); // Get the database instance
 
-export { database, ref, onValue, update }; // Export Firebase functions for use in other modules
-export { app, database };
+export { database, ref, onValue }; // Export Firebase functions for use in other modules
