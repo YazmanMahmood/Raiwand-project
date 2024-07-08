@@ -40,7 +40,11 @@ document.addEventListener('DOMContentLoaded', () => {
             document.getElementById('soil-moisture-box').textContent = `${soilMoisture.toFixed(1)} %`;
         }
     });
-
+onValue(temperatureRef, (snapshot) => {
+        console.log("Temperature data:", snapshot.val());
+    }, (error) => {
+        console.error("Error fetching temperature:", error);
+    });
     // Listen for changes in the humidity data
     onValue(humidityRef, (snapshot) => {
         const humidity = snapshot.val();
