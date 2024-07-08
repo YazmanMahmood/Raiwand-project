@@ -54,11 +54,11 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 
     onValue(temperatureRef, (snapshot) => {
-      const temperature = snapshot.val();
-      if (temperature !== null) {
-        // Update the temperature gauge
-        temperatureGauge.refresh(temperature);
-      }
+        const temperature = snapshot.val();
+        if (temperature !== null) {
+            // Update the temperature gauge
+            temperatureGauge.refresh(temperature);
+        }
     });
 
     // Function to update gauges from Firebase data

@@ -1,4 +1,3 @@
-// Import Firebase modules
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
 import { getDatabase, ref, onValue, update } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-database.js";
 
@@ -13,9 +12,6 @@ const firebaseConfig = {
   appId: "1:338760023791:web:667a022e8b69459eb2651a",
   measurementId: "G-CPD0XFLYN5"
 };
-
-
-
 
 // Initialize Firebase
 const app = initializeApp(firebaseConfig);
