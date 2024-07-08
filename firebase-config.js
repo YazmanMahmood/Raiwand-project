@@ -18,3 +18,4 @@ const app = initializeApp(firebaseConfig);
 const database = getDatabase(app); // Get the database instance
 
 export { database, ref, onValue, update }; // Export Firebase functions for use in other modules
+export { app, database };

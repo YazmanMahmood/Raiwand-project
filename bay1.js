@@ -5,7 +5,6 @@ document.addEventListener('DOMContentLoaded', () => {
     const waterFlowRef = ref(database, 'GreenHouse Raiwind/ESP1/ESP_20240622030456');
     const waterFlowCounterRef = ref(database, 'GreenHouse Raiwind/ESP1/ESP_20240622030452/waterflow');
     const lastReadingRef = ref(database, 'GreenHouse Raiwind/ESP1/ESP_20240622030452');
-    
     const temperatureRef = ref(database, 'GreenHouse Raiwind/ESP1/temperature');
 
     // Initialize click count
@@ -60,6 +59,30 @@ document.addEventListener('DOMContentLoaded', () => {
             temperatureGauge.refresh(temperature);
         }
     });
+
+   // Listen for changes in the temperature data
+   onValue(temperatureRef, (snapshot) => {
+    const temperature = snapshot.val();
+    if (temperature !== null) {
+        // Update the temperature gauge
+        updateTemperatureGauge(temperature);
+    }
+});
+
+// Function to update the temperature gauge
+function updateTemperatureGauge(temperature) {
+    // Update the gauge value
+    document.getElementById('temperature').textContent = temperature.toFixed(1);
+
+    // Calculate the angle for the gauge (assuming 0-50°C range)
+    const angle = (temperature / 50) * 280;
+    const dashArray = `${angle} ${280 - angle}`;
+
+    // Update the SVG path
+    const path = document.querySelector('#temperature-gauge svg path');
+    path.style.strokeDasharray = dashArray;
+}
+
 
     // Function to update gauges from Firebase data
     function updateData(data) {

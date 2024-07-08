@@ -187,7 +187,9 @@ body {
     font-size: 3em;
     color: #afafaf;
   }
-  
+  .gauge svg path {
+    transition: stroke-dasharray 0.5s ease;
+}
   .gauge #temperature::after {
     content: '°C';
     font-size: 0.5em;
