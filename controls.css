@@ -1,4 +1,3 @@
-/* Add your custom styles here */
 body {
   font-family: Arial, sans-serif;
   margin: 0;
@@ -68,44 +67,42 @@ body {
   margin-bottom: 20px;
 }
 
-.widgets {
+.control-panel {
   display: flex;
+  flex-direction: column;
   gap: 20px;
 }
 
-.widget {
-  flex: 1;
-  background-color: #f0f0f0;
-  padding: 15px;
-  border-radius: 5px;
+.control-group {
   display: flex;
   flex-direction: column;
-  align-items: center;
+  gap: 10px;
+  width: 100%;
 }
 
-.large-textbox {
+.control-group label {
+  font-size: 1.2em;
+}
+
+.control-group input[type="range"] {
   width: 100%;
-  height: 100px;
-  font-size: 2em;
+}
+
+.control-labels {
+  display: flex;
+  justify-content: space-between;
+}
+
+.control-labels span {
+  flex: 1;
   text-align: center;
-  background-color: #fff;
-  border-radius: 5px;
-  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+.dropdown {
   display: flex;
   justify-content: center;
-  align-items: center;
 }
 
-.summary {
-  margin-top: 20px;
-}
-
-#summary-chart {
-  width: 100%;
-  height: 400px;
-}
-
-/* Responsive adjustments */
 @media (max-width: 767px) {
   .sidebar {
     transform: translateX(-100%);
