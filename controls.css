@@ -1,44 +1,37 @@
 /* Reset default styles */
-* {
-    box-sizing: border-box;
-    margin: 0;
-    padding: 0;
-}
-
-/* Body styles */
 body {
-    font-family: Arial, sans-serif;
-    display: flex;
-    min-height: 100vh; /* Full viewport height */
+  font-family: Arial, sans-serif;
+  margin: 0;
+  padding: 0;
+  display: flex;
 }
 
-/* Sidebar styles */
 .sidebar {
-    width: 200px;
-    height: 100vh; /* Full viewport height */
-    background-color: #333;
-    color: white;
-    padding: 15px;
-    position: fixed; /* Fixed position */
-    display: flex;
-    flex-direction: column;
+  width: 200px;
+  background-color: #333;
+  color: white;
+  padding: 15px;
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
 }
 
 .sidebar-header {
-    margin-bottom: 15px;
+  margin-bottom: 15px;
 }
 
 .sidebar a {
-    display: block;
-    color: white;
-    padding: 10px;
-    text-decoration: none;
-    margin-bottom: 5px;
+  display: block;
+  color: white;
+  padding: 10px;
+  text-decoration: none;
+  margin-bottom: 5px;
 }
 
 .sidebar a:hover, .sidebar a.active {
-    background-color: #555;
+  background-color: #555;
 }
+
 
 /* Main content styles */
 .main-content {
