@@ -3,7 +3,7 @@ import { database, ref, onValue } from "./firebase-config.js";
 document.addEventListener('DOMContentLoaded', () => {
     // Initialize Firebase references
     const lastReadingRef = ref(database, 'GreenHouse Raiwind/ESP1/ESP_20240622030452');
-    const temperatureRef = ref(database, 'GreenHouse Raiwind/Esp1/temperature');
+    const temperatureRef = ref(database, 'Esp1/temperature');
     const soilMoistureRef = ref(database, 'GreenHouse Raiwind/Esp1/soil_moisture');
     const humidityRef = ref(database, 'GreenHouse Raiwind/Esp1/humidity');
 
