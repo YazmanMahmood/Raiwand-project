@@ -7,25 +7,13 @@
   <link rel="stylesheet" href="bay1.css">
 </head>
 <body>
-  <div class="hamburger" id="hamburger-menu">
-    <div></div>
-    <div></div>
-    <div></div>
-  </div>
-  <div class="sidebar" id="sidebar">
-    <div class="sidebar-header">
-      <h2>SmartSpace Agri</h2>
-    </div>
-    <a href="bay1.html" class="active">Home</a>
-    <a href="#">Temperature</a>
-    <a href="#">Humidity</a>
-    <a href="#">Soil Moisture</a>
-    <a href="#">Reports</a>
-    <a href="controls.html">Controls</a>
-    <a href="#">Settings</a>
-  </div>
   <div class="main-content">
     <div class="header">
+      <div class="hamburger" id="hamburger-menu">
+        <div></div>
+        <div></div>
+        <div></div>
+      </div>
       <h1>Bay 1</h1>
       <p>Last Reading as of <span id="last-reading">Loading...</span></p>
     </div>
@@ -44,6 +32,7 @@
       </div>
     </div>
     <div class="control-panel">
+      <h3>Control Panel</h3>
       <div class="control-group">
         <label for="water-pump-slider">Water Pump</label>
         <input type="range" id="water-pump-slider" min="0" max="2" step="1" value="0">
@@ -79,6 +68,18 @@
       <h3>Daily Summary</h3>
       <canvas id="summary-chart"></canvas>
     </div>
+  </div>
+  <div class="sidebar" id="sidebar">
+    <div class="sidebar-header">
+      <h2>SmartSpace Agri</h2>
+    </div>
+    <a href="bay1.html" class="active">Home</a>
+    <a href="#">Temperature</a>
+    <a href="#">Humidity</a>
+    <a href="#">Soil Moisture</a>
+    <a href="#">Reports</a>
+    <a href="controls.html">Controls</a>
+    <a href="#">Settings</a>
   </div>
 
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
