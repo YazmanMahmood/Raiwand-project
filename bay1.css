@@ -4,6 +4,38 @@ body {
   margin: 0;
   padding: 0;
   display: flex;
+  flex-direction: column;
+}
+
+.sidebar {
+  width: 100%;
+  background-color: #333;
+  color: white;
+  padding: 15px;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-around;
+  transition: transform 0.3s ease;
+}
+
+.sidebar.open {
+  transform: translateY(0);
+}
+
+.sidebar-header {
+  margin-bottom: 15px;
+}
+
+.sidebar a {
+  display: block;
+  color: white;
+  padding: 10px;
+  text-decoration: none;
+  margin-bottom: 5px;
+}
+
+.sidebar a:hover, .sidebar a.active {
+  background-color: #555;
 }
 
 .main-content {
@@ -57,10 +89,12 @@ body {
 }
 
 .control-panel {
+  margin-bottom: 20px;
   background-color: #f0f0f0;
   padding: 15px;
   border-radius: 5px;
-  margin-bottom: 20px;
+  display: flex;
+  flex-direction: column;
 }
 
 .control-group {
@@ -77,64 +111,19 @@ body {
   margin-top: 10px;
 }
 
-.sidebar {
-  width: 200px;
-  background-color: #333;
-  color: white;
-  padding: 15px;
-  height: 100vh;
-  display: flex;
-  flex-direction: column;
-  transition: transform 0.3s ease;
-}
-
-.sidebar.open {
-  transform: translateX(0);
-}
-
-.sidebar-header {
-  margin-bottom: 15px;
-}
-
-.sidebar a {
-  display: block;
-  color: white;
-  padding: 10px;
-  text-decoration: none;
-  margin-bottom: 5px;
-}
-
-.sidebar a:hover, .sidebar a.active {
-  background-color: #555;
-}
-
-.hamburger {
-  display: none;
-  flex-direction: column;
-  cursor: pointer;
-  margin-left: 20px;
-}
-
-.hamburger div {
-  width: 25px;
-  height: 3px;
-  background-color: black;
-  margin: 4px 0;
-}
-
 /* Responsive adjustments */
 @media (max-width: 767px) {
   .sidebar {
-    width: 100%;
-    height: auto;
+    flex-direction: column;
+    height: auto; /* Auto height */
     position: fixed;
-    top: 0;
-    left: -100%;
-    transition: left 0.3s ease;
+    bottom: 0;
+    left: 0;
+    width: 100%;
   }
 
-  .sidebar.open {
-    left: 0;
+  .main-content {
+    margin-bottom: 200px; /* Reserve space for sidebar */
   }
 
   .hamburger {
