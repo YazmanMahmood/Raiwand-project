@@ -1,29 +1,9 @@
-/* controls.css */
-
+/* Reset default styles */
 body {
   font-family: Arial, sans-serif;
   margin: 0;
   padding: 0;
   display: flex;
-}
-
-.hamburger {
-  display: none;
-  flex-direction: column;
-  justify-content: space-around;
-  width: 30px;
-  height: 30px;
-  position: fixed;
-  top: 15px;
-  left: 15px;
-  cursor: pointer;
-  z-index: 1000;
-}
-
-.hamburger div {
-  width: 100%;
-  height: 4px;
-  background-color: #333;
 }
 
 .sidebar {
@@ -35,11 +15,6 @@ body {
   display: flex;
   flex-direction: column;
   transition: transform 0.3s ease;
-  position: fixed;
-  left: 0;
-  top: 0;
-  transform: translateX(-100%);
-  z-index: 999;
 }
 
 .sidebar.open {
@@ -63,7 +38,6 @@ body {
 }
 
 .main-content {
-  margin-left: 200px; /* Adjusted for sidebar width */
   flex: 1;
   padding: 20px;
 }
@@ -75,57 +49,63 @@ body {
   margin-bottom: 20px;
 }
 
-/* Control panel styles */
-.control-panel {
+.widgets {
   display: flex;
-  flex-direction: column;
   gap: 20px;
 }
 
-.control-group {
+.widget {
+  flex: 1;
+  background-color: #f0f0f0;
+  padding: 15px;
+  border-radius: 5px;
   display: flex;
   flex-direction: column;
-  gap: 10px;
+  align-items: center;
+}
+
+.large-textbox {
   width: 100%;
-}
-
-.control-group label {
-  font-size: 1.2em;
-}
-
-.control-group input[type="range"] {
-  width: 100%;
-}
-
-.control-labels {
-  display: flex;
-  justify-content: space-between;
-}
-
-.control-labels span {
-  flex: 1;
+  height: 100px;
+  font-size: 2em;
   text-align: center;
-}
-
-.dropdown {
+  background-color: #fff;
+  border-radius: 5px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
   display: flex;
   justify-content: center;
+  align-items: center;
+}
+
+.summary {
+  margin-top: 20px;
+}
+
+#summary-chart {
+  width: 100%;
+  height: 400px;
 }
 
 /* Responsive adjustments */
 @media (max-width: 767px) {
   .sidebar {
-    transform: translateX(-100%);
+    width: 100%; /* Sidebar spans full width */
+    height: auto; /* Auto height */
     position: fixed;
-    height: 100%;
-    z-index: 999;
+    top: 0;
+    left: -100%;
+    transition: left 0.3s ease;
   }
 
   .main-content {
-    margin-left: 0;
+    margin-left: 0; /* No margin */
   }
 
   .hamburger {
     display: flex;
+  }
+
+  .sidebar.open {
+    left: 0;
   }
 }
