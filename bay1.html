@@ -7,12 +7,12 @@
   <link rel="stylesheet" href="bay1.css">
 </head>
 <body>
-  <div class="hamburger" id="hamburger-menu">
+  <div class="hamburger">
     <div></div>
     <div></div>
     <div></div>
   </div>
-  <div class="sidebar" id="sidebar">
+  <div class="sidebar">
     <div class="sidebar-header">
       <h2>SmartSpace Agri</h2>
     </div>
@@ -53,10 +53,5 @@
   <script type="module" src="firebase-config.js"></script>
   <script type="module" src="bay1.js"></script>
   <script src="summary-chart.js"></script>
-  <script>
-    document.getElementById('hamburger-menu').addEventListener('click', function() {
-      document.getElementById('sidebar').classList.toggle('open');
-    });
-  </script>
 </body>
 </html>
