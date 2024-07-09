@@ -7,7 +7,12 @@
   <link rel="stylesheet" href="controls.css">
 </head>
 <body>
-  <div class="sidebar">
+  <div class="hamburger" id="hamburger-menu">
+    <div></div>
+    <div></div>
+    <div></div>
+  </div>
+  <div class="sidebar" id="sidebar">
     <div class="sidebar-header">
       <h2>SmartSpace Agri</h2>
     </div>
@@ -57,5 +62,10 @@
     </div>
   </div>
   <script src="controls.js"></script>
+  <script>
+    document.getElementById('hamburger-menu').addEventListener('click', function() {
+      document.getElementById('sidebar').classList.toggle('open');
+    });
+  </script>
 </body>
 </html>
