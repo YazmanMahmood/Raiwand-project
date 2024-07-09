@@ -1,6 +1,6 @@
 document.addEventListener('DOMContentLoaded', () => {
-  const hamburger = document.querySelector('.hamburger');
-  const sidebar = document.querySelector('.sidebar');
+  const hamburger = document.getElementById('hamburger');
+  const sidebar = document.getElementById('sidebar');
 
   // Toggle sidebar on hamburger menu click
   hamburger.addEventListener('click', () => {
