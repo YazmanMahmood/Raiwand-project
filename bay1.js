@@ -53,6 +53,9 @@ document.addEventListener('DOMContentLoaded', () => {
         console.error("Error fetching soil moisture:", error);
         document.getElementById('soil-moisture-box').textContent = "Error loading data";
     });
+document.getElementById('hamburger-menu').addEventListener('click', function() {
+  document.getElementById('sidebar').classList.toggle('open');
+});
 
     // Listen for changes in the humidity data
     onValue(humidityRef, (snapshot) => {
