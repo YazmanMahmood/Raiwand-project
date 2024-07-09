@@ -69,4 +69,40 @@ document.addEventListener('DOMContentLoaded', () => {
         console.error("Error fetching humidity:", error);
         document.getElementById('humidity-box').textContent = "Error loading data";
     });
+
+    // Control panel functionality
+    const waterPumpSlider = document.getElementById('water-pump-slider');
+    const fansSlider = document.getElementById('fans-slider');
+    const waterPumpDropdown = document.getElementById('water-pump-dropdown');
+    const fansDropdown = document.getElementById('fans-dropdown');
+
+    waterPumpSlider.addEventListener('input', () => {
+        const value = waterPumpSlider.value;
+        if (value === '1') {
+            waterPumpDropdown.style.display = 'block';
+        } else {
+            waterPumpDropdown.style.display = 'none';
+        }
+    });
+
+    fansSlider.addEventListener('input', () => {
+        const value = fansSlider.value;
+        if (value === '1') {
+            fansDropdown.style.display = 'block';
+        } else {
+            fansDropdown.style.display = 'none';
+        }
+    });
+
+    waterPumpDropdown.querySelector('select').addEventListener('change', (event) => {
+        const selectedValue = event.target.value;
+        // Implement logic to control the water pump
+        console.log('Water Pump:', selectedValue);
+    });
+
+    fansDropdown.querySelector('select').addEventListener('change', (event) => {
+        const selectedValue = event.target.value;
+        // Implement logic to control the fans
+        console.log('Fans:', selectedValue);
+    });
 });
