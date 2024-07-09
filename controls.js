@@ -11,6 +11,9 @@ document.addEventListener('DOMContentLoaded', () => {
             waterPumpDropdown.style.display = 'none';
         }
     });
+document.getElementById('hamburger-menu').addEventListener('click', function() {
+  document.getElementById('sidebar').classList.toggle('open');
+});
 
     fansSlider.addEventListener('input', () => {
         if (fansSlider.value == 1) {
