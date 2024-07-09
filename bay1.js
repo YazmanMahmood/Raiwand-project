@@ -1,13 +1,19 @@
 import { database, ref, onValue } from "./firebase-config.js";
 
 document.addEventListener('DOMContentLoaded', () => {
-    // Initialize Firebase references
+    const hamburger = document.querySelector('.hamburger');
+    const sidebar = document.querySelector('.sidebar');
+
+    hamburger.addEventListener('click', () => {
+        sidebar.classList.toggle('open');
+    });
+
+    // Firebase initialization and data fetching
     const lastReadingRef = ref(database, 'Esp1/ESP_20240622030452');
     const temperatureRef = ref(database, 'Esp1/temperature');
     const soilMoistureRef = ref(database, 'Esp1/soil_moisture');
     const humidityRef = ref(database, 'Esp1/humidity');
 
-    // Get the initial last reading date and time
     onValue(lastReadingRef, (snapshot) => {
         const data = snapshot.val();
         if (data && data.data_time) {
@@ -28,7 +34,6 @@ document.addEventListener('DOMContentLoaded', () => {
         document.getElementById('last-reading').innerText = "Error loading data";
     });
 
-    // Listen for changes in the temperature data
     onValue(temperatureRef, (snapshot) => {
         const temperature = snapshot.val();
         if (temperature !== null) {
@@ -41,7 +46,6 @@ document.addEventListener('DOMContentLoaded', () => {
         document.getElementById('temperature-box').textContent = "Error loading data";
     });
 
-    // Listen for changes in the soil moisture data
     onValue(soilMoistureRef, (snapshot) => {
         const soilMoisture = snapshot.val();
         if (soilMoisture !== null) {
@@ -54,7 +58,6 @@ document.addEventListener('DOMContentLoaded', () => {
         document.getElementById('soil-moisture-box').textContent = "Error loading data";
     });
 
-    // Listen for changes in the humidity data
     onValue(humidityRef, (snapshot) => {
         const humidity = snapshot.val();
         if (humidity !== null) {
