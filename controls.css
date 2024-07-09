@@ -1,3 +1,5 @@
+/* controls.css */
+
 body {
   font-family: Arial, sans-serif;
   margin: 0;
@@ -33,6 +35,11 @@ body {
   display: flex;
   flex-direction: column;
   transition: transform 0.3s ease;
+  position: fixed;
+  left: 0;
+  top: 0;
+  transform: translateX(-100%);
+  z-index: 999;
 }
 
 .sidebar.open {
@@ -56,6 +63,7 @@ body {
 }
 
 .main-content {
+  margin-left: 200px; /* Adjusted for sidebar width */
   flex: 1;
   padding: 20px;
 }
@@ -67,6 +75,7 @@ body {
   margin-bottom: 20px;
 }
 
+/* Control panel styles */
 .control-panel {
   display: flex;
   flex-direction: column;
@@ -103,6 +112,7 @@ body {
   justify-content: center;
 }
 
+/* Responsive adjustments */
 @media (max-width: 767px) {
   .sidebar {
     transform: translateX(-100%);
