@@ -5,6 +5,25 @@ body {
   padding: 0;
   display: flex;
 }
+.dimmed {
+  opacity: 0.5; /* This makes the link appear dimmed */
+  pointer-events: none; /* This disables clicking the link */
+}
+
+.active {
+  font-weight: bold;
+  color: #000; /* Adjust as needed */
+}
+
+/* Optional: Add some hover effects to improve user experience */
+.dimmed:hover {
+  opacity: 0.7;
+  pointer-events: none;
+}
+
+.bay.dimmed:hover {
+  cursor: not-allowed; /* Changes cursor to indicate it's not clickable */
+}
 
 .sidebar {
   width: 200px;
