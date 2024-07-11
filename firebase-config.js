@@ -13,8 +13,9 @@ const firebaseConfig = {
   measurementId: "G-CPD0XFLYN5"
 };
 
-// Initialize Firebase
 const app = initializeApp(firebaseConfig);
-const database = getDatabase(app); // Get the database instance
+const database = getDatabase(app);
 
-export { database, ref, onValue }; // Export Firebase functions for use in other modules
+console.log("Firebase initialized");
+
+export { database, ref, onValue };

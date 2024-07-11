@@ -65,6 +65,37 @@ document.addEventListener('DOMContentLoaded', () => {
     }, (error) => {
         console.error("Error fetching humidity:", error);
         updateValue('humidity-box', null);
+<<<<<<< HEAD
+    });
+
+    // Control panel functionality
+    const waterPumpSlider = document.getElementById('water-pump-slider');
+    const fansSlider = document.getElementById('fans-slider');
+    const waterPumpDropdown = document.getElementById('water-pump-dropdown');
+    const fansDropdown = document.getElementById('fans-dropdown');
+
+    waterPumpSlider.addEventListener('input', () => {
+        const value = waterPumpSlider.value;
+        waterPumpDropdown.style.display = value === '1' ? 'block' : 'none';
+    });
+
+    fansSlider.addEventListener('input', () => {
+        const value = fansSlider.value;
+        fansDropdown.style.display = value === '1' ? 'block' : 'none';
+    });
+
+    waterPumpDropdown.querySelector('select').addEventListener('change', (event) => {
+        const selectedValue = event.target.value;
+        // Implement logic to control the water pump
+        console.log('Water Pump:', selectedValue);
+    });
+
+    fansDropdown.querySelector('select').addEventListener('change', (event) => {
+        const selectedValue = event.target.value;
+        // Implement logic to control the fans
+        console.log('Fans:', selectedValue);
+=======
+>>>>>>> 366b80ac03fbeb918bc895f4e6e21987981fa205
     });
 
     // Control panel functionality
