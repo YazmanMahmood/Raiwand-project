@@ -1,4 +1,3 @@
-
 import { database, ref, onValue } from "./firebase-config.js";
 
 document.addEventListener('DOMContentLoaded', () => {
@@ -35,40 +34,37 @@ document.addEventListener('DOMContentLoaded', () => {
         document.getElementById('last-reading').innerText = "Error loading data";
     });
 
+    const updateValue = (elementId, value) => {
+        const element = document.getElementById(elementId);
+        if (value !== null) {
+            element.textContent = `${value.toFixed(1)} ${elementId === 'temperature-box' ? '°C' : '%'}`;
+        } else {
+            element.textContent = "Data not available";
+        }
+    };
+
     onValue(temperatureRef, (snapshot) => {
         const temperature = snapshot.val();
-        if (temperature !== null) {
-            document.getElementById('temperature-box').textContent = ${temperature.toFixed(1)} °C;
-        } else {
-            document.getElementById('temperature-box').textContent = "Data not available";
-        }
+        updateValue('temperature-box', temperature);
     }, (error) => {
         console.error("Error fetching temperature:", error);
-        document.getElementById('temperature-box').textContent = "Error loading data";
+        updateValue('temperature-box', null);
     });
 
     onValue(soilMoistureRef, (snapshot) => {
         const soilMoisture = snapshot.val();
-        if (soilMoisture !== null) {
-            document.getElementById('soil-moisture-box').textContent = ${soilMoisture.toFixed(1)} %;
-        } else {
-            document.getElementById('soil-moisture-box').textContent = "Data not available";
-        }
+        updateValue('soil-moisture-box', soilMoisture);
     }, (error) => {
         console.error("Error fetching soil moisture:", error);
-        document.getElementById('soil-moisture-box').textContent = "Error loading data";
+        updateValue('soil-moisture-box', null);
     });
 
     onValue(humidityRef, (snapshot) => {
         const humidity = snapshot.val();
-        if (humidity !== null) {
-            document.getElementById('humidity-box').textContent = ${humidity.toFixed(1)} %;
-        } else {
-            document.getElementById('humidity-box').textContent = "Data not available";
-        }
+        updateValue('humidity-box', humidity);
     }, (error) => {
         console.error("Error fetching humidity:", error);
-        document.getElementById('humidity-box').textContent = "Error loading data";
+        updateValue('humidity-box', null);
     });
 
     // Control panel functionality
@@ -79,20 +75,12 @@ document.addEventListener('DOMContentLoaded', () => {
 
     waterPumpSlider.addEventListener('input', () => {
         const value = waterPumpSlider.value;
-        if (value === '1') {
-            waterPumpDropdown.style.display = 'block';
-        } else {
-            waterPumpDropdown.style.display = 'none';
-        }
+        waterPumpDropdown.style.display = value === '1' ? 'block' : 'none';
     });
 
     fansSlider.addEventListener('input', () => {
         const value = fansSlider.value;
-        if (value === '1') {
-            fansDropdown.style.display = 'block';
-        } else {
-            fansDropdown.style.display = 'none';
-        }
+        fansDropdown.style.display = value === '1' ? 'block' : 'none';
     });
 
     waterPumpDropdown.querySelector('select').addEventListener('change', (event) => {
