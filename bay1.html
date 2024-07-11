@@ -21,7 +21,6 @@
     <a class="dimmed">Bay 8</a>
     <a class="dimmed">Bay 9</a>
     <a class="dimmed">Bay 10</a>
-    <a href="#">Environment</a>
     <a href="#">Settings</a>
   </div>
 
@@ -30,6 +29,8 @@
       <h1>Bay 1</h1>
       <p>Last Reading as of <span id="last-reading">Loading...</span></p>
     </div>
+    
+    <!-- Live Data Reception -->
     <div class="widgets">
       <div class="widget">
         <h3>Soil Moisture</h3>
@@ -44,6 +45,25 @@
         <div id="humidity-box" class="large-textbox"></div>
       </div>
     </div>
+    
+    <!-- Set Values Panel -->
+    <div class="set-values">
+      <h2>Set Values</h2>
+      <div class="widget">
+        <h3>Soil Moisture</h3>
+        <input type="number" id="set-soil-moisture" class="large-inputbox" placeholder="Enter soil moisture value">
+      </div>
+      <div class="widget">
+        <h3>Temperature</h3>
+        <input type="number" id="set-temperature" class="large-inputbox" placeholder="Enter temperature value">
+      </div>
+      <div class="widget">
+        <h3>Humidity</h3>
+        <input type="number" id="set-humidity" class="large-inputbox" placeholder="Enter humidity value">
+      </div>
+    </div>
+    
+    <!-- Control Panel -->
     <div class="control-panel">
       <h2>Control Panel</h2>
       <div class="control-group">
@@ -77,11 +97,13 @@
         </div>
       </div>
     </div>
+
     <div class="summary">
       <h3>Daily Summary</h3>
       <canvas id="summary-chart"></canvas>
     </div>
   </div>
+
   <div class="hamburger" id="hamburger-menu">
     <div></div>
     <div></div>
