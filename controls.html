@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Greenhouse Monitoring - Controls</title>
-  <link rel="stylesheet" href="bay1.css">
+  <link rel="stylesheet" href="controls.css">
 </head>
 <body>
   <div class="sidebar">
@@ -23,39 +23,39 @@
     <div class="header">
       <h1>Controls</h1>
     </div>
-        <div class="control-panel">
-            <div class="control-group">
-                <label for="water-pump-slider">Water Pump</label>
-                <input type="range" id="water-pump-slider" min="0" max="2" step="1" value="0">
-                <div class="control-labels">
-                    <span>Auto</span>
-                    <span>Manual</span>
-                    <span>Off</span>
-                </div>
-                <div class="dropdown" id="water-pump-dropdown" style="display: none;">
-                    <select>
-                        <option value="on">On</option>
-                        <option value="off">Off</option>
-                    </select>
-                </div>
-            </div>
-            <div class="control-group">
-                <label for="fans-slider">Fans</label>
-                <input type="range" id="fans-slider" min="0" max="2" step="1" value="0">
-                <div class="control-labels">
-                    <span>Auto</span>
-                    <span>Manual</span>
-                    <span>Off</span>
-                </div>
-                <div class="dropdown" id="fans-dropdown" style="display: none;">
-                    <select>
-                        <option value="on">On</option>
-                        <option value="off">Off</option>
-                    </select>
-                </div>
-            </div>
+    <div class="control-panel">
+      <div class="control-group">
+        <label for="water-pump-slider">Water Pump</label>
+        <input type="range" id="water-pump-slider" min="0" max="2" step="1" value="0">
+        <div class="control-labels">
+          <span>Auto</span>
+          <span>Manual</span>
+          <span>Off</span>
         </div>
+        <div class="dropdown" id="water-pump-dropdown" style="display: none;">
+          <select>
+            <option value="on">On</option>
+            <option value="off">Off</option>
+          </select>
+        </div>
+      </div>
+      <div class="control-group">
+        <label for="fans-slider">Fans</label>
+        <input type="range" id="fans-slider" min="0" max="2" step="1" value="0">
+        <div class="control-labels">
+          <span>Auto</span>
+          <span>Manual</span>
+          <span>Off</span>
+        </div>
+        <div class="dropdown" id="fans-dropdown" style="display: none;">
+          <select>
+            <option value="on">On</option>
+            <option value="off">Off</option>
+          </select>
+        </div>
+      </div>
     </div>
-    <script src="controls.js"></script>
+  </div>
+  <script src="controls.js"></script>
 </body>
 </html>

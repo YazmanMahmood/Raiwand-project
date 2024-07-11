@@ -20,6 +20,12 @@ body {
     color: white;
     padding: 15px;
     position: fixed; /* Fixed position */
+    display: flex;
+    flex-direction: column;
+}
+
+.sidebar-header {
+    margin-bottom: 15px;
 }
 
 .sidebar a {
@@ -30,7 +36,7 @@ body {
     margin-bottom: 5px;
 }
 
-.sidebar a:hover {
+.sidebar a:hover, .sidebar a.active {
     background-color: #555;
 }
 
@@ -39,6 +45,50 @@ body {
     margin-left: 200px; /* Adjusted for sidebar width */
     flex: 1;
     padding: 20px;
+}
+
+.header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+}
+
+/* Control panel styles */
+.control-panel {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.control-group {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    width: 100%;
+}
+
+.control-group label {
+    font-size: 1.2em;
+}
+
+.control-group input[type="range"] {
+    width: 100%;
+}
+
+.control-labels {
+    display: flex;
+    justify-content: space-between;
+}
+
+.control-labels span {
+    flex: 1;
+    text-align: center;
+}
+
+.dropdown {
+    display: flex;
+    justify-content: center;
 }
 
 /* Responsive adjustments */
@@ -51,5 +101,9 @@ body {
 
     .main-content {
         margin-left: 0; /* No margin */
+    }
+
+    .control-panel {
+        width: 100%;
     }
 }

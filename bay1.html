@@ -7,23 +7,30 @@
   <link rel="stylesheet" href="bay1.css">
 </head>
 <body>
-  <div class="sidebar">
+  <div class="sidebar" id="sidebar">
     <div class="sidebar-header">
       <h2>SmartSpace Agri</h2>
     </div>
-    <a href="bay1.html" class="active">Home</a>
-    <a href="#">Temperature</a>
-    <a href="#">Humidity</a>
-    <a href="#">Soil Moisture</a>
-    <a href="#">Reports</a>
-    <a href="controls.html">Controls</a>
+    <a href="bay1.html" class="active">Bay 1</a>
+    <a class="bay dimmed">Bay 2</a>
+    <a class="dimmed">Bay 3</a>
+    <a class="dimmed">Bay 4</a>
+    <a class="dimmed">Bay 5</a>
+    <a class="dimmed">Bay 6</a>
+    <a class="dimmed">Bay 7</a>
+    <a class="dimmed">Bay 8</a>
+    <a class="dimmed">Bay 9</a>
+    <a class="dimmed">Bay 10</a>
     <a href="#">Settings</a>
   </div>
+
   <div class="main-content">
     <div class="header">
       <h1>Bay 1</h1>
       <p>Last Reading as of <span id="last-reading">Loading...</span></p>
     </div>
+    
+    <!-- Live Data Reception -->
     <div class="widgets">
       <div class="widget">
         <h3>Soil Moisture</h3>
@@ -38,19 +45,81 @@
         <div id="humidity-box" class="large-textbox"></div>
       </div>
     </div>
+    
+    <!-- Set Values Panel -->
+    <div class="set-values">
+      <h2>Set Values</h2>
+      <div class="widgets">
+        <div class="widget">
+          <h3>Soil Moisture</h3>
+          <input type="number" id="set-soil-moisture" class="large-inputbox" placeholder="Enter soil moisture value">
+        </div>
+        <div class="widget">
+          <h3>Temperature</h3>
+          <input type="number" id="set-temperature" class="large-inputbox" placeholder="Enter temperature value">
+        </div>
+        <div class="widget">
+          <h3>Humidity</h3>
+          <input type="number" id="set-humidity" class="large-inputbox" placeholder="Enter humidity value">
+        </div>
+      </div>
+    </div>
+    
+    <!-- Control Panel -->
+    <div class="control-panel">
+      <h2>Control Panel</h2>
+      <div class="control-group">
+        <label for="water-pump-slider">Water Pump</label>
+        <input type="range" id="water-pump-slider" min="0" max="2" step="1" value="0">
+        <div class="control-labels">
+          <span>Auto</span>
+          <span>Manual</span>
+          <span>Off</span>
+        </div>
+        <div class="dropdown" id="water-pump-dropdown" style="display: none;">
+          <select>
+            <option value="on">On</option>
+            <option value="off">Off</option>
+          </select>
+        </div>
+      </div>
+      <div class="control-group">
+        <label for="fans-slider">Fans</label>
+        <input type="range" id="fans-slider" min="0" max="2" step="1" value="0">
+        <div class="control-labels">
+          <span>Auto</span>
+          <span>Manual</span>
+          <span>Off</span>
+        </div>
+        <div class="dropdown" id="fans-dropdown" style="display: none;">
+          <select>
+            <option value="on">On</option>
+            <option value="off">Off</option>
+          </select>
+        </div>
+      </div>
+    </div>
+    
     <div class="summary">
       <h3>Daily Summary</h3>
       <canvas id="summary-chart"></canvas>
     </div>
   </div>
-  <script src="https://www.gstatic.com/firebasejs/10.1.0/firebase-app-compat.js"></script>
-<script src="https://www.gstatic.com/firebasejs/10.1.0/firebase-database-compat.js"></script>
   
+  <div class="hamburger" id="hamburger-menu">
+    <div></div>
+    <div></div>
+    <div></div>
+  </div>
+
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-  <script type="module" src="firebase-app.js"></script>
-  <script type="module" src="firebase-database.js"></script>
-  
+  <script type="module" src="firebase-config.js"></script>
   <script type="module" src="bay1.js"></script>
   <script src="summary-chart.js"></script>
+  <script>
+    document.getElementById('hamburger-menu').addEventListener('click', function() {
+      document.getElementById('sidebar').classList.toggle('open');
+    });
+  </script>
 </body>
 </html>
