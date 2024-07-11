@@ -1,4 +1,5 @@
 import { database, ref, onValue } from "./firebase-config.js";
+import Chart from 'chart.js/auto';
 
 document.addEventListener('DOMContentLoaded', () => {
     const hamburger = document.querySelector('.hamburger');
@@ -37,7 +38,7 @@ document.addEventListener('DOMContentLoaded', () => {
     onValue(temperatureRef, (snapshot) => {
         const temperature = snapshot.val();
         if (temperature !== null) {
-            document.getElementById('temperature-box').textContent = ${temperature.toFixed(1)} °C;
+            document.getElementById('temperature-box').textContent = `${temperature.toFixed(1)} °C`;
         } else {
             document.getElementById('temperature-box').textContent = "Data not available";
         }
@@ -49,7 +50,7 @@ document.addEventListener('DOMContentLoaded', () => {
     onValue(soilMoistureRef, (snapshot) => {
         const soilMoisture = snapshot.val();
         if (soilMoisture !== null) {
-            document.getElementById('soil-moisture-box').textContent = ${soilMoisture.toFixed(1)} %;
+            document.getElementById('soil-moisture-box').textContent = `${soilMoisture.toFixed(1)} %`;
         } else {
             document.getElementById('soil-moisture-box').textContent = "Data not available";
         }
@@ -61,13 +62,39 @@ document.addEventListener('DOMContentLoaded', () => {
     onValue(humidityRef, (snapshot) => {
         const humidity = snapshot.val();
         if (humidity !== null) {
-            document.getElementById('humidity-box').textContent = ${humidity.toFixed(1)} %;
+            document.getElementById('humidity-box').textContent = `${humidity.toFixed(1)} %`;
         } else {
             document.getElementById('humidity-box').textContent = "Data not available";
         }
     }, (error) => {
         console.error("Error fetching humidity:", error);
         document.getElementById('humidity-box').textContent = "Error loading data";
+    });
+
+    // Render line chart with random data
+    const ctx = document.getElementById('summary-chart').getContext('2d');
+    const labels = ['January', 'February', 'March', 'April', 'May', 'June'];
+    const data = {
+        labels: labels,
+        datasets: [{
+            label: 'Random Data',
+            data: [12, 19, 3, 5, 2, 3], // Replace with your random data values
+            fill: false,
+            borderColor: 'rgb(75, 192, 192)',
+            tension: 0.1
+        }]
+    };
+
+    const lineChart = new Chart(ctx, {
+        type: 'line',
+        data: data,
+        options: {
+            scales: {
+                y: {
+                    beginAtZero: true
+                }
+            }
+        }
     });
 
     // Control panel functionality
