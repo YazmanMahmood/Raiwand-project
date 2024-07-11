@@ -132,4 +132,4 @@ document.addEventListener('DOMContentLoaded', () => {
         // Implement logic to control the fans
         console.log('Fans:', selectedValue);
     });
-}};
+});
