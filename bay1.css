@@ -167,5 +167,19 @@ input[type="range"]:hover {
   .hamburger {
     display: flex;
   }
+}
 
+/* New CSS for dimmed class */
+.dimmed {
+  opacity: 0.5; /* This makes the link appear dimmed */
+  pointer-events: none; /* This disables clicking the link */
+}
+
+.active {
+  font-weight: bold;
+  color: #fff; /* Adjust as needed */
+}
+
+.bay.dimmed:hover {
+  cursor: not-allowed; /* Changes cursor to indicate it's not clickable */
 }
