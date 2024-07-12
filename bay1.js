@@ -1,11 +1,12 @@
 import { database, ref, onValue } from "./firebase-config.js";
 
 document.addEventListener('DOMContentLoaded', () => {
-    const hamburger = document.querySelector('.hamburger');
-    const sidebar = document.querySelector('.sidebar');
+    const hamburger = document.getElementById('hamburger-menu');
+    const sidebar = document.getElementById('sidebar');
 
     hamburger.addEventListener('click', () => {
         sidebar.classList.toggle('open');
+        hamburger.classList.toggle('open');
     });
 
     // Firebase initialization and data fetching
@@ -94,10 +95,5 @@ document.addEventListener('DOMContentLoaded', () => {
         // Implement logic to control the fans
         console.log('Fans:', selectedValue);
     });
-    document.getElementById('hamburger-menu').addEventListener('click', function() {
-  document.getElementById('sidebar').classList.toggle('open');
-  document.querySelector('.hamburger').classList.toggle('open');
-});
-
 
 });
