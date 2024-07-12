@@ -96,6 +96,8 @@ document.addEventListener('DOMContentLoaded', () => {
     });
     document.getElementById('hamburger-menu').addEventListener('click', function() {
   document.getElementById('sidebar').classList.toggle('open');
+  document.querySelector('.hamburger').classList.toggle('open');
 });
+
 
 });
