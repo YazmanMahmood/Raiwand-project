@@ -94,4 +94,8 @@ document.addEventListener('DOMContentLoaded', () => {
         // Implement logic to control the fans
         console.log('Fans:', selectedValue);
     });
+    document.getElementById('hamburger-menu').addEventListener('click', function() {
+  document.getElementById('sidebar').classList.toggle('open');
+});
+
 });
