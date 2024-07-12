@@ -6,7 +6,6 @@ document.addEventListener('DOMContentLoaded', () => {
 
     hamburger.addEventListener('click', () => {
         sidebar.classList.toggle('open');
-        hamburger.classList.toggle('open');
     });
 
     // Firebase initialization and data fetching
