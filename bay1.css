@@ -170,33 +170,34 @@ input[type="range"]:hover {
   }
 
   .hamburger {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    position: fixed;
-    top: 20px;
-    left: 20px;
-    z-index: 2; /* Ensure hamburger button is above content */
-    cursor: pointer;
-  }
+  display: flex;
+  flex-direction: column; /* Stack items vertically */
+  justify-content: center; /* Center items vertically */
+  align-items: center; /* Center items horizontally */
+  cursor: pointer;
+  position: fixed;
+  top: 20px;
+  left: 20px;
+  z-index: 1000;
+}
+
 
   .hamburger div {
-    width: 25px;
-    height: 3px;
-    background-color: #333;
-    margin: 5px;
-    transition: transform 0.3s;
-  }
+  width: 25px;
+  height: 3px;
+  background-color: #333;
+  margin: 5px;
+  transition: transform 0.3s;
+}
 
   .hamburger.open div:nth-child(1) {
-    transform: rotate(-45deg) translate(-5px, 6px);
-  }
+  transform: rotate(-45deg) translate(0, 6px);
+}
 
-  .hamburger.open div:nth-child(2) {
-    opacity: 0;
-  }
+.hamburger.open div:nth-child(2) {
+  opacity: 0;
+}
 
-  .hamburger.open div:nth-child(3) {
-    transform: rotate(45deg) translate(-5px, -6px);
-  }
+.hamburger.open div:nth-child(3) {
+  transform: rotate(45deg) translate(0, -6px);
 }
