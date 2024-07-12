@@ -4,8 +4,10 @@ document.addEventListener('DOMContentLoaded', () => {
     const hamburger = document.getElementById('hamburger-menu');
     const sidebar = document.getElementById('sidebar');
 
+    // Function to toggle sidebar and hamburger menu
     hamburger.addEventListener('click', () => {
         sidebar.classList.toggle('open');
+        hamburger.classList.toggle('open');
     });
 
     // Firebase initialization and data fetching
@@ -94,5 +96,18 @@ document.addEventListener('DOMContentLoaded', () => {
         // Implement logic to control the fans
         console.log('Fans:', selectedValue);
     });
+
+    // Function to hide sidebar on smaller screens
+    const mediaQuery = window.matchMedia('(max-width: 767px)');
+    function handleTabletChange(e) {
+        if (e.matches) {
+            sidebar.classList.remove('open');
+            hamburger.classList.remove('open');
+        } else {
+            sidebar.classList.add('open');
+        }
+    }
+    mediaQuery.addListener(handleTabletChange);
+    handleTabletChange(mediaQuery);
 
 });
