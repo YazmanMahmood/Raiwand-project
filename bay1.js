@@ -1,18 +1,21 @@
+import { database, ref, onValue } from "./firebase-config.js";
+
 document.addEventListener('DOMContentLoaded', () => {
-  const hamburger = document.querySelector('#hamburger-menu');
-  const sidebar = document.querySelector('#sidebar');
+  const hamburger = document.querySelector('.hamburger');
+  const sidebar = document.querySelector('.sidebar');
 
   hamburger.addEventListener('click', () => {
     sidebar.classList.toggle('open');
+    hamburger.classList.toggle('open');
   });
 
   // Firebase initialization and data fetching
-  const lastReadingRef = firebase.database().ref('Esp1/ESP_20240622030452');
-  const temperatureRef = firebase.database().ref('Esp1/temperature');
-  const soilMoistureRef = firebase.database().ref('Esp1/soil_moisture');
-  const humidityRef = firebase.database().ref('Esp1/humidity');
+  const lastReadingRef = ref(database, 'Esp1/ESP_20240622030452');
+  const temperatureRef = ref(database, 'Esp1/temperature');
+  const soilMoistureRef = ref(database, 'Esp1/soil_moisture');
+  const humidityRef = ref(database, 'Esp1/humidity');
 
-  lastReadingRef.on('value', (snapshot) => {
+  onValue(lastReadingRef, (snapshot) => {
     const data = snapshot.val();
     if (data && data.data_time) {
       const lastReadingTime = new Date(data.data_time);
@@ -41,7 +44,7 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   };
 
-  temperatureRef.on('value', (snapshot) => {
+  onValue(temperatureRef, (snapshot) => {
     const temperature = snapshot.val();
     updateValue('temperature-box', temperature);
   }, (error) => {
@@ -49,7 +52,7 @@ document.addEventListener('DOMContentLoaded', () => {
     updateValue('temperature-box', null);
   });
 
-  soilMoistureRef.on('value', (snapshot) => {
+  onValue(soilMoistureRef, (snapshot) => {
     const soilMoisture = snapshot.val();
     updateValue('soil-moisture-box', soilMoisture);
   }, (error) => {
@@ -57,7 +60,7 @@ document.addEventListener('DOMContentLoaded', () => {
     updateValue('soil-moisture-box', null);
   });
 
-  humidityRef.on('value', (snapshot) => {
+  onValue(humidityRef, (snapshot) => {
     const humidity = snapshot.val();
     updateValue('humidity-box', humidity);
   }, (error) => {
