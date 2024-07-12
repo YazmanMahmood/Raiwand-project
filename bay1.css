@@ -177,11 +177,14 @@ input[type="range"]:hover {
 /* Responsive adjustments */
 @media (max-width: 767px) {
   .sidebar {
-    transform: translateX(-100%);
+    width: 200px;
+    position: fixed;
+    top: 0;
+    left: -200px; /* Off-screen by default */
   }
 
   .sidebar.open {
-    transform: translateX(0);
+    left: 0; /* Moves the sidebar into view */
   }
 
   .main-content {
