@@ -4,6 +4,7 @@ body {
   margin: 0;
   padding: 0;
   display: flex;
+  height: 100vh;
 }
 
 .sidebar {
@@ -17,6 +18,7 @@ body {
   top: 0;
   left: 0;
   height: 100%;
+  transform: translateX(-100%);
   transition: transform 0.3s ease;
 }
 
@@ -41,7 +43,7 @@ body {
 }
 
 .main-content {
-  margin-left: 250px;
+  margin-left: 200px;
   padding: 20px;
   flex: 1;
 }
@@ -71,8 +73,8 @@ body {
 
 .large-textbox, .large-inputbox {
   width: 100%;
-  height: 80px;  /* Reduced height */
-  font-size: 1.5em;  /* Reduced font size */
+  height: 80px;
+  font-size: 1.5em;
   text-align: center;
   background-color: #fff;
   border-radius: 5px;
@@ -153,17 +155,33 @@ input[type="range"]:hover {
   background: #ccc;
 }
 
+/* Hamburger menu styles */
+.hamburger {
+  display: none;
+  flex-direction: column;
+  justify-content: space-between;
+  width: 30px;
+  height: 25px;
+  position: fixed;
+  top: 15px;
+  left: 15px;
+  cursor: pointer;
+}
+
+.hamburger div {
+  height: 4px;
+  background-color: #333;
+  border-radius: 2px;
+}
+
 /* Responsive adjustments */
 @media (max-width: 767px) {
   .sidebar {
-    width: 200px;
-    position: fixed;
-    top: 0;
-    left: -200px;
+    transform: translateX(-100%);
   }
 
   .sidebar.open {
-    transform: translateX(200px);
+    transform: translateX(0);
   }
 
   .main-content {
@@ -207,8 +225,8 @@ input[type="range"]:hover {
 
 .large-inputbox {
   width: 100%;
-  height: 80px;  /* Reduced height */
-  font-size: 1.5em;  /* Reduced font size */
+  height: 80px;
+  font-size: 1.5em;
   text-align: center;
   background-color: #fff;
   border-radius: 5px;
@@ -219,8 +237,4 @@ input[type="range"]:hover {
   border: none;
   outline: none;
   padding: 0 10px;
-<<<<<<< HEAD
 }
-=======
-}
->>>>>>> 366b80ac03fbeb918bc895f4e6e21987981fa205
