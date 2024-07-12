@@ -7,6 +7,7 @@ body {
   height: 100vh;
 }
 
+/* Adjusted CSS for hamburger menu and sidebar visibility */
 .sidebar {
   width: 200px;
   background-color: #333;
@@ -18,16 +19,11 @@ body {
   top: 0;
   left: -200px; /* Off-screen by default */
   height: 100%;
-  transition: transform 0.3s ease;
+  transition: left 0.3s ease; /* Changed transition property */
 }
 
 .sidebar.open {
   left: 0; /* Moves the sidebar into view */
-}
-
-
-.sidebar-header {
-  margin-bottom: 15px;
 }
 
 .sidebar a {
@@ -175,11 +171,17 @@ input[type="range"]:hover {
 }
 
 /* Responsive adjustments */
+.hamburger {
+  display: none; /* Hide by default */
+  position: fixed;
+  top: 15px;
+  left: 15px;
+  cursor: pointer;
+  z-index: 1000; /* Ensure it's above other content */
+}
+
 @media (max-width: 767px) {
   .sidebar {
-    width: 200px;
-    position: fixed;
-    top: 0;
     left: -200px; /* Off-screen by default */
   }
 
@@ -192,9 +194,10 @@ input[type="range"]:hover {
   }
 
   .hamburger {
-    display: flex;
+    display: flex; /* Show only when sidebar is closed */
   }
 }
+
 
 /* Styles for the set-values panel */
 .set-values {
