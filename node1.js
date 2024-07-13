@@ -1,3 +1,5 @@
+// firebase-config.js
+
 import { database, ref, onValue } from "./firebase-config.js";
 
 document.addEventListener('DOMContentLoaded', () => {
@@ -10,30 +12,9 @@ document.addEventListener('DOMContentLoaded', () => {
   });
 
   // Firebase initialization and data fetching
-  const lastReadingRef = ref(database, 'Esp1/ESP_20240622030452');
-  const temperatureRef = ref(database, 'Esp1/temperature');
-  const soilMoistureRef = ref(database, 'Esp1/soil_moisture');
-  const humidityRef = ref(database, 'Esp1/humidity');
-
-  onValue(lastReadingRef, (snapshot) => {
-    const data = snapshot.val();
-    if (data && data.data_time) {
-      const lastReadingTime = new Date(data.data_time);
-      document.getElementById('last-reading').innerText = lastReadingTime.toLocaleString('en-US', {
-        hour: 'numeric',
-        minute: 'numeric',
-        hour12: true,
-        day: 'numeric',
-        month: 'long',
-        year: 'numeric'
-      });
-    } else {
-      document.getElementById('last-reading').innerText = "Data not available";
-    }
-  }, (error) => {
-    console.error("Error fetching last reading time:", error);
-    document.getElementById('last-reading').innerText = "Error loading data";
-  });
+  const temperatureRef = ref(database, 'bay 1/node 1/temperature');
+  const soilMoistureRef = ref(database, 'bay 1/node 1/soil_moisture');
+  const humidityRef = ref(database, 'bay 1/node 1/humidity');
 
   const updateValue = (elementId, value) => {
     const element = document.getElementById(elementId);

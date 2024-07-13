@@ -1,45 +1,71 @@
 document.addEventListener('DOMContentLoaded', () => {
-    const nodes = ['A', 'B', 'C', 'D', 'E', 'F'];
-    let totalTemp = 0, totalHumidity = 0, totalSoil = 0;
-
-    nodes.forEach((node, index) => {
-        const temp = (Math.random() * 40).toFixed(1);
-        const humidity = (Math.random() * 100).toFixed(1);
-        const soil = (Math.random() * 100).toFixed(1);
-        const lastReading = new Date().toLocaleString('en-US', {
-            hour: 'numeric',
-            minute: 'numeric',
-            hour12: true,
-            day: 'numeric',
-            month: 'long',
-            year: 'numeric'
-        });
-
-        document.getElementById(`temp${node}`).textContent = `${temp}°C`;
-        document.getElementById(`humidity${node}`).textContent = `${humidity}%`;
-        document.getElementById(`soil${node}`).textContent = `${soil}%`;
-        document.getElementById(`reading${node}`).textContent = lastReading;
-
-        totalTemp += parseFloat(temp);
-        totalHumidity += parseFloat(humidity);
-        totalSoil += parseFloat(soil);
+    const summaryCtx = document.getElementById('summary-chart').getContext('2d');
+    const summaryChart = new Chart(summaryCtx, {
+        type: 'line',
+        data: {
+            labels: ['09:00', '11:00', '13:00', '15:00', '17:00', '19:00', '21:00'],
+            datasets: [{
+                label: 'Temperature',
+                data: [30, 25, 28, 26, 27, 29, 32],
+                backgroundColor: 'rgba(26, 188, 156, 0.2)',
+                borderColor: 'rgba(26, 188, 156, 1)',
+                borderWidth: 2,
+                fill: true,
+                tension: 0.4
+            }]
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            scales: {
+                x: {
+                    beginAtZero: true
+                },
+                y: {
+                    beginAtZero: true,
+                    max: 50
+                }
+            }
+        }
     });
 
-    const avgTemp = (totalTemp / nodes.length).toFixed(1);
-    const avgHumidity = (totalHumidity / nodes.length).toFixed(1);
-    const avgSoil = (totalSoil / nodes.length).toFixed(1);
+    // Create gauges
+    const soilMoistureGauge = new JustGage({
+        id: "soil-moisture-gauge",
+        value: 87.5,
+        min: 0,
+        max: 100,
+        title: "Soil Moisture",
+        label: "%",
+        pointer: true,
+        gaugeWidthScale: 0.6,
+        levelColors: ["#00ff00", "#ff0000"]
+    });
 
-    document.getElementById('avg-temp').textContent = `${avgTemp}°C`;
-    document.getElementById('avg-humidity').textContent = `${avgHumidity}%`;
-    document.getElementById('avg-soil').textContent = `${avgSoil}%`;
+    const temperatureGauge = new JustGage({
+        id: "temperature-gauge",
+        value: 32.5,
+        min: 0,
+        max: 50,
+        title: "Temperature",
+        label: "°C",
+        pointer: true,
+        gaugeWidthScale: 0.6,
+        levelColors: ["#00ff00", "#ff0000"]
+    });
 
-    const waterSupplyStatus = Math.random() > 0.5 ? 'On' : 'Off';
-    const fanStatus = Math.random() > 0.5 ? 'On' : 'Off';
+    const humidityGauge = new JustGage({
+        id: "humidity-gauge",
+        value: 85,
+        min: 0,
+        max: 100,
+        title: "Humidity",
+        label: "%",
+        pointer: true,
+        gaugeWidthScale: 0.6,
+        levelColors: ["#00ff00", "#ff0000"]
+    });
 
-    document.getElementById('water-supply-status').textContent = waterSupplyStatus;
-    document.getElementById('fan-status').textContent = fanStatus;
+    // Sample sensor data
+    document.getElementById('last-reading').innerText = '8:00pm, September 7, 2019';
 });
-
-function redirectToBay1() {
-    window.location.href = "bay1.html";
-}
