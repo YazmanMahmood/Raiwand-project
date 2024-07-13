@@ -66,6 +66,16 @@ document.addEventListener('DOMContentLoaded', () => {
         levelColors: ["#00ff00", "#ff0000"]
     });
 
+    // Function to redirect to node1.html
+    function redirectToNode1() {
+        window.location.href = 'node1.html'; // Replace with the actual path to node1.html
+    }
+
     // Sample sensor data
     document.getElementById('last-reading').innerText = '8:00pm, September 7, 2019';
+
+    // Attach the redirectToNode1 function to the onclick event of Node 1
+    const node1 = document.querySelector('.node:nth-child(1)');
+    node1.addEventListener('click', redirectToNode1);
 });
+
