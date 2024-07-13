@@ -18,6 +18,7 @@ body {
   left: 0;
   height: 100%;
   transition: transform 0.3s ease;
+  z-index: 1; /* Ensure sidebar is above other content */
 }
 
 .sidebar.open {
@@ -41,7 +42,7 @@ body {
 }
 
 .main-content {
-  margin-left: 250px;
+  margin-left: 200px; /* Adjusted for sidebar width */
   padding: 20px;
   flex: 1;
 }
@@ -156,14 +157,12 @@ input[type="range"]:hover {
 /* Responsive adjustments */
 @media (max-width: 767px) {
   .sidebar {
-    width: 200px;
-    position: fixed;
-    top: 0;
-    left: -200px;
+    transform: translateX(-100%);
+    transition: transform 0.3s ease;
   }
 
   .sidebar.open {
-    transform: translateX(200px);
+    transform: translateX(0);
   }
 
   .main-content {
@@ -172,103 +171,32 @@ input[type="range"]:hover {
 
   .hamburger {
     display: flex;
-  }
-}
-
-/* Styles for the set-values panel */
-.set-values {
-  background-color: #f0f0f0;
-  padding: 15px;
-  border-radius: 5px;
-  margin-bottom: 20px;
-  display: flex;
-  flex-direction: column;
-}
-
-.set-values .widgets {
-  display: flex;
-  gap: 20px;
-  margin-bottom: 20px;
-}
-
-.set-values .widget {
-  flex: 1;
-  background-color: #f0f0f0;
-  padding: 15px;
-  border-radius: 5px;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-}
-
-.set-values h2 {
-  margin-bottom: 15px;
-}
-
-.large-inputbox {
-  width: 100%;
-  height: 80px;  /* Reduced height */
-  font-size: 1.5em;  /* Reduced font size */
-  text-align: center;
-  background-color: #fff;
-  border-radius: 5px;
-  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  border: none;
-  outline: none;
-  padding: 0 10px;
-}
-
-.hamburger {
-  display: none;
-  flex-direction: column; /* Stack items vertically */
-  justify-content: center; /* Center items vertically */
-  align-items: center; /* Center items horizontally */
-  cursor: pointer;
-  position: fixed;
-  top: 20px;
-  left: 20px;
-  z-index: 1000;
-  width: 40px; /* Square button */
-  height: 40px; /* Square button */
-  background-color: #333; /* Background color for visibility */
-  border-radius: 5px; /* Rounded corners */
-}
-
-.hamburger div {
-  width: 25px;
-  height: 3px;
-  background-color: #fff; /* White bars for contrast */
-  margin: 3px 0;
-  transition: transform 0.3s;
-}
-
-.hamburger.open div:nth-child(1) {
-  transform: rotate(-45deg) translate(-5px, 6px);
-}
-
-.hamburger.open div:nth-child(2) {
-  opacity: 0;
-}
-
-.hamburger.open div:nth-child(3) {
-  transform: rotate(45deg) translate(-5px, -6px);
-}
-
-/* Show hamburger button on mobile */
-@media (max-width: 767px) {
-  .hamburger {
-    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: fixed;
+    top: 20px;
+    left: 20px;
+    z-index: 2; /* Ensure hamburger button is above content */
+    cursor: pointer;
   }
 
-  .main-content {
-    margin-left: 0;
+  .hamburger div {
+    width: 25px;
+    height: 3px;
+    background-color: #333;
+    margin: 5px;
+    transition: transform 0.3s;
   }
 
-  .sidebar.open + .hamburger {
-    left: 220px;
+  .hamburger.open div:nth-child(1) {
+    transform: rotate(-45deg) translate(-5px, 6px);
+  }
+
+  .hamburger.open div:nth-child(2) {
+    opacity: 0;
+  }
+
+  .hamburger.open div:nth-child(3) {
+    transform: rotate(45deg) translate(-5px, -6px);
   }
 }
-
