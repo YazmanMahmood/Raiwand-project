@@ -1,14 +1,17 @@
+/* Reset styles */
 * {
     margin: 0;
     padding: 0;
     box-sizing: border-box;
 }
 
+/* Body styles */
 body {
     font-family: Arial, sans-serif;
     background-color: #f0f0f0;
 }
 
+/* Container styles */
 .container {
     max-width: 1200px;
     margin: 20px auto;
@@ -18,6 +21,7 @@ body {
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
 }
 
+/* Header styles */
 .header {
     text-align: center;
     margin-bottom: 20px;
@@ -28,11 +32,13 @@ h1 {
     margin-bottom: 10px;
 }
 
+/* Content styles */
 .content {
     display: flex;
     justify-content: space-between;
 }
 
+/* Nodes container styles */
 .nodes-container {
     display: flex;
     flex-wrap: wrap;
@@ -40,6 +46,7 @@ h1 {
     width: 70%;
 }
 
+/* Individual node styles */
 .node {
     width: calc(50% - 10px);
     background-color: #8a8686;
@@ -64,6 +71,7 @@ h1 {
     margin-bottom: 10px;
 }
 
+/* Sidebar styles */
 .sidebar {
     width: 25%;
 }
@@ -82,6 +90,7 @@ h1 {
     font-weight: bold;
 }
 
+/* Responsive styles */
 @media screen and (max-width: 768px) {
     .content {
         flex-direction: column;
