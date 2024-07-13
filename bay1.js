@@ -1,8 +1,6 @@
 document.addEventListener('DOMContentLoaded', () => {
-    // Function to redirect to node1.html
-    function redirectToNode1() {
-        window.location.href = 'node1.html'; // Replace with the actual path to node1.html
-    }
+    const node1 = document.getElementById('node1');
+}
 
     // Attach the redirectToNode1 function to the onclick event of Node 1
     const node1 = document.querySelector('.node:nth-child(1)');
