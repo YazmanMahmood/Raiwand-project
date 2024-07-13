@@ -1,14 +1,8 @@
 document.addEventListener('DOMContentLoaded', () => {
-    const node1 = document.getElementById('node1');
-}
-
-    // Attach the redirectToNode1 function to the onclick event of Node 1
-    const node1 = document.querySelector('.node:nth-child(1)');
-    node1.addEventListener('click', redirectToNode1);
-
-    // Initialize Chart.js chart if summary-chart canvas exists
-    const summaryCtx = document.getElementById('summary-chart')?.getContext('2d');
-    if (summaryCtx) {
+    // Check if summary-chart canvas exists before accessing getContext
+    const summaryCanvas = document.getElementById('summary-chart');
+    if (summaryCanvas) {
+        const summaryCtx = summaryCanvas.getContext('2d');
         const summaryChart = new Chart(summaryCtx, {
             type: 'line',
             data: {
@@ -39,53 +33,31 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
+    // Create gauges if the corresponding elements exist
+    const createGauge = (id, value, title, label) => {
+        const gaugeElement = document.getElementById(id);
+        if (gaugeElement) {
+            new JustGage({
+                id: id,
+                value: value,
+                min: 0,
+                max: 100,
+                title: title,
+                label: label,
+                pointer: true,
+                gaugeWidthScale: 0.6,
+                levelColors: ["#00ff00", "#ff0000"]
+            });
+        }
+    };
 
-    // Create gauges
-    const soilMoistureGauge = new JustGage({
-        id: "soil-moisture-gauge",
-        value: 87.5,
-        min: 0,
-        max: 100,
-        title: "Soil Moisture",
-        label: "%",
-        pointer: true,
-        gaugeWidthScale: 0.6,
-        levelColors: ["#00ff00", "#ff0000"]
-    });
+    createGauge("soil-moisture-gauge", 87.5, "Soil Moisture", "%");
+    createGauge("temperature-gauge", 32.5, "Temperature", "°C");
+    createGauge("humidity-gauge", 85, "Humidity", "%");
 
-    const temperatureGauge = new JustGage({
-        id: "temperature-gauge",
-        value: 32.5,
-        min: 0,
-        max: 50,
-        title: "Temperature",
-        label: "°C",
-        pointer: true,
-        gaugeWidthScale: 0.6,
-        levelColors: ["#00ff00", "#ff0000"]
-    });
-
-    const humidityGauge = new JustGage({
-        id: "humidity-gauge",
-        value: 85,
-        min: 0,
-        max: 100,
-        title: "Humidity",
-        label: "%",
-        pointer: true,
-        gaugeWidthScale: 0.6,
-        levelColors: ["#00ff00", "#ff0000"]
-    });
-
-    // Sample sensor data
-    document.getElementById('last-reading').innerText = '8:00pm, September 7, 2019';
-
-    // Function to redirect to node1.html
-    function redirectToNode1() {
-        window.location.href = 'node1.html'; // Replace with the actual path to node1.html
+    // Set sample sensor data if the element exists
+    const lastReadingElement = document.getElementById('last-reading');
+    if (lastReadingElement) {
+        lastReadingElement.innerText = '8:00pm, September 7, 2019';
     }
-
-    // Attach the redirectToNode1 function to the onclick event of Node 1
-    const node1 = document.querySelector('.node:nth-child(1)');
-    node1.addEventListener('click', redirectToNode1);
 });
