@@ -1,33 +1,46 @@
 document.addEventListener('DOMContentLoaded', () => {
-    const summaryCtx = document.getElementById('summary-chart').getContext('2d');
-    const summaryChart = new Chart(summaryCtx, {
-        type: 'line',
-        data: {
-            labels: ['09:00', '11:00', '13:00', '15:00', '17:00', '19:00', '21:00'],
-            datasets: [{
-                label: 'Temperature',
-                data: [30, 25, 28, 26, 27, 29, 32],
-                backgroundColor: 'rgba(26, 188, 156, 0.2)',
-                borderColor: 'rgba(26, 188, 156, 1)',
-                borderWidth: 2,
-                fill: true,
-                tension: 0.4
-            }]
-        },
-        options: {
-            responsive: true,
-            maintainAspectRatio: false,
-            scales: {
-                x: {
-                    beginAtZero: true
-                },
-                y: {
-                    beginAtZero: true,
-                    max: 50
+    // Function to redirect to node1.html
+    function redirectToNode1() {
+        window.location.href = 'node1.html'; // Replace with the actual path to node1.html
+    }
+
+    // Attach the redirectToNode1 function to the onclick event of Node 1
+    const node1 = document.querySelector('.node:nth-child(1)');
+    node1.addEventListener('click', redirectToNode1);
+
+    // Initialize Chart.js chart if summary-chart canvas exists
+    const summaryCtx = document.getElementById('summary-chart')?.getContext('2d');
+    if (summaryCtx) {
+        const summaryChart = new Chart(summaryCtx, {
+            type: 'line',
+            data: {
+                labels: ['09:00', '11:00', '13:00', '15:00', '17:00', '19:00', '21:00'],
+                datasets: [{
+                    label: 'Temperature',
+                    data: [30, 25, 28, 26, 27, 29, 32],
+                    backgroundColor: 'rgba(26, 188, 156, 0.2)',
+                    borderColor: 'rgba(26, 188, 156, 1)',
+                    borderWidth: 2,
+                    fill: true,
+                    tension: 0.4
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                scales: {
+                    x: {
+                        beginAtZero: true
+                    },
+                    y: {
+                        beginAtZero: true,
+                        max: 50
+                    }
                 }
             }
-        }
-    });
+        });
+    }
+
 
     // Create gauges
     const soilMoistureGauge = new JustGage({
