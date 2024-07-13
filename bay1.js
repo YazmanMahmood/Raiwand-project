@@ -32,7 +32,9 @@ document.addEventListener('DOMContentLoaded', () => {
             }
         });
     }
-
+function redirectToNode1() {
+    window.location.href = 'node1.html';
+}
     // Create gauges if the corresponding elements exist
     const createGauge = (id, value, title, label) => {
         const gaugeElement = document.getElementById(id);
