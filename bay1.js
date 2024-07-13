@@ -1,3 +1,7 @@
+function redirectToNode1() {
+    window.location.href = 'node1.html';
+}
+
 document.addEventListener('DOMContentLoaded', () => {
     // Check if summary-chart canvas exists before accessing getContext
     const summaryCanvas = document.getElementById('summary-chart');
@@ -32,9 +36,6 @@ document.addEventListener('DOMContentLoaded', () => {
             }
         });
     }
-function redirectToNode1() {
-    window.location.href = 'node1.html';
-}
     // Create gauges if the corresponding elements exist
     const createGauge = (id, value, title, label) => {
         const gaugeElement = document.getElementById(id);
