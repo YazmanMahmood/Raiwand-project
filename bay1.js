@@ -1,7 +1,9 @@
 function redirectToNode1() {
     window.location.href = 'node1.html';
 }
-
+function redirectToNode2() {
+    window.location.href = 'node2.html';
+}
 document.addEventListener('DOMContentLoaded', () => {
     // Check if summary-chart canvas exists before accessing getContext
     const summaryCanvas = document.getElementById('summary-chart');
