@@ -35,7 +35,29 @@ h1 {
 /* Content styles */
 .content {
     display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+/* Sidebar styles */
+.sidebar {
+    display: flex;
     justify-content: space-between;
+    gap: 20px;
+}
+
+.average-readings, .control-status {
+    background-color: #8a8686;
+    color: white;
+    padding: 20px;
+    border-radius: 8px;
+    flex: 1;
+}
+
+.average-readings h2, .control-status h2 {
+    font-size: 24px;
+    margin-bottom: 10px;
+    font-weight: bold;
 }
 
 /* Nodes container styles */
@@ -43,12 +65,12 @@ h1 {
     display: flex;
     flex-wrap: wrap;
     gap: 20px;
-    width: 70%;
 }
 
 /* Individual node styles */
 .node {
-    width: calc(50% - 10px);
+    flex: 1 1 calc(50% - 10px);
+    min-width: 250px;
     background-color: #8a8686;
     color: white;
     padding: 20px;
@@ -71,33 +93,10 @@ h1 {
     margin-bottom: 10px;
 }
 
-/* Sidebar styles */
-.sidebar {
-    width: 25%;
-}
-
-.average-readings, .control-status {
-    background-color: #8a8686;
-    color: white;
-    padding: 20px;
-    border-radius: 8px;
-    margin-bottom: 20px;
-}
-
-.average-readings h2, .control-status h2 {
-    font-size: 24px;
-    margin-bottom: 10px;
-    font-weight: bold;
-}
-
 /* Responsive styles */
 @media screen and (max-width: 768px) {
-    .content {
+    .sidebar {
         flex-direction: column;
-    }
-
-    .nodes-container, .sidebar {
-        width: 100%;
     }
 
     .nodes-container {
