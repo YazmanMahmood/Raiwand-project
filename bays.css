@@ -15,8 +15,8 @@ body {
 }
 
 .bay img {
-    width: 150px;
-    height: 150px;
+    width: 180px;
+    height: 180px;
 }
 
 .bay-name {
@@ -29,5 +29,5 @@ body {
     display: flex;
     flex-wrap: wrap;
     justify-content: center;
-    margin-bottom: 40px; /* Space between sets of 5 bays */
+    margin-bottom: 50px; /* Space between sets of 5 bays */
 }
