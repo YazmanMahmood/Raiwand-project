@@ -48,43 +48,48 @@ document.addEventListener('DOMContentLoaded', () => {
   });
 
   // Control panel adjustments
-  const waterPumpDropdown = document.getElementById('water-pump-dropdown');
-  const fansDropdown = document.getElementById('fans-dropdown');
+  const waterPumpSlider = document.getElementById('water-pump-slider');
+  const fansSlider = document.getElementById('fans-slider');
 
-  waterPumpDropdown.addEventListener('change', (event) => {
+  waterPumpSlider.addEventListener('input', (event) => {
     const selectedValue = event.target.value;
-    // Implement logic to control the water pump based on selected value
     console.log('Water Pump:', selectedValue);
+    // Implement logic to control the water pump based on selected value
   });
 
-  fansDropdown.addEventListener('change', (event) => {
+  fansSlider.addEventListener('input', (event) => {
     const selectedValue = event.target.value;
-    // Implement logic to control the fans based on selected value
     console.log('Fans:', selectedValue);
+    // Implement logic to control the fans based on selected value
   });
 
-  // Adjust sidebar contents alignment
-  const sidebarContent = document.querySelector('.sidebar .content');
-  sidebarContent.style.display = 'flex';
-  sidebarContent.style.flexDirection = 'column';
-  sidebarContent.style.alignItems = 'center';
-
-  // Increase daily summary chart size
+  // Modify chart size
   const summaryChartCanvas = document.getElementById('summary-chart');
   summaryChartCanvas.style.width = '100%';
-  summaryChartCanvas.style.height = '600px'; // Increase height for better visibility
+  summaryChartCanvas.style.height = '100%';
 
-  // Decrease control panel box size and center it
-  const controlPanel = document.querySelector('.control-panel');
-  controlPanel.style.maxWidth = '300px'; // Adjust as needed for content
-  controlPanel.style.margin = 'auto';
+  // Ensure chart resizes with container
+  window.addEventListener('resize', () => {
+    if (window.summaryChart) {
+      window.summaryChart.resize();
+    }
+  });
 
-  // Dropdown button for nodes
+  // Dropdown functionality
   const dropdownBtn = document.querySelector('.dropdown-btn');
+  const dropdownContainer = document.querySelector('.dropdown-container');
+
   dropdownBtn.addEventListener('click', () => {
     dropdownBtn.classList.toggle('active');
-    const dropdownContent = dropdownBtn.nextElementSibling;
-    dropdownContent.classList.toggle('show');
+    dropdownContainer.classList.toggle('show');
+  });
+
+  // Close dropdown when clicking outside
+  document.addEventListener('click', (event) => {
+    if (!event.target.matches('.dropdown-btn') && !event.target.closest('.dropdown-container')) {
+      dropdownContainer.classList.remove('show');
+      dropdownBtn.classList.remove('active');
+    }
   });
 
   // Redirect on dropdown item click
