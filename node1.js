@@ -1,5 +1,3 @@
-// firebase-config.js
-
 import { database, ref, onValue } from "./firebase-config.js";
 
 document.addEventListener('DOMContentLoaded', () => {
@@ -12,11 +10,28 @@ document.addEventListener('DOMContentLoaded', () => {
   });
 
   // Firebase initialization and data fetching
-  const temperatureRef = ref(database, 'bay 1/node 1/temperature');
-  const soilMoistureRef = ref(database, 'bay 1/node 1/soil_moisture');
-  const humidityRef = ref(database, 'bay 1/node 1/humidity');
+  const bay1Dropdown = document.getElementById('bay1-dropdown');
+  const bay1DropdownContent = document.getElementById('bay1-dropdown-content');
 
-  const updateValue = (elementId, value) => {
+  bay1Dropdown.addEventListener('click', () => {
+    bay1DropdownContent.classList.toggle('open');
+  });
+
+  bay1DropdownContent.addEventListener('click', (event) => {
+    if (event.target.tagName === 'A') {
+      const nodeLink = event.target.getAttribute('href');
+      if (nodeLink) {
+        window.location.href = nodeLink;
+      }
+    }
+  });
+
+  // Firebase data fetching
+  const node1TemperatureRef = ref(database, 'bay 1/node 1/temperature');
+  const node1SoilMoistureRef = ref(database, 'bay 1/node 1/soil_moisture');
+  const node1HumidityRef = ref(database, 'bay 1/node 1/humidity');
+
+  const updateNode1Values = (elementId, value) => {
     const element = document.getElementById(elementId);
     if (value !== null) {
       element.textContent = `${value.toFixed(1)} ${elementId === 'temperature-box' ? '°C' : '%'}`;
@@ -25,31 +40,31 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   };
 
-  onValue(temperatureRef, (snapshot) => {
+  onValue(node1TemperatureRef, (snapshot) => {
     const temperature = snapshot.val();
-    updateValue('temperature-box', temperature);
+    updateNode1Values('temperature-box', temperature);
   }, (error) => {
     console.error("Error fetching temperature:", error);
-    updateValue('temperature-box', null);
+    updateNode1Values('temperature-box', null);
   });
 
-  onValue(soilMoistureRef, (snapshot) => {
+  onValue(node1SoilMoistureRef, (snapshot) => {
     const soilMoisture = snapshot.val();
-    updateValue('soil-moisture-box', soilMoisture);
+    updateNode1Values('soil-moisture-box', soilMoisture);
   }, (error) => {
     console.error("Error fetching soil moisture:", error);
-    updateValue('soil-moisture-box', null);
+    updateNode1Values('soil-moisture-box', null);
   });
 
-  onValue(humidityRef, (snapshot) => {
+  onValue(node1HumidityRef, (snapshot) => {
     const humidity = snapshot.val();
-    updateValue('humidity-box', humidity);
+    updateNode1Values('humidity-box', humidity);
   }, (error) => {
     console.error("Error fetching humidity:", error);
-    updateValue('humidity-box', null);
+    updateNode1Values('humidity-box', null);
   });
 
-  // Control panel functionality
+  // Control panel adjustments
   const waterPumpSlider = document.getElementById('water-pump-slider');
   const fansSlider = document.getElementById('fans-slider');
   const waterPumpDropdown = document.getElementById('water-pump-dropdown');
@@ -65,6 +80,14 @@ document.addEventListener('DOMContentLoaded', () => {
     fansDropdown.style.display = value === '1' ? 'block' : 'none';
   });
 
+  // Change 'Manual' to 'On' and remove dropdown below
+  const manualLabel = document.querySelector('.control-panel label[for="water-pump-slider"]');
+  manualLabel.textContent = 'On'; // Change label text
+
+  const manualDropdown = document.getElementById('water-pump-dropdown');
+  manualDropdown.style.display = 'none'; // Hide the dropdown
+
+  // Event listener for selecting options in dropdowns
   waterPumpDropdown.querySelector('select').addEventListener('change', (event) => {
     const selectedValue = event.target.value;
     // Implement logic to control the water pump
