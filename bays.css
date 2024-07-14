@@ -12,6 +12,7 @@ body {
     cursor: pointer;
     flex: 1 1 calc(20% - 40px); /* Adjusting width to fit 5 per row with margins */
     box-sizing: border-box;
+    opacity: 0.5; /* Default dimmed state */
 }
 
 .bay img {
@@ -36,4 +37,29 @@ body {
     display: flex;
     justify-content: center;
     margin-bottom: 120px; /* Increased space between sets of 5 bays */
+}
+
+.bay.active {
+    opacity: 1; /* Make Bay 1 fully visible */
+}
+
+/* Responsive design for phone compatibility */
+@media (max-width: 600px) {
+    .bay {
+        flex: 1 1 calc(50% - 40px); /* Adjust to 2 per row for smaller screens */
+        margin: 10px;
+    }
+
+    .bay img {
+        width: 120px;
+        height: 120px;
+    }
+
+    .bay-name {
+        font-size: 16px;
+    }
+
+    .bay-row {
+        margin-bottom: 60px; /* Adjust gap for smaller screens */
+    }
 }
