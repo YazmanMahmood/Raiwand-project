@@ -5,10 +5,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Login</title>
     <link rel="stylesheet" href="login.css">
-    <!-- Load Firebase SDK -->
-    <script src="https://www.gstatic.com/firebasejs/10.12.3/firebase-app.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/10.12.3/firebase-auth.js"></script>
-    <!-- Other Firebase SDK modules as needed -->
+    <!-- Add these script tags in the head -->
+    <script src="https://www.gstatic.com/firebasejs/10.12.3/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.12.3/firebase-database-compat.js"></script>
 </head>
 <body>
     <div class="login-container">
@@ -24,6 +23,8 @@
         </form>
         <p id="error-message"></p>
     </div>
+    <!-- Change these to regular scripts -->
+    <script src="firebase-config.js"></script>
     <script src="login.js"></script>
 </body>
 </html>
