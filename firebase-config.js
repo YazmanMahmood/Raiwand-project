@@ -12,8 +12,10 @@ const firebaseConfig = {
 };
 
 // Initialize Firebase
-firebase.initializeApp(firebaseConfig);
+ffirebase.initializeApp(firebaseConfig);
 const database = firebase.database();
 console.log("Firebase initialized");
 
-
+// If you need to use these in other files, you can attach them to the window object
+window.firebaseDatabase = database;
+window.firebaseRef = firebase.database().ref;
