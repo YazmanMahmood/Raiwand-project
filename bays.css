@@ -29,5 +29,11 @@ body {
     display: flex;
     flex-wrap: wrap;
     justify-content: center;
-    margin-bottom: 50px; /* Space between sets of 5 bays */
+}
+
+.bay-row {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    margin-bottom: 80px; /* Increased space between sets of 5 bays */
 }
