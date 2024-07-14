@@ -71,8 +71,11 @@ body {
 
 .dropdown-container.show {
   display: block;
-  max-height: 1000px;
+  max-height: 300px; /* Adjust this value as needed */
+  overflow-y: auto; /* Add this to enable scrolling if necessary */
+  transition: max-height 0.3s ease-out;
 }
+
 
 .dropdown-container a {
   padding: 10px;
