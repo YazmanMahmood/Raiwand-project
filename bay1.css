@@ -42,7 +42,7 @@ h1 {
 /* Sidebar styles */
 .sidebar {
     display: flex;
-    justify-content: space-between;
+    justify-content: center;
     gap: 20px;
 }
 
@@ -51,8 +51,8 @@ h1 {
     color: white;
     padding: 15px;
     border-radius: 8px;
-    flex: 1;
-    max-width: calc(50% - 10px);
+    width: 30%;
+    max-width: 300px;
 }
 
 .average-readings h2, .control-status h2 {
@@ -103,10 +103,12 @@ h1 {
 @media screen and (max-width: 768px) {
     .sidebar {
         flex-direction: column;
+        align-items: center;
     }
 
     .average-readings, .control-status {
-        max-width: 100%;
+        width: 80%;
+        max-width: none;
     }
 
     .nodes-container {
