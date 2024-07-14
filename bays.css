@@ -31,12 +31,14 @@ body {
     display: flex;
     flex-wrap: wrap;
     justify-content: center;
+    width: 100%; /* Ensure full width */
 }
 
 .bay-row {
-    width: 100%;
     display: flex;
+    flex-wrap: wrap; /* Allow wrapping within the row */
     justify-content: center;
+    width: 100%;
     margin-bottom: 120px; /* Increased space between sets of 5 bays */
 }
 
@@ -45,7 +47,27 @@ body {
 }
 
 /* Responsive design for phone compatibility */
-@media (max-width: 800px) {
+@media (max-width: 1200px) {
+    .bay {
+        flex: 1 1 calc(25% - 40px); /* Adjust to 4 per row for smaller screens */
+        margin: 10px;
+    }
+
+    .bay img {
+        width: 160px;
+        height: 160px;
+    }
+
+    .bay-name {
+        font-size: 16px;
+    }
+
+    .bay-row {
+        margin-bottom: 80px; /* Adjust gap for smaller screens */
+    }
+}
+
+@media (max-width: 900px) {
     .bay {
         flex: 1 1 calc(33.33% - 40px); /* Adjust to 3 per row for smaller screens */
         margin: 10px;
@@ -57,11 +79,11 @@ body {
     }
 
     .bay-name {
-        font-size: 16px;
+        font-size: 14px;
     }
 
     .bay-row {
-        margin-bottom: 80px; /* Adjust gap for smaller screens */
+        margin-bottom: 60px; /* Adjust gap for smaller screens */
     }
 }
 
@@ -77,10 +99,30 @@ body {
     }
 
     .bay-name {
-        font-size: 14px;
+        font-size: 12px;
     }
 
     .bay-row {
-        margin-bottom: 60px; /* Adjust gap for smaller screens */
+        margin-bottom: 40px; /* Adjust gap for smaller screens */
+    }
+}
+
+@media (max-width: 400px) {
+    .bay {
+        flex: 1 1 calc(100% - 40px); /* Adjust to 1 per row for smallest screens */
+        margin: 10px;
+    }
+
+    .bay img {
+        width: 100px;
+        height: 100px;
+    }
+
+    .bay-name {
+        font-size: 10px;
+    }
+
+    .bay-row {
+        margin-bottom: 20px; /* Adjust gap for smaller screens */
     }
 }
