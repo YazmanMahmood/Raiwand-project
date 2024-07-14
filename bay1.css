@@ -35,77 +35,54 @@ h1 {
 /* Content styles */
 .content {
     display: flex;
-    flex-direction: column;
-    align-items: center;
+    gap: 20px;
 }
 
-/* Greenhouse styles */
-.greenhouse {
+/* Bay image styles */
+.bay-image {
     position: relative;
+    width: 100%;
+    max-width: 800px; /* Adjust as necessary */
+    margin: 0 auto;
 }
 
-.greenhouse img {
+.bay-image img {
     width: 100%;
-    height: auto;
+    display: block;
+}
+
+/* Node information styles */
+.node-info {
+    position: absolute;
+    top: 20px; /* Adjust as necessary */
+    left: 20px; /* Adjust as necessary */
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px;
+    z-index: 100;
 }
 
 .node {
-    position: absolute;
-    width: 150px;
-    background-color: rgba(255, 255, 255, 0.8);
-    border: 1px solid #000;
-    border-radius: 5px;
-    padding: 5px;
-    text-align: center;
+    flex: 1 1 calc(50% - 10px);
+    min-width: 250px;
+    background-color: #8a8686;
+    color: white;
+    padding: 20px;
+    border-radius: 8px;
+    cursor: pointer;
     transition: background-color 0.3s ease;
 }
 
 .node:hover {
-    background-color: rgba(255, 255, 255, 1);
+    background-color: #736f6f;
 }
 
-.node-info {
-    display: none;
+.node h2 {
+    font-size: 24px;
+    margin-bottom: 10px;
+    font-weight: bold;
 }
 
-.node:hover .node-info {
-    display: block;
-}
-
-/* Position nodes within the greenhouse image */
-#node1 {
-    top: 10%;
-    left: 30%;
-}
-
-#node2 {
-    top: 10%;
-    left: 60%;
-}
-
-#node3 {
-    top: 40%;
-    left: 20%;
-}
-
-#node4 {
-    top: 40%;
-    left: 50%;
-}
-
-#node5 {
-    top: 70%;
-    left: 30%;
-}
-
-#node6 {
-    top: 70%;
-    left: 60%;
-}
-
-/* Responsive styles */
-@media screen and (max-width: 768px) {
-    .node {
-        width: 120px;
-    }
+.node p {
+    margin-bottom: 10px;
 }
