@@ -7,18 +7,27 @@ body {
 }
 
 .bay {
-    margin: 10px;
+    margin: 20px;
     text-align: center;
     cursor: pointer;
+    flex: 1 1 calc(20% - 40px); /* Adjusting width to fit 5 per row with margins */
+    box-sizing: border-box;
 }
 
 .bay img {
-    width: 100px;
-    height: 100px;
+    width: 150px;
+    height: 150px;
 }
 
 .bay-name {
     margin-top: 10px;
     font-size: 18px;
     color: #333;
+}
+
+.bay-container {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    margin-bottom: 40px; /* Space between sets of 5 bays */
 }
