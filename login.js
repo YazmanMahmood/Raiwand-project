@@ -1,6 +1,7 @@
-// Import Firebase app and database
-import { app } from "./firebase-config.js";
+// Import Firebase app and authentication modules
+import { initializeApp } from "firebase/app";
 import { getAuth, signInWithEmailAndPassword } from "firebase/auth";
+import { app } from "./firebase-config.js"; // Adjust the path as necessary
 
 document.addEventListener('DOMContentLoaded', () => {
     const loginForm = document.getElementById('loginForm');
