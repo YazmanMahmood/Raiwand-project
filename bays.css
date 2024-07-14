@@ -42,6 +42,12 @@ h1 {
     color: white;
     font-size: 20px;
     transition: transform 0.3s ease, height 0.3s ease;
+    overflow: hidden; /* Ensure content doesn't overflow */
+}
+
+.bay img {
+    width: 80px; /* Adjust size as needed */
+    height: auto;
 }
 
 .bay:hover {
