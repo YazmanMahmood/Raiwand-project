@@ -36,86 +36,76 @@ h1 {
 .content {
     display: flex;
     flex-direction: column;
-    gap: 20px;
+    align-items: center;
 }
 
-/* Sidebar styles */
-.sidebar {
-    display: flex;
-    justify-content: center;
-    gap: 20px;
+/* Greenhouse styles */
+.greenhouse {
+    position: relative;
 }
 
-.average-readings, .control-status {
-    background-color: #8a8686;
-    color: white;
-    padding: 15px;
-    border-radius: 8px;
-    width: 30%;
-    max-width: 300px;
+.greenhouse img {
+    width: 100%;
+    height: auto;
 }
 
-.average-readings h2, .control-status h2 {
-    font-size: 20px;
-    margin-bottom: 8px;
-    font-weight: bold;
-}
-
-.average-readings p, .control-status p {
-    font-size: 14px;
-    margin-bottom: 5px;
-}
-
-/* Nodes container styles */
-.nodes-container {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 20px;
-}
-
-/* Individual node styles */
 .node {
-    flex: 1 1 calc(50% - 10px);
-    min-width: 250px;
-    background-color: #8a8686;
-    color: white;
-    padding: 20px;
-    border-radius: 8px;
-    cursor: pointer;
+    position: absolute;
+    width: 150px;
+    background-color: rgba(255, 255, 255, 0.8);
+    border: 1px solid #000;
+    border-radius: 5px;
+    padding: 5px;
+    text-align: center;
     transition: background-color 0.3s ease;
 }
 
 .node:hover {
-    background-color: #736f6f;
+    background-color: rgba(255, 255, 255, 1);
 }
 
-.node h2 {
-    font-size: 24px;
-    margin-bottom: 10px;
-    font-weight: bold;
+.node-info {
+    display: none;
 }
 
-.node p {
-    margin-bottom: 10px;
+.node:hover .node-info {
+    display: block;
+}
+
+/* Position nodes within the greenhouse image */
+#node1 {
+    top: 10%;
+    left: 30%;
+}
+
+#node2 {
+    top: 10%;
+    left: 60%;
+}
+
+#node3 {
+    top: 40%;
+    left: 20%;
+}
+
+#node4 {
+    top: 40%;
+    left: 50%;
+}
+
+#node5 {
+    top: 70%;
+    left: 30%;
+}
+
+#node6 {
+    top: 70%;
+    left: 60%;
 }
 
 /* Responsive styles */
 @media screen and (max-width: 768px) {
-    .sidebar {
-        flex-direction: column;
-        align-items: center;
-    }
-
-    .average-readings, .control-status {
-        width: 80%;
-        max-width: none;
-    }
-
-    .nodes-container {
-        flex-direction: column;
-    }
-
     .node {
-        width: 100%;
+        width: 120px;
     }
 }
