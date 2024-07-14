@@ -1,5 +1,3 @@
-import { database, ref, onValue } from "./firebase-config.js";
-
 document.addEventListener('DOMContentLoaded', () => {
     document.getElementById('loginForm').addEventListener('submit', function(event) {
         event.preventDefault();
@@ -8,13 +6,13 @@ document.addEventListener('DOMContentLoaded', () => {
         const errorMessage = document.getElementById('error-message');
 
         // Reference to the users in the database
-        const usersRef = ref(database, 'user');
+        const usersRef = firebase.database().ref('user');
 
         // Get the user data
-        onValue(ref(database, 'user/id1'), (snapshot) => {
+        usersRef.child('id1').once('value').then((snapshot) => {
             const storedUsername = snapshot.val();
             if (username === storedUsername) {
-                onValue(ref(database, 'user/password1'), (pwSnapshot) => {
+                usersRef.child('password1').once('value').then((pwSnapshot) => {
                     const storedPassword = pwSnapshot.val();
                     if (password === storedPassword) {
                         // Credentials are correct
@@ -27,8 +25,9 @@ document.addEventListener('DOMContentLoaded', () => {
             } else {
                 errorMessage.textContent = 'Invalid username or password';
             }
-        }, {
-            onlyOnce: true
+        }).catch((error) => {
+            console.error('Error:', error);
+            errorMessage.textContent = 'An error occurred. Please try again.';
         });
     });
 });
