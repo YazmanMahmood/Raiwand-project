@@ -54,14 +54,16 @@ body {
   font-size: 16px;
   margin-bottom: 5px;
   transition: background-color 0.3s;
-}
-
-.dropdown-btn:hover {
-  background-color: #555;
+  position: relative;
 }
 
 .dropdown-btn .arrow {
   float: right;
+  transition: transform 0.3s;
+}
+
+.dropdown-btn.active .arrow {
+  transform: rotate(90deg);
 }
 
 .dropdown-container {
