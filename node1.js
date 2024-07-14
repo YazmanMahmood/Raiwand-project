@@ -48,48 +48,43 @@ document.addEventListener('DOMContentLoaded', () => {
   });
 
   // Control panel adjustments
-  const waterPumpSlider = document.getElementById('water-pump-slider');
-  const fansSlider = document.getElementById('fans-slider');
+  const waterPumpDropdown = document.getElementById('water-pump-dropdown');
+  const fansDropdown = document.getElementById('fans-dropdown');
 
-  waterPumpSlider.addEventListener('input', (event) => {
+  waterPumpDropdown.addEventListener('change', (event) => {
     const selectedValue = event.target.value;
-    console.log('Water Pump:', selectedValue);
     // Implement logic to control the water pump based on selected value
+    console.log('Water Pump:', selectedValue);
   });
 
-  fansSlider.addEventListener('input', (event) => {
+  fansDropdown.addEventListener('change', (event) => {
     const selectedValue = event.target.value;
-    console.log('Fans:', selectedValue);
     // Implement logic to control the fans based on selected value
+    console.log('Fans:', selectedValue);
   });
 
-  // Modify chart size
+  // Adjust sidebar contents alignment
+  const sidebarContent = document.querySelector('.sidebar .content');
+  sidebarContent.style.display = 'flex';
+  sidebarContent.style.flexDirection = 'column';
+  sidebarContent.style.alignItems = 'center';
+
+  // Increase daily summary chart size
   const summaryChartCanvas = document.getElementById('summary-chart');
   summaryChartCanvas.style.width = '100%';
-  summaryChartCanvas.style.height = '100%';
+  summaryChartCanvas.style.height = '600px'; // Increase height for better visibility
 
-  // Ensure chart resizes with container
-  window.addEventListener('resize', () => {
-    if (window.summaryChart) {
-      window.summaryChart.resize();
-    }
-  });
+  // Decrease control panel box size and center it
+  const controlPanel = document.querySelector('.control-panel');
+  controlPanel.style.maxWidth = '300px'; // Adjust as needed for content
+  controlPanel.style.margin = 'auto';
 
-  // Dropdown functionality
+  // Dropdown button for nodes
   const dropdownBtn = document.querySelector('.dropdown-btn');
-  const dropdownContainer = document.querySelector('.dropdown-container');
-
   dropdownBtn.addEventListener('click', () => {
     dropdownBtn.classList.toggle('active');
-    dropdownContainer.classList.toggle('show');
-  });
-
-  // Close dropdown when clicking outside
-  document.addEventListener('click', (event) => {
-    if (!event.target.matches('.dropdown-btn') && !event.target.closest('.dropdown-container')) {
-      dropdownContainer.classList.remove('show');
-      dropdownBtn.classList.remove('active');
-    }
+    const dropdownContent = dropdownBtn.nextElementSibling;
+    dropdownContent.classList.toggle('show');
   });
 
   // Redirect on dropdown item click
