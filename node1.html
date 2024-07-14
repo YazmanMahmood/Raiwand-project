@@ -12,17 +12,12 @@
       <h2>SmartSpace Agri</h2>
     </div>
     <a href="bay1.html" class="active">Bay 1</a>
-    <div class="dropdown" id="bay1-dropdown">
-      <button class="bay dimmed">Nodes <span>&#9660;</span></button>
-      <div class="dropdown-content" id="bay1-dropdown-content">
-        <a href="node1.html">Node 1</a>
-        <a href="node2.html">Node 2</a>
-        <a href="node3.html">Node 3</a>
-        <a href="node4.html">Node 4</a>
-        <a href="node5.html">Node 5</a>
-        <a href="node6.html">Node 6</a>
-      </div>
-    </div>
+    <a href="node1.html">Node 1</a>
+    <a href="node2.html">Node 2</a>
+    <a href="node3.html">Node 3</a>
+    <a href="node4.html">Node 4</a>
+    <a href="node5.html">Node 5</a>
+    <a href="node6.html">Node 6</a>
     <a class="dimmed">Bay 2</a>
     <a class="dimmed">Bay 3</a>
     <a class="dimmed">Bay 4</a>
@@ -38,7 +33,7 @@
   <div class="main-content">
     <div class="header">
       <h1>Bay 1</h1>
-      <!-- Remove Last Reading display -->
+      <p>Last Reading as of <span id="last-reading">Loading...</span></p>
     </div>
     
     <!-- Live Data Reception -->
@@ -123,19 +118,6 @@
     document.getElementById('hamburger-menu').addEventListener('click', function() {
       var sidebar = document.getElementById('sidebar');
       sidebar.classList.toggle('open');
-    });
-
-    // Dropdown menu toggle
-    document.getElementById('bay1-dropdown').addEventListener('click', function() {
-      var dropdownContent = document.getElementById('bay1-dropdown-content');
-      dropdownContent.classList.toggle('show');
-    });
-
-    // Dropdown menu redirect
-    document.getElementById('bay1-dropdown-content').addEventListener('click', function(event) {
-      if (event.target.tagName === 'A') {
-        window.location.href = event.target.getAttribute('href');
-      }
     });
   </script>
 </body>
