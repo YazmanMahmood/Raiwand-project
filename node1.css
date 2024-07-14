@@ -195,6 +195,15 @@ input[type="range"]:hover {
   .hamburger.open div:nth-child(2) {
     opacity: 0;
   }
+  .summary {
+    margin-top: 20px;
+}
+
+.chart-container {
+    position: relative;
+    height: 400px;
+    width: 100%;
+}
 
   .hamburger.open div:nth-child(3) {
     transform: rotate(45deg) translate(-5px, -6px);
