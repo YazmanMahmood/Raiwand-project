@@ -9,24 +9,7 @@ document.addEventListener('DOMContentLoaded', () => {
     hamburger.classList.toggle('open');
   });
 
-  // Firebase initialization and data fetching
-  const bay1Dropdown = document.getElementById('bay1-dropdown');
-  const bay1DropdownContent = document.getElementById('bay1-dropdown-content');
-
-  bay1Dropdown.addEventListener('click', () => {
-    bay1DropdownContent.classList.toggle('open');
-  });
-
-  bay1DropdownContent.addEventListener('click', (event) => {
-    if (event.target.tagName === 'A') {
-      const nodeLink = event.target.getAttribute('href');
-      if (nodeLink) {
-        window.location.href = nodeLink;
-      }
-    }
-  });
-
-  // Firebase data fetching
+  // Firebase data fetching for Node 1
   const node1TemperatureRef = ref(database, 'bay 1/node 1/temperature');
   const node1SoilMoistureRef = ref(database, 'bay 1/node 1/soil_moisture');
   const node1HumidityRef = ref(database, 'bay 1/node 1/humidity');
@@ -64,20 +47,37 @@ document.addEventListener('DOMContentLoaded', () => {
     updateNode1Values('humidity-box', null);
   });
 
+  // Nodes dropdown functionality
+  const nodesDropdown = document.getElementById('bay1-dropdown');
+  const nodesDropdownContent = document.getElementById('bay1-dropdown-content');
+
+  nodesDropdown.addEventListener('click', () => {
+    nodesDropdownContent.classList.toggle('open');
+  });
+
+  nodesDropdownContent.addEventListener('click', (event) => {
+    if (event.target.tagName === 'A') {
+      const nodeLink = event.target.getAttribute('href');
+      if (nodeLink) {
+        window.location.href = nodeLink;
+      }
+    }
+  });
+
   // Control panel adjustments
   const waterPumpSlider = document.getElementById('water-pump-slider');
   const fansSlider = document.getElementById('fans-slider');
-  const waterPumpDropdown = document.getElementById('water-pump-dropdown');
-  const fansDropdown = document.getElementById('fans-dropdown');
 
   waterPumpSlider.addEventListener('input', () => {
     const value = waterPumpSlider.value;
-    waterPumpDropdown.style.display = value === '1' ? 'block' : 'none';
+    // Implement logic to control the water pump based on value
+    console.log('Water Pump:', value);
   });
 
   fansSlider.addEventListener('input', () => {
     const value = fansSlider.value;
-    fansDropdown.style.display = value === '1' ? 'block' : 'none';
+    // Implement logic to control the fans based on value
+    console.log('Fans:', value);
   });
 
   // Change 'Manual' to 'On' and remove dropdown below
@@ -87,16 +87,4 @@ document.addEventListener('DOMContentLoaded', () => {
   const manualDropdown = document.getElementById('water-pump-dropdown');
   manualDropdown.style.display = 'none'; // Hide the dropdown
 
-  // Event listener for selecting options in dropdowns
-  waterPumpDropdown.querySelector('select').addEventListener('change', (event) => {
-    const selectedValue = event.target.value;
-    // Implement logic to control the water pump
-    console.log('Water Pump:', selectedValue);
-  });
-
-  fansDropdown.querySelector('select').addEventListener('change', (event) => {
-    const selectedValue = event.target.value;
-    // Implement logic to control the fans
-    console.log('Fans:', selectedValue);
-  });
 });
