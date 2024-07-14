@@ -5,9 +5,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Bay 1 - Greenhouse Monitoring</title>
     <link rel="stylesheet" href="bay1.css">
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/justgage"></script>
-    <script src="https://cdn.jsdelivr.net/npm/raphael"></script>
 </head>
 <body>
     <div class="container">
@@ -15,60 +12,51 @@
             <h1>Greenhouse Monitoring - Bay 1</h1>
         </div>
         <div class="content">
-            <div class="greenhouse">
-                <img src="GreenHouseBay.png" alt="Greenhouse Bay">
-                <div class="node" id="node1">
-                    <p>Node 1</p>
-                    <div class="node-info">
+            <div class="bay-image">
+                <img src="enhanced_bay_image.png" alt="Bay Image">
+                <!-- Place your enhanced bay image here with boxes and lines -->
+                <div class="node-info">
+                    <div class="node" onclick="redirectToNode('node1.html')">
+                        <h2>Node 1</h2>
                         <p>Temperature: <span id="tempA">22.5°C</span></p>
                         <p>Humidity: <span id="humidityA">55%</span></p>
                         <p>Soil Moisture: <span id="soilA">40%</span></p>
                     </div>
-                </div>
-                <div class="node" id="node2">
-                    <p>Node 2</p>
-                    <div class="node-info">
+                    <div class="node" onclick="redirectToNode('node2.html')">
+                        <h2>Node 2</h2>
                         <p>Temperature: <span id="tempB">23.0°C</span></p>
                         <p>Humidity: <span id="humidityB">50%</span></p>
                         <p>Soil Moisture: <span id="soilB">42%</span></p>
                     </div>
-                </div>
-                <div class="node" id="node3">
-                    <p>Node 3</p>
-                    <div class="node-info">
+                    <div class="node" onclick="redirectToNode('node3.html')">
+                        <h2>Node 3</h2>
                         <p>Temperature: <span id="tempC">21.5°C</span></p>
                         <p>Humidity: <span id="humidityC">60%</span></p>
                         <p>Soil Moisture: <span id="soilC">38%</span></p>
                     </div>
-                </div>
-                <div class="node" id="node4">
-                    <p>Node 4</p>
-                    <div class="node-info">
+                    <div class="node" onclick="redirectToNode('node4.html')">
+                        <h2>Node 4</h2>
                         <p>Temperature: <span id="tempD">22.0°C</span></p>
                         <p>Humidity: <span id="humidityD">57%</span></p>
                         <p>Soil Moisture: <span id="soilD">41%</span></p>
                     </div>
-                </div>
-                <div class="node" id="node5">
-                    <p>Node 5</p>
-                    <div class="node-info">
+                    <div class="node" onclick="redirectToNode('node5.html')">
+                        <h2>Node 5</h2>
                         <p>Temperature: <span id="tempE">23.2°C</span></p>
                         <p>Humidity: <span id="humidityE">52%</span></p>
                         <p>Soil Moisture: <span id="soilE">39%</span></p>
                     </div>
-                </div>
-                <div class="node" id="node6">
-                    <p>Node 6</p>
-                    <div class="node-info">
+                    <div class="node" onclick="redirectToNode('node6.html')">
+                        <h2>Node 6</h2>
                         <p>Temperature: <span id="tempF">21.8°C</span></p>
                         <p>Humidity: <span id="humidityF">58%</span></p>
                         <p>Soil Moisture: <span id="soilF">37%</span></p>
                     </div>
                 </div>
             </div>
-            <canvas id="summary-chart" width="400" height="200"></canvas>
         </div>
     </div>
+
     <script src="bay1.js"></script>
 </body>
 </html>
