@@ -12,7 +12,8 @@ body {
     cursor: pointer;
     flex: 1 1 calc(20% - 40px); /* Adjusting width to fit 5 per row with margins */
     box-sizing: border-box;
-    opacity: 0.5; /* Default dimmed state */
+    opacity: 0.3; /* Default dimmed state */
+    transition: opacity 0.3s ease; /* Smooth transition for opacity */
 }
 
 .bay img {
