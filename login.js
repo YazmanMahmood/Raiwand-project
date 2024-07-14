@@ -1,8 +1,3 @@
-// Import Firebase app and authentication modules
-import { initializeApp } from "firebase/app";
-import { getAuth, signInWithEmailAndPassword } from "firebase/auth";
-import { app } from "./firebase-config.js"; // Adjust the path as necessary
-
 document.addEventListener('DOMContentLoaded', () => {
     const loginForm = document.getElementById('loginForm');
     const errorMessage = document.getElementById('error-message');
@@ -10,12 +5,23 @@ document.addEventListener('DOMContentLoaded', () => {
     loginForm.addEventListener('submit', function(event) {
         event.preventDefault();
 
-        const username = document.getElementById('username').value;
-        const password = document.getElementById('password').value;
+        const username = document.getElementById('user1').value;
+        const password = document.getElementById('password1').value;
+
+        // Initialize Firebase app if not already initialized
+        const firebaseConfig = {
+            apiKey: "AIzaSyAmVSOm8g6p4F3ZY4jxIEUTQH_oFllo1hg",
+            authDomain: "greenhouse-raiwind.firebaseapp.com",
+            projectId: "greenhouse-raiwind"
+            // Add other Firebase config parameters as needed
+        };
+
+        if (!firebase.apps.length) {
+            firebase.initializeApp(firebaseConfig);
+        }
 
         // Sign in with Firebase Authentication
-        const auth = getAuth(app);
-        signInWithEmailAndPassword(auth, username, password)
+        firebase.auth().signInWithEmailAndPassword(username, password)
             .then((userCredential) => {
                 // Signed in
                 const user = userCredential.user;
