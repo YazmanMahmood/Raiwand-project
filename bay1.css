@@ -38,6 +38,32 @@ h1 {
     gap: 20px;
 }
 
+/* Sidebar styles */
+.sidebar {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    width: 30%; /* Adjust width as necessary */
+}
+
+.average-readings, .control-status {
+    background-color: #8a8686;
+    color: white;
+    padding: 15px;
+    border-radius: 8px;
+}
+
+.average-readings h2, .control-status h2 {
+    font-size: 20px;
+    margin-bottom: 8px;
+    font-weight: bold;
+}
+
+.average-readings p, .control-status p {
+    font-size: 14px;
+    margin-bottom: 5px;
+}
+
 /* Bay image styles */
 .bay-image {
     position: relative;
@@ -46,12 +72,6 @@ h1 {
     margin: 0 auto;
 }
 
-.bay-image img {
-    width: 100%;
-    display: block;
-}
-
-/* Node information styles */
 .node-info {
     position: absolute;
     top: 20px; /* Adjust as necessary */
@@ -85,4 +105,33 @@ h1 {
 
 .node p {
     margin-bottom: 10px;
+}
+
+/* Responsive styles */
+@media screen and (max-width: 768px) {
+    .sidebar {
+        width: 100%;
+        max-width: none;
+    }
+
+    .average-readings, .control-status {
+        width: 100%;
+    }
+
+    .bay-image {
+        max-width: 100%;
+    }
+
+    .node-info {
+        position: relative;
+        top: auto;
+        left: auto;
+        margin-top: 20px;
+        margin-left: 0;
+        flex-direction: column;
+    }
+
+    .node {
+        width: 100%;
+    }
 }
