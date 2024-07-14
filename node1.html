@@ -11,7 +11,7 @@
     <div class="sidebar-header">
       <h2>SmartSpace Agri</h2>
     </div>
-    <button class="dropdown-btn">Bay 1 <span class="arrow">&#9660;</span></button>
+    <button href="bay1.html" class="dropdown-btn">Bay 1 <span class="arrow">&#9660;</span></button>
     <div class="dropdown-container">
       <a href="node1.html">Node 1</a>
       <a href="node2.html">Node 2</a>
@@ -38,7 +38,6 @@
       <p>Last Reading as of <span id="last-reading">Loading...</span></p>
     </div>
     
-    <!-- Live Data Reception -->
     <div class="widgets">
       <div class="widget">
         <h3>Soil Moisture</h3>
@@ -54,7 +53,6 @@
       </div>
     </div>
     
-    <!-- Set Values Panel -->
     <div class="set-values">
       <h2>Set Values</h2>
       <div class="widgets">
@@ -73,7 +71,6 @@
       </div>
     </div>
     
-    <!-- Control Panel -->
     <div class="control-panel">
       <h2>Control Panel</h2>
       <div class="control-group">
@@ -114,51 +111,5 @@
   <script type="module" src="firebase-config.js"></script>
   <script type="module" src="node1.js"></script>
   <script src="summary-chart.js"></script>
-
-  <script>
-    // Toggle sidebar visibility
-    document.getElementById('hamburger-menu').addEventListener('click', function() {
-      var sidebar = document.getElementById('sidebar');
-      sidebar.classList.toggle('open');
-    });
-
-    // Dropdown menu toggle
-    document.querySelector('.dropdown-btn').addEventListener('click', function() {
-      this.classList.toggle('active');
-      var dropdownContent = this.nextElementSibling;
-      dropdownContent.classList.toggle('show');
-    });
-
-    // Dropdown menu redirect
-    document.querySelectorAll('.dropdown-container a').forEach(link => {
-      link.addEventListener('click', function(event) {
-        window.location.href = event.target.getAttribute('href');
-      });
-    });
-
-    // Chart.js setup
-    var ctx = document.getElementById('summary-chart').getContext('2d');
-    var myChart = new Chart(ctx, {
-      type: 'line',
-      data: {
-        labels: ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday'],
-        datasets: [{
-          label: 'Temperature (°C)',
-          data: [23, 25, 22, 24, 21],
-          borderColor: 'rgb(255, 99, 132)',
-          tension: 0.1
-        }]
-      },
-      options: {
-        responsive: true,
-        plugins: {
-          legend: {
-            display: true,
-            position: 'top'
-          }
-        }
-      }
-    });
-  </script>
 </body>
 </html>
