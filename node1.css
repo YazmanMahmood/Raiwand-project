@@ -137,22 +137,27 @@ body {
 }
 
 .summary {
-  margin-top: 20px; /* Adjusted margin */
+  margin-top: 20px;
 }
 
 .chart-container {
   width: 100%;
-  max-width: 800px; /* Adjusted max-width for responsiveness */
-  margin: 0 auto; /* Center align */
+  max-width: 100%; /* Ensure chart fills its container */
+  margin: 0 auto; /* Center the chart container */
+  background-color: #f9f9f9;
+  border-radius: 5px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  padding: 20px;
+}
+
+.chart-container canvas {
+  max-width: 100%;
 }
 
 .control-panel {
-  width: 100%;
-  max-width: 800px; /* Adjusted max-width */
-  margin: 20px auto; /* Center align */
-  background-color: #f0f0f0;
+  background-color: #f9f9f9;
   padding: 20px;
-  border-radius: 10px;
+  border-radius: 5px;
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
 }
 
@@ -161,44 +166,61 @@ body {
 }
 
 .control-group label {
-  font-weight: bold;
-  margin-bottom: 10px;
   display: block;
+  margin-bottom: 10px;
+}
+
+.control-group input[type="range"] {
+  width: 100%;
 }
 
 .control-labels {
   display: flex;
   justify-content: space-between;
+  margin-top: 5px;
 }
 
 .hamburger {
-  display: none; /* Hide hamburger menu for desktop view */
+  display: none;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  width: 40px;
+  height: 40px;
+  position: fixed;
+  top: 10px;
+  left: 10px;
+  z-index: 2;
+  cursor: pointer;
 }
 
-@media screen and (max-width: 768px) {
-  .main-content {
-    margin-left: 0;
-  }
+.hamburger div {
+  width: 25px;
+  height: 3px;
+  background-color: #333;
+  margin: 5px 0;
+}
 
+@media (max-width: 768px) {
   .sidebar {
     transform: translateX(-100%);
-    z-index: 2;
+    transition: transform 0.3s ease;
   }
 
   .sidebar.open {
     transform: translateX(0);
   }
 
-  .control-panel {
+  .hamburger {
+    display: flex;
+  }
+
+  .main-content {
+    margin-left: 0;
     padding: 10px;
   }
 
-  .hamburger {
-    display: block;
-    position: fixed;
-    top: 20px;
-    left: 20px;
-    cursor: pointer;
-    z-index: 3;
+  .control-panel {
+    margin-top: 10px; /* Adjusted margin for responsiveness */
   }
 }
