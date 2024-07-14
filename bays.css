@@ -45,6 +45,26 @@ body {
 }
 
 /* Responsive design for phone compatibility */
+@media (max-width: 800px) {
+    .bay {
+        flex: 1 1 calc(33.33% - 40px); /* Adjust to 3 per row for smaller screens */
+        margin: 10px;
+    }
+
+    .bay img {
+        width: 140px;
+        height: 140px;
+    }
+
+    .bay-name {
+        font-size: 16px;
+    }
+
+    .bay-row {
+        margin-bottom: 80px; /* Adjust gap for smaller screens */
+    }
+}
+
 @media (max-width: 600px) {
     .bay {
         flex: 1 1 calc(50% - 40px); /* Adjust to 2 per row for smaller screens */
@@ -57,7 +77,7 @@ body {
     }
 
     .bay-name {
-        font-size: 16px;
+        font-size: 14px;
     }
 
     .bay-row {
