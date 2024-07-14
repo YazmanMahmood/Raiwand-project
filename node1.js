@@ -47,44 +47,35 @@ document.addEventListener('DOMContentLoaded', () => {
     updateNode1Values('humidity-box', null);
   });
 
-  // Nodes dropdown functionality
-  const nodesDropdown = document.getElementById('bay1-dropdown');
-  const nodesDropdownContent = document.getElementById('bay1-dropdown-content');
-
-  nodesDropdown.addEventListener('click', () => {
-    nodesDropdownContent.classList.toggle('open');
-  });
-
-  nodesDropdownContent.addEventListener('click', (event) => {
-    if (event.target.tagName === 'A') {
-      const nodeLink = event.target.getAttribute('href');
-      if (nodeLink) {
-        window.location.href = nodeLink;
-      }
-    }
-  });
-
   // Control panel adjustments
-  const waterPumpSlider = document.getElementById('water-pump-slider');
-  const fansSlider = document.getElementById('fans-slider');
+  const waterPumpDropdown = document.getElementById('water-pump-dropdown');
+  const fansDropdown = document.getElementById('fans-dropdown');
 
-  waterPumpSlider.addEventListener('input', () => {
-    const value = waterPumpSlider.value;
-    // Implement logic to control the water pump based on value
-    console.log('Water Pump:', value);
+  const waterPumpOptions = waterPumpDropdown.querySelectorAll('option');
+  const fansOptions = fansDropdown.querySelectorAll('option');
+
+  waterPumpDropdown.addEventListener('change', (event) => {
+    const selectedValue = event.target.value;
+    // Implement logic to control the water pump based on selected value
+    console.log('Water Pump:', selectedValue);
   });
 
-  fansSlider.addEventListener('input', () => {
-    const value = fansSlider.value;
-    // Implement logic to control the fans based on value
-    console.log('Fans:', value);
+  fansDropdown.addEventListener('change', (event) => {
+    const selectedValue = event.target.value;
+    // Implement logic to control the fans based on selected value
+    console.log('Fans:', selectedValue);
   });
 
-  // Change 'Manual' to 'On' and remove dropdown below
-  const manualLabel = document.querySelector('.control-panel label[for="water-pump-slider"]');
-  manualLabel.textContent = 'On'; // Change label text
+  // Adjust sidebar contents alignment
+  const waterPumpLabel = document.querySelector('.control-panel label[for="water-pump-dropdown"]');
+  waterPumpLabel.textContent = 'Water Pump';
 
-  const manualDropdown = document.getElementById('water-pump-dropdown');
-  manualDropdown.style.display = 'none'; // Hide the dropdown
+  const fansLabel = document.querySelector('.control-panel label[for="fans-dropdown"]');
+  fansLabel.textContent = 'Fans';
+
+  const sidebarContent = document.querySelector('.sidebar .content');
+  sidebarContent.style.display = 'flex';
+  sidebarContent.style.flexDirection = 'column';
+  sidebarContent.style.alignItems = 'center';
 
 });
