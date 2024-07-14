@@ -55,6 +55,21 @@ document.addEventListener('DOMContentLoaded', () => {
             });
         }
     };
+    document.addEventListener('DOMContentLoaded', () => {
+    const nodesData = [
+        { id: 'node1', temp: '22.5°C', humidity: '55%', soil: '40%' },
+        { id: 'node2', temp: '23.0°C', humidity: '50%', soil: '42%' },
+        { id: 'node3', temp: '21.5°C', humidity: '60%', soil: '38%' },
+        { id: 'node4', temp: '22.0°C', humidity: '57%', soil: '41%' },
+        { id: 'node5', temp: '23.2°C', humidity: '52%', soil: '39%' },
+        { id: 'node6', temp: '21.8°C', humidity: '58%', soil: '37%' }
+    ];
+
+    nodesData.forEach(node => {
+        document.getElementById(`${node.id}`).querySelector('#tempA').innerText = node.temp;
+        document.getElementById(`${node.id}`).querySelector('#humidityA').innerText = node.humidity;
+        document.getElementById(`${node.id}`).querySelector('#soilA').innerText = node.soil;
+    });
 
     createGauge("soil-moisture-gauge", 87.5, "Soil Moisture", "%");
     createGauge("temperature-gauge", 32.5, "Temperature", "°C");
