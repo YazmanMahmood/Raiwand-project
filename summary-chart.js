@@ -47,9 +47,9 @@ document.addEventListener('DOMContentLoaded', () => {
                     },
                     y: {
                         beginAtZero: true,
-                        max: 100, // Set a fixed maximum value
+                        max: 100,
                         ticks: {
-                            stepSize: 20 // Set a fixed step size
+                            stepSize: 20
                         }
                     }
                 },
@@ -58,8 +58,7 @@ document.addEventListener('DOMContentLoaded', () => {
                         position: 'top',
                     },
                     title: {
-                        display: true,
-                        text: 'Daily Summary'
+                        display: false
                     }
                 },
                 elements: {
