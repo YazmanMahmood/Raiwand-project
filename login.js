@@ -1,38 +1,34 @@
+import { database, ref, onValue } from "./firebase-config.js";
+
 document.addEventListener('DOMContentLoaded', () => {
-    const loginForm = document.getElementById('loginForm');
-    const errorMessage = document.getElementById('error-message');
-
-    loginForm.addEventListener('submit', function(event) {
+    document.getElementById('loginForm').addEventListener('submit', function(event) {
         event.preventDefault();
+        const username = document.getElementById('username').value;
+        const password = document.getElementById('password').value;
+        const errorMessage = document.getElementById('error-message');
 
-        const username = document.getElementById('user1').value;
-        const password = document.getElementById('password1').value;
+        // Reference to the users in the database
+        const usersRef = ref(database, 'user');
 
-        // Initialize Firebase app if not already initialized
-        const firebaseConfig = {
-            apiKey: "AIzaSyAmVSOm8g6p4F3ZY4jxIEUTQH_oFllo1hg",
-            authDomain: "greenhouse-raiwind.firebaseapp.com",
-            projectId: "greenhouse-raiwind"
-            // Add other Firebase config parameters as needed
-        };
-
-        if (!firebase.apps.length) {
-            firebase.initializeApp(firebaseConfig);
-        }
-
-        // Sign in with Firebase Authentication
-        firebase.auth().signInWithEmailAndPassword(username, password)
-            .then((userCredential) => {
-                // Signed in
-                const user = userCredential.user;
-                sessionStorage.setItem('loggedIn', 'true');
-                // Redirect to bays.html or desired page
-                window.location.href = 'bays.html';
-            })
-            .catch((error) => {
-                const errorCode = error.code;
-                const errorMessageText = error.message;
-                errorMessage.textContent = errorMessageText;
-            });
+        // Get the user data
+        onValue(ref(database, 'user/id1'), (snapshot) => {
+            const storedUsername = snapshot.val();
+            if (username === storedUsername) {
+                onValue(ref(database, 'user/password1'), (pwSnapshot) => {
+                    const storedPassword = pwSnapshot.val();
+                    if (password === storedPassword) {
+                        // Credentials are correct
+                        sessionStorage.setItem('loggedIn', 'true');
+                        window.location.href = 'bays.html';
+                    } else {
+                        errorMessage.textContent = 'Invalid username or password';
+                    }
+                });
+            } else {
+                errorMessage.textContent = 'Invalid username or password';
+            }
+        }, {
+            onlyOnce: true
+        });
     });
 });
