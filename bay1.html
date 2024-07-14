@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Bay 1 - Greenhouse Monitoring</title>
+    <title>Greenhouse Nodes - Bay 1</title>
     <link rel="stylesheet" href="bay1.css">
 </head>
 <body>
@@ -12,9 +12,21 @@
             <h1>Greenhouse Monitoring - Bay 1</h1>
         </div>
         <div class="content">
+            <div class="sidebar">
+                <div class="average-readings">
+                    <h2>Average Readings</h2>
+                    <p>Temperature: <span id="avg-temp">22.3°C</span></p>
+                    <p>Humidity: <span id="avg-humidity">55.3%</span></p>
+                    <p>Soil Moisture: <span id="avg-soil">39.5%</span></p>
+                </div>
+                <div class="control-status">
+                    <h2>Control Status</h2>
+                    <p>Water Supply: <span id="water-supply-status">On</span></p>
+                    <p>Fan Status: <span id="fan-status">Off</span></p>
+                </div>
+            </div>
             <div class="bay-image">
-                <img src="enhanced_bay_image.png" alt="Bay Image">
-                <!-- Place your enhanced bay image here with boxes and lines -->
+                <img src="GreenHouseBay.png" alt="Bay Image">
                 <div class="node-info">
                     <div class="node" onclick="redirectToNode('node1.html')">
                         <h2>Node 1</h2>
