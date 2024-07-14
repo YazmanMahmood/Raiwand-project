@@ -1,9 +1,11 @@
 function redirectToNode1() {
     window.location.href = 'node1.html';
 }
+
 function redirectToNode2() {
     window.location.href = 'node2.html';
 }
+
 document.addEventListener('DOMContentLoaded', () => {
     // Check if summary-chart canvas exists before accessing getContext
     const summaryCanvas = document.getElementById('summary-chart');
@@ -38,6 +40,7 @@ document.addEventListener('DOMContentLoaded', () => {
             }
         });
     }
+
     // Create gauges if the corresponding elements exist
     const createGauge = (id, value, title, label) => {
         const gaugeElement = document.getElementById(id);
@@ -55,7 +58,7 @@ document.addEventListener('DOMContentLoaded', () => {
             });
         }
     };
-    document.addEventListener('DOMContentLoaded', () => {
+
     const nodesData = [
         { id: 'node1', temp: '22.5°C', humidity: '55%', soil: '40%' },
         { id: 'node2', temp: '23.0°C', humidity: '50%', soil: '42%' },
@@ -66,9 +69,12 @@ document.addEventListener('DOMContentLoaded', () => {
     ];
 
     nodesData.forEach(node => {
-        document.getElementById(`${node.id}`).querySelector('#tempA').innerText = node.temp;
-        document.getElementById(`${node.id}`).querySelector('#humidityA').innerText = node.humidity;
-        document.getElementById(`${node.id}`).querySelector('#soilA').innerText = node.soil;
+        const nodeElement = document.getElementById(node.id);
+        if (nodeElement) {
+            nodeElement.querySelector('#tempA').innerText = node.temp;
+            nodeElement.querySelector('#humidityA').innerText = node.humidity;
+            nodeElement.querySelector('#soilA').innerText = node.soil;
+        }
     });
 
     createGauge("soil-moisture-gauge", 87.5, "Soil Moisture", "%");
