@@ -1,5 +1,4 @@
-import { database, ref, get, child } from "./firebase-config.js";
-
+// login.js
 document.addEventListener('DOMContentLoaded', () => {
     document.getElementById('loginForm').addEventListener('submit', function(event) {
         event.preventDefault();
@@ -8,15 +7,15 @@ document.addEventListener('DOMContentLoaded', () => {
         const errorMessage = document.getElementById('error-message');
 
         // Reference to the users in the database
-        const usersRef = ref(database, 'user');
+        const usersRef = firebase.database().ref('user');
 
         // Get the user data
-        get(child(usersRef, 'id1')).then((snapshot) => {
+        usersRef.child('id1').get().then((snapshot) => {
             if (snapshot.exists()) {
                 const storedUsername = snapshot.val();
                 // If username matches, check password
                 if (username === storedUsername) {
-                    get(child(usersRef, 'password1')).then((pwSnapshot) => {
+                    usersRef.child('password1').get().then((pwSnapshot) => {
                         if (pwSnapshot.exists()) {
                             const storedPassword = pwSnapshot.val();
                             if (password === storedPassword) {
