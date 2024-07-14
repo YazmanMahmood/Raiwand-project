@@ -3,29 +3,69 @@ document.addEventListener('DOMContentLoaded', () => {
     if (summaryCanvas) {
         const summaryCtx = summaryCanvas.getContext('2d');
         const summaryChart = new Chart(summaryCtx, {
-            type: 'line', // Changed from 'bar' to 'line'
+            type: 'line',
             data: {
                 labels: ['09:00', '11:00', '13:00', '15:00', '17:00', '19:00', '21:00'],
-                datasets: [{
-                    label: 'Temperature',
-                    data: [30, 25, 28, 26, 27, 29, 32],
-                    borderColor: 'rgba(26, 188, 156, 1)',
-                    backgroundColor: 'rgba(26, 188, 156, 0.2)',
-                    borderWidth: 2,
-                    fill: true,
-                    tension: 0.4 // This adds a slight curve to the line
-                }]
+                datasets: [
+                    {
+                        label: 'Temperature (°C)',
+                        data: [30, 25, 28, 26, 27, 29, 32],
+                        borderColor: 'rgba(255, 99, 132, 1)',
+                        backgroundColor: 'rgba(255, 99, 132, 0.2)',
+                        borderWidth: 2,
+                        fill: false,
+                        tension: 0.4
+                    },
+                    {
+                        label: 'Humidity (%)',
+                        data: [60, 65, 62, 68, 70, 65, 63],
+                        borderColor: 'rgba(54, 162, 235, 1)',
+                        backgroundColor: 'rgba(54, 162, 235, 0.2)',
+                        borderWidth: 2,
+                        fill: false,
+                        tension: 0.4
+                    },
+                    {
+                        label: 'Soil Moisture (%)',
+                        data: [40, 38, 42, 45, 43, 41, 39],
+                        borderColor: 'rgba(75, 192, 192, 1)',
+                        backgroundColor: 'rgba(75, 192, 192, 0.2)',
+                        borderWidth: 2,
+                        fill: false,
+                        tension: 0.4
+                    }
+                ]
             },
             options: {
                 responsive: true,
                 maintainAspectRatio: false,
                 scales: {
                     x: {
-                        beginAtZero: true
+                        grid: {
+                            display: false
+                        }
                     },
                     y: {
                         beginAtZero: true,
-                        max: 50
+                        max: 100, // Set a fixed maximum value
+                        ticks: {
+                            stepSize: 20 // Set a fixed step size
+                        }
+                    }
+                },
+                plugins: {
+                    legend: {
+                        position: 'top',
+                    },
+                    title: {
+                        display: true,
+                        text: 'Daily Summary'
+                    }
+                },
+                elements: {
+                    point: {
+                        radius: 4,
+                        hoverRadius: 6
                     }
                 }
             }
