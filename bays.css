@@ -35,5 +35,5 @@ body {
     width: 100%;
     display: flex;
     justify-content: center;
-    margin-bottom: 70px; /* Increased space between sets of 5 bays */
+    margin-bottom: 120px; /* Increased space between sets of 5 bays */
 }
