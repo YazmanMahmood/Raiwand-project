@@ -62,12 +62,13 @@ body {
 
 .dropdown-container {
   display: none;
-  background-color: #444;
+  background-color: #edbebe; /* Change background color */
   padding-left: 8px;
   overflow: hidden;
-  max-height: 0;
+  max-height: 300px; /* Adjust as needed */
   transition: max-height 0.3s ease-out;
 }
+
 
 .dropdown-container.show {
   display: block;
