@@ -18,4 +18,4 @@ const database = getDatabase(app);
 
 console.log("Firebase initialized");
 
-export { database, ref, onValue };
+export { database,app, ref, onValue };
