@@ -1,4 +1,3 @@
-/* Reset default styles */
 body {
   font-family: Arial, sans-serif;
   margin: 0;
@@ -18,7 +17,7 @@ body {
   left: 0;
   height: 100%;
   transition: transform 0.3s ease;
-  z-index: 1; /* Ensure sidebar is above other content */
+  z-index: 1;
 }
 
 .sidebar.open {
@@ -68,29 +67,31 @@ body {
 
 .dropdown-container {
   display: none;
-  background-color: #e0b6b6;
+  background-color: #444;
   padding-left: 8px;
   overflow: hidden;
   transition: max-height 0.3s ease-out;
+  max-height: 0;
+}
+
+.dropdown-container.show {
+  display: block;
+  max-height: 1000px;
 }
 
 .dropdown-container a {
   padding: 10px;
   text-decoration: none;
   display: block;
-  color: black;
+  color: white;
 }
 
 .dropdown-container a:hover {
-  background-color: #ccc;
-}
-
-.dropdown-container.show {
-  display: block;
+  background-color: #555;
 }
 
 .main-content {
-  margin-left: 200px; /* Adjusted for sidebar width */
+  margin-left: 200px;
   padding: 20px;
   flex: 1;
 }
@@ -120,8 +121,8 @@ body {
 
 .large-textbox, .large-inputbox {
   width: 100%;
-  height: 80px;  /* Reduced height */
-  font-size: 1.5em;  /* Reduced font size */
+  height: 80px;
+  font-size: 1.5em;
   text-align: center;
   background-color: #fff;
   border-radius: 5px;
@@ -143,15 +144,17 @@ body {
 
 .chart-container {
   width: 100%;
-  max-width: 600px;
-  margin: 0 auto;
+  height: 50vh;
+  min-height: 300px;
+  max-height: 600px;
+  margin: 20px 0;
   background-color: #f9f9f9;
   border-radius: 5px;
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
 }
 
 .control-panel {
-  width: 50%; /* Adjusted for smaller size */
+  width: 50%;
   margin: 0 auto;
   background-color: #f0f0f0;
   padding: 20px;
@@ -186,7 +189,7 @@ body {
   background: transparent;
   border: none;
   cursor: pointer;
-  z-index: 2; /* Ensure the hamburger is above other content */
+  z-index: 2;
 }
 
 .hamburger div {
@@ -206,7 +209,7 @@ body {
 
   .main-content {
     margin-left: 0;
-    padding-top: 60px; /* Space for hamburger menu */
+    padding-top: 60px;
   }
 
   .hamburger {
@@ -215,15 +218,16 @@ body {
     top: 15px;
     left: 15px;
   }
-}
 
-/* Animation for dropdown */
-.dropdown-container {
-  max-height: 0;
-  overflow: hidden;
-  transition: max-height 0.3s ease;
-}
+  .chart-container {
+    height: 60vh;
+  }
 
-.dropdown-container.show {
-  max-height: 300px; /* Adjust based on content */
+  .widgets {
+    flex-direction: column;
+  }
+
+  .widget {
+    margin-bottom: 10px;
+  }
 }
