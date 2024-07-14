@@ -1,124 +1,61 @@
-document.addEventListener('DOMContentLoaded', () => {
-    // Function to redirect to node page
-    const redirectToNode = (nodePage) => {
-        window.location.href = nodePage;
-    };
+function redirectToNode(nodePage) {
+    window.location.href = nodePage;
+}
 
-    // Sample data simulation (replace with Firebase or actual data)
-    const nodesData = [
-        {
-            id: 'node1',
-            name: 'Node 1',
-            temperature: '22.5°C',
-            humidity: '55%',
-            soilMoisture: '40%'
-        },
-        {
-            id: 'node2',
-            name: 'Node 2',
-            temperature: '23.0°C',
-            humidity: '50%',
-            soilMoisture: '42%'
-        },
-        {
-            id: 'node3',
-            name: 'Node 3',
-            temperature: '21.5°C',
-            humidity: '60%',
-            soilMoisture: '38%'
-        },
-        {
-            id: 'node4',
-            name: 'Node 4',
-            temperature: '22.0°C',
-            humidity: '57%',
-            soilMoisture: '41%'
-        },
-        {
-            id: 'node5',
-            name: 'Node 5',
-            temperature: '23.2°C',
-            humidity: '52%',
-            soilMoisture: '39%'
-        },
-        {
-            id: 'node6',
-            name: 'Node 6',
-            temperature: '21.8°C',
-            humidity: '58%',
-            soilMoisture: '37%'
-        }
+document.addEventListener('DOMContentLoaded', () => {
+    // Sample data for nodes (replace with actual dynamic data if available)
+    const nodes = [
+        { id: 'node1', temperature: '22.5°C', humidity: '55%', soilMoisture: '40%', waterSupply: 'On', fanStatus: 'Off', reading: '22:30, July 13' },
+        { id: 'node2', temperature: '23.0°C', humidity: '50%', soilMoisture: '42%', waterSupply: 'Off', fanStatus: 'On', reading: '22:30, July 13' },
+        // Add more nodes as needed
     ];
 
-    // Update node information in the HTML
-    nodesData.forEach(node => {
-        const nodeElement = document.getElementById(node.id);
+    // Update DOM with sample data (for demonstration purposes)
+    nodes.forEach((node, index) => {
+        const nodeElement = document.querySelector(`#temp${String.fromCharCode(65 + index)}`);
         if (nodeElement) {
-            nodeElement.addEventListener('click', () => {
-                redirectToNode(`${node.id}.html`);
-            });
-            nodeElement.querySelector('#temp').innerText = node.temperature;
-            nodeElement.querySelector('#humidity').innerText = node.humidity;
-            nodeElement.querySelector('#soil').innerText = node.soilMoisture;
-        });
+            nodeElement.textContent = node.temperature;
+        }
+
+        const humidityElement = document.querySelector(`#humidity${String.fromCharCode(65 + index)}`);
+        if (humidityElement) {
+            humidityElement.textContent = node.humidity;
+        }
+
+        const soilElement = document.querySelector(`#soil${String.fromCharCode(65 + index)}`);
+        if (soilElement) {
+            soilElement.textContent = node.soilMoisture;
+        }
+
+        const waterElement = document.querySelector(`#water${String.fromCharCode(65 + index)}`);
+        if (waterElement) {
+            waterElement.textContent = node.waterSupply;
+        }
+
+        const fanElement = document.querySelector(`#fan${String.fromCharCode(65 + index)}`);
+        if (fanElement) {
+            fanElement.textContent = node.fanStatus;
+        }
+
+        const readingElement = document.querySelector(`#reading${String.fromCharCode(65 + index)}`);
+        if (readingElement) {
+            readingElement.textContent = node.reading;
+        }
     });
 
-    // Example chart initialization (replace with your actual implementation)
-    const summaryChartCanvas = document.getElementById('summary-chart');
-    if (summaryChartCanvas) {
-        const summaryCtx = summaryChartCanvas.getContext('2d');
-        const summaryChart = new Chart(summaryCtx, {
-            type: 'line',
-            data: {
-                labels: ['09:00', '11:00', '13:00', '15:00', '17:00', '19:00', '21:00'],
-                datasets: [{
-                    label: 'Temperature',
-                    data: [30, 25, 28, 26, 27, 29, 32],
-                    backgroundColor: 'rgba(26, 188, 156, 0.2)',
-                    borderColor: 'rgba(26, 188, 156, 1)',
-                    borderWidth: 2,
-                    fill: true,
-                    tension: 0.4
-                }]
-            },
-            options: {
-                responsive: true,
-                maintainAspectRatio: false,
-                scales: {
-                    x: {
-                        beginAtZero: true
-                    },
-                    y: {
-                        beginAtZero: true,
-                        max: 50
-                    }
-                }
-            }
-        });
-    }
-
-    // Example gauge initialization (replace with your actual implementation)
-    const createGauge = (id, value, title, label) => {
-        new JustGage({
-            id: id,
-            value: value,
-            min: 0,
-            max: 100,
-            title: title,
-            label: label,
-            pointer: true,
-            gaugeWidthScale: 0.6,
-            levelColors: ["#00ff00", "#ff0000"]
-        });
+    // Sample data for average readings (for demonstration purposes)
+    const averageReadings = {
+        temperature: '22.3°C',
+        humidity: '55.3%',
+        soilMoisture: '39.5%',
+        waterSupply: 'On',
+        fanStatus: 'Off'
     };
 
-    createGauge("soil-moisture-gauge", 87.5, "Soil Moisture", "%");
-    createGauge("temperature-gauge", 32.5, "Temperature", "°C");
-    createGauge("humidity-gauge", 85, "Humidity", "%");
-
-    // Set sample sensor data if the element exists
-    const lastReadingElement = document.getElementById('last-reading');
-    if (lastReadingElement) {
-        lastReadingElement.innerText = '8:00pm, September 7, 2019';
-    }
+    // Update DOM with sample average readings
+    document.getElementById('avg-temp').textContent = averageReadings.temperature;
+    document.getElementById('avg-humidity').textContent = averageReadings.humidity;
+    document.getElementById('avg-soil').textContent = averageReadings.soilMoisture;
+    document.getElementById('water-supply-status').textContent = averageReadings.waterSupply;
+    document.getElementById('fan-status').textContent = averageReadings.fanStatus;
 });
