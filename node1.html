@@ -11,15 +11,15 @@
     <div class="sidebar-header">
       <h2>SmartSpace Agri</h2>
     </div>
-    <div class="bay-dropdown">
-      <a href="bay1.html" class="active">Bay 1</a>
-      <div class="dropdown-content">
+    <div class="dropdown">
+      <a href="#" class="bay" id="bay1-dropdown">Bay 1</a>
+      <div class="dropdown-content" id="bay1-dropdown-content">
         <a href="node1.html">Node 1</a>
         <a href="node2.html">Node 2</a>
-        <a href="node3.html">Node 3</a>
-        <a href="node4.html">Node 4</a>
-        <a href="node5.html">Node 5</a>
-        <a href="node6.html">Node 6</a>
+        <a href="#">Node 3</a>
+        <a href="#">Node 4</a>
+        <a href="#">Node 5</a>
+        <a href="#">Node 6</a>
       </div>
     </div>
     <a class="bay dimmed">Bay 2</a>
@@ -83,14 +83,8 @@
         <input type="range" id="water-pump-slider" min="0" max="2" step="1" value="0">
         <div class="control-labels">
           <span>Auto</span>
-          <span>Manual</span>
+          <span>On</span>
           <span>Off</span>
-        </div>
-        <div class="dropdown" id="water-pump-dropdown" style="display: none;">
-          <select>
-            <option value="on">On</option>
-            <option value="off">Off</option>
-          </select>
         </div>
       </div>
       <div class="control-group">
@@ -98,14 +92,8 @@
         <input type="range" id="fans-slider" min="0" max="2" step="1" value="0">
         <div class="control-labels">
           <span>Auto</span>
-          <span>Manual</span>
+          <span>On</span>
           <span>Off</span>
-        </div>
-        <div class="dropdown" id="fans-dropdown" style="display: none;">
-          <select>
-            <option value="on">On</option>
-            <option value="off">Off</option>
-          </select>
         </div>
       </div>
     </div>
@@ -137,6 +125,23 @@
         sidebar.style.display = 'none';
       } else {
         sidebar.style.display = 'block';
+      }
+    });
+
+    // Dropdown menu toggle
+    document.getElementById('bay1-dropdown').addEventListener('click', function() {
+      var dropdownContent = document.getElementById('bay1-dropdown-content');
+      if (dropdownContent.style.display === 'block') {
+        dropdownContent.style.display = 'none';
+      } else {
+        dropdownContent.style.display = 'block';
+      }
+    });
+
+    // Dropdown menu redirect
+    document.getElementById('bay1-dropdown-content').addEventListener('click', function(event) {
+      if (event.target.tagName === 'A') {
+        window.location.href = event.target.getAttribute('href');
       }
     });
   </script>
