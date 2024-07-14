@@ -1,4 +1,9 @@
 {
+  "name": "Raiwand project",
+  "version": "1.0.0",
+  "scripts": {
+    "build": "echo 'No build step required'"
+  },
   "dependencies": {
     "chart.js": "^3.9.1"
   }
