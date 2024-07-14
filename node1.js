@@ -78,4 +78,13 @@ document.addEventListener('DOMContentLoaded', () => {
   sidebarContent.style.flexDirection = 'column';
   sidebarContent.style.alignItems = 'center';
 
+  // Increase daily summary chart size
+  const summaryChartCanvas = document.getElementById('summary-chart');
+  summaryChartCanvas.style.width = '100%';
+  summaryChartCanvas.style.height = '400px'; // Adjust height as needed
+
+  // Center control panel box
+  const controlPanel = document.querySelector('.control-panel');
+  controlPanel.style.margin = 'auto';
 });
+
