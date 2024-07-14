@@ -7,7 +7,7 @@ body {
 }
 
 .sidebar {
-  width: 200px;
+  width: 180px;
   background-color: #333;
   color: white;
   padding: 15px;
@@ -62,11 +62,12 @@ body {
 
 .dropdown-container {
   display: none;
-  background-color: #edbebe; /* Change background color */
+  background-color: #edbebe;
   padding-left: 8px;
   overflow: hidden;
-  max-height: 300px; /* Adjust as needed */
+  max-height: 300px;
   transition: max-height 0.3s ease-out;
+  color: #333; /* Adjust text color for better visibility */
 }
 
 
@@ -81,6 +82,7 @@ body {
 .dropdown-container a {
   padding: 10px;
   font-size: 14px;
+  color: #333; /* Match text color with background contrast */
 }
 
 .main-content {
