@@ -1,46 +1,31 @@
-// login.js
+// Import Firebase app and database
+import { app } from "./firebase-config.js";
+import { getAuth, signInWithEmailAndPassword } from "firebase/auth";
+
 document.addEventListener('DOMContentLoaded', () => {
-    document.getElementById('loginForm').addEventListener('submit', function(event) {
+    const loginForm = document.getElementById('loginForm');
+    const errorMessage = document.getElementById('error-message');
+
+    loginForm.addEventListener('submit', function(event) {
         event.preventDefault();
+
         const username = document.getElementById('username').value;
         const password = document.getElementById('password').value;
-        const errorMessage = document.getElementById('error-message');
 
-        // Reference to the users in the database
-        const usersRef = firebase.database().ref('user');
-
-        // Get the user data
-        usersRef.child('id1').get().then((snapshot) => {
-            if (snapshot.exists()) {
-                const storedUsername = snapshot.val();
-                // If username matches, check password
-                if (username === storedUsername) {
-                    usersRef.child('password1').get().then((pwSnapshot) => {
-                        if (pwSnapshot.exists()) {
-                            const storedPassword = pwSnapshot.val();
-                            if (password === storedPassword) {
-                                // Credentials are correct
-                                sessionStorage.setItem('loggedIn', 'true');
-                                window.location.href = 'bays.html';
-                            } else {
-                                errorMessage.textContent = 'Invalid username or password';
-                            }
-                        } else {
-                            errorMessage.textContent = 'Error retrieving user data';
-                        }
-                    }).catch((error) => {
-                        console.error(error);
-                        errorMessage.textContent = 'Error checking credentials';
-                    });
-                } else {
-                    errorMessage.textContent = 'Invalid username or password';
-                }
-            } else {
-                errorMessage.textContent = 'User not found';
-            }
-        }).catch((error) => {
-            console.error(error);
-            errorMessage.textContent = 'Error checking credentials';
-        });
+        // Sign in with Firebase Authentication
+        const auth = getAuth(app);
+        signInWithEmailAndPassword(auth, username, password)
+            .then((userCredential) => {
+                // Signed in
+                const user = userCredential.user;
+                sessionStorage.setItem('loggedIn', 'true');
+                // Redirect to bays.html or desired page
+                window.location.href = 'bays.html';
+            })
+            .catch((error) => {
+                const errorCode = error.code;
+                const errorMessageText = error.message;
+                errorMessage.textContent = errorMessageText;
+            });
     });
 });
