@@ -87,5 +87,20 @@ document.addEventListener('DOMContentLoaded', () => {
   const controlPanel = document.querySelector('.control-panel');
   controlPanel.style.maxWidth = '300px'; // Adjust as needed for content
   controlPanel.style.margin = 'auto';
-});
 
+  // Dropdown button for nodes
+  const dropdownBtn = document.querySelector('.dropdown-btn');
+  dropdownBtn.addEventListener('click', () => {
+    dropdownBtn.classList.toggle('active');
+    const dropdownContent = dropdownBtn.nextElementSibling;
+    dropdownContent.classList.toggle('show');
+  });
+
+  // Redirect on dropdown item click
+  const dropdownLinks = document.querySelectorAll('.dropdown-container a');
+  dropdownLinks.forEach(link => {
+    link.addEventListener('click', (event) => {
+      window.location.href = event.target.getAttribute('href');
+    });
+  });
+});
