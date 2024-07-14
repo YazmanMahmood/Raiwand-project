@@ -1,16 +1,72 @@
-function redirectToNode1() {
-    window.location.href = 'node1.html';
-}
-
-function redirectToNode2() {
-    window.location.href = 'node2.html';
-}
-
 document.addEventListener('DOMContentLoaded', () => {
-    // Check if summary-chart canvas exists before accessing getContext
-    const summaryCanvas = document.getElementById('summary-chart');
-    if (summaryCanvas) {
-        const summaryCtx = summaryCanvas.getContext('2d');
+    // Function to redirect to node page
+    const redirectToNode = (nodePage) => {
+        window.location.href = nodePage;
+    };
+
+    // Sample data simulation (replace with Firebase or actual data)
+    const nodesData = [
+        {
+            id: 'node1',
+            name: 'Node 1',
+            temperature: '22.5°C',
+            humidity: '55%',
+            soilMoisture: '40%'
+        },
+        {
+            id: 'node2',
+            name: 'Node 2',
+            temperature: '23.0°C',
+            humidity: '50%',
+            soilMoisture: '42%'
+        },
+        {
+            id: 'node3',
+            name: 'Node 3',
+            temperature: '21.5°C',
+            humidity: '60%',
+            soilMoisture: '38%'
+        },
+        {
+            id: 'node4',
+            name: 'Node 4',
+            temperature: '22.0°C',
+            humidity: '57%',
+            soilMoisture: '41%'
+        },
+        {
+            id: 'node5',
+            name: 'Node 5',
+            temperature: '23.2°C',
+            humidity: '52%',
+            soilMoisture: '39%'
+        },
+        {
+            id: 'node6',
+            name: 'Node 6',
+            temperature: '21.8°C',
+            humidity: '58%',
+            soilMoisture: '37%'
+        }
+    ];
+
+    // Update node information in the HTML
+    nodesData.forEach(node => {
+        const nodeElement = document.getElementById(node.id);
+        if (nodeElement) {
+            nodeElement.addEventListener('click', () => {
+                redirectToNode(`${node.id}.html`);
+            });
+            nodeElement.querySelector('#temp').innerText = node.temperature;
+            nodeElement.querySelector('#humidity').innerText = node.humidity;
+            nodeElement.querySelector('#soil').innerText = node.soilMoisture;
+        });
+    });
+
+    // Example chart initialization (replace with your actual implementation)
+    const summaryChartCanvas = document.getElementById('summary-chart');
+    if (summaryChartCanvas) {
+        const summaryCtx = summaryChartCanvas.getContext('2d');
         const summaryChart = new Chart(summaryCtx, {
             type: 'line',
             data: {
@@ -41,41 +97,20 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
-    // Create gauges if the corresponding elements exist
+    // Example gauge initialization (replace with your actual implementation)
     const createGauge = (id, value, title, label) => {
-        const gaugeElement = document.getElementById(id);
-        if (gaugeElement) {
-            new JustGage({
-                id: id,
-                value: value,
-                min: 0,
-                max: 100,
-                title: title,
-                label: label,
-                pointer: true,
-                gaugeWidthScale: 0.6,
-                levelColors: ["#00ff00", "#ff0000"]
-            });
-        }
+        new JustGage({
+            id: id,
+            value: value,
+            min: 0,
+            max: 100,
+            title: title,
+            label: label,
+            pointer: true,
+            gaugeWidthScale: 0.6,
+            levelColors: ["#00ff00", "#ff0000"]
+        });
     };
-
-    const nodesData = [
-        { id: 'node1', temp: '22.5°C', humidity: '55%', soil: '40%' },
-        { id: 'node2', temp: '23.0°C', humidity: '50%', soil: '42%' },
-        { id: 'node3', temp: '21.5°C', humidity: '60%', soil: '38%' },
-        { id: 'node4', temp: '22.0°C', humidity: '57%', soil: '41%' },
-        { id: 'node5', temp: '23.2°C', humidity: '52%', soil: '39%' },
-        { id: 'node6', temp: '21.8°C', humidity: '58%', soil: '37%' }
-    ];
-
-    nodesData.forEach(node => {
-        const nodeElement = document.getElementById(node.id);
-        if (nodeElement) {
-            nodeElement.querySelector('#tempA').innerText = node.temp;
-            nodeElement.querySelector('#humidityA').innerText = node.humidity;
-            nodeElement.querySelector('#soilA').innerText = node.soil;
-        }
-    });
 
     createGauge("soil-moisture-gauge", 87.5, "Soil Moisture", "%");
     createGauge("temperature-gauge", 32.5, "Temperature", "°C");
