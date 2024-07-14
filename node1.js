@@ -81,10 +81,11 @@ document.addEventListener('DOMContentLoaded', () => {
   // Increase daily summary chart size
   const summaryChartCanvas = document.getElementById('summary-chart');
   summaryChartCanvas.style.width = '100%';
-  summaryChartCanvas.style.height = '400px'; // Adjust height as needed
+  summaryChartCanvas.style.height = '600px'; // Increase height for better visibility
 
-  // Center control panel box
+  // Decrease control panel box size and center it
   const controlPanel = document.querySelector('.control-panel');
+  controlPanel.style.maxWidth = '300px'; // Adjust as needed for content
   controlPanel.style.margin = 'auto';
 });
 
