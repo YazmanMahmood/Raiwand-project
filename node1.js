@@ -3,10 +3,25 @@ import { database, ref, onValue } from "./firebase-config.js";
 document.addEventListener('DOMContentLoaded', () => {
   const hamburger = document.querySelector('.hamburger');
   const sidebar = document.querySelector('.sidebar');
+  const mainContent = document.querySelector('.main-content');
 
   hamburger.addEventListener('click', () => {
     sidebar.classList.toggle('open');
     hamburger.classList.toggle('open');
+    if (sidebar.classList.contains('open')) {
+      hamburger.style.left = '215px';
+    } else {
+      hamburger.style.left = '15px';
+    }
+  });
+
+  // Close sidebar when clicking outside
+  mainContent.addEventListener('click', () => {
+    if (sidebar.classList.contains('open') && window.innerWidth <= 768) {
+      sidebar.classList.remove('open');
+      hamburger.classList.remove('open');
+      hamburger.style.left = '15px';
+    }
   });
 
   // Firebase data fetching for Node 1
@@ -79,7 +94,8 @@ document.addEventListener('DOMContentLoaded', () => {
   const dropdownBtn = document.querySelector('.dropdown-btn');
   const dropdownContainer = document.querySelector('.dropdown-container');
 
-  dropdownBtn.addEventListener('click', () => {
+  dropdownBtn.addEventListener('click', (e) => {
+    e.stopPropagation();
     dropdownBtn.classList.toggle('active');
     dropdownContainer.classList.toggle('show');
   });
@@ -96,7 +112,20 @@ document.addEventListener('DOMContentLoaded', () => {
   const dropdownLinks = document.querySelectorAll('.dropdown-container a');
   dropdownLinks.forEach(link => {
     link.addEventListener('click', (event) => {
+      event.stopPropagation();
       window.location.href = event.target.getAttribute('href');
     });
+  });
+
+  // Update layout on window resize
+  window.addEventListener('resize', () => {
+    if (window.innerWidth > 768) {
+      sidebar.classList.remove('open');
+      hamburger.classList.remove('open');
+      hamburger.style.left = '15px';
+      mainContent.style.marginLeft = '200px';
+    } else {
+      mainContent.style.marginLeft = '0';
+    }
   });
 });
