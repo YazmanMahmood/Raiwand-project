@@ -5,6 +5,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Greenhouse Nodes</title>
     <link rel="stylesheet" href="bay1.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/justgage"></script>
+    <script src="https://cdn.jsdelivr.net/npm/raphael"></script>
 </head>
 <body>
     <div class="container">
@@ -63,7 +66,7 @@
                     <p>Fan Status: <span id="fanD">On</span></p>
                     <p>Reading: <span id="readingD">22:30, July 13</span></p>
                 </div>
-                <div class="node" onclick="redirectToNode5()" style="top: 10%; left: 90%;">
+                <div class="node" onclick="redirectToNode5()" style="top: 50%; left: 10%;">
                     <h2>Node 5</h2>
                     <p>Temperature: <span id="tempE">21.9°C</span></p>
                     <p>Humidity: <span id="humidityE">54%</span></p>
@@ -72,10 +75,21 @@
                     <p>Fan Status: <span id="fanE">Off</span></p>
                     <p>Reading: <span id="readingE">22:30, July 13</span></p>
                 </div>
+                <div class="node" onclick="redirectToNode6()" style="top: 50%; left: 30%;">
+                    <h2>Node 6</h2>
+                    <p>Temperature: <span id="tempF">21.0°C</span></p>
+                    <p>Humidity: <span id="humidityF">52%</span></p>
+                    <p>Soil Moisture: <span id="soilF">39%</span></p>
+                    <p>Water Supply: <span id="waterF">Off</span></p>
+                    <p>Fan Status: <span id="fanF">On</span></p>
+                    <p>Reading: <span id="readingF">22:30, July 13</span></p>
+                </div>
             </div>
         </div>
+        <div class="footer">
+            <canvas id="summary-chart"></canvas>
+        </div>
     </div>
-
     <script src="bay1.js"></script>
 </body>
 </html>
