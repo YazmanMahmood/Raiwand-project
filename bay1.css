@@ -68,24 +68,22 @@ h1 {
 
 /* Nodes container styles */
 .nodes-container {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 20px;
+    position: relative;
 }
 
-/* Individual node styles */
+.main-image {
+    width: 100%;
+    height: auto;
+}
+
 .node {
-    flex: 1 1 calc(50% - 10px);
-    min-width: 250px;
+    position: absolute;
     background-color: #8a8686;
     color: white;
     padding: 20px;
     border-radius: 8px;
     cursor: pointer;
     transition: background-color 0.3s ease;
-    background-image: url('GreenHouseBay.png');
-    background-size: cover;
-    position: relative;
 }
 
 .node:hover {
@@ -112,10 +110,6 @@ h1 {
     .average-readings, .control-status {
         width: 80%;
         max-width: none;
-    }
-
-    .nodes-container {
-        flex-direction: column;
     }
 
     .node {
