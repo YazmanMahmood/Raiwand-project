@@ -3,34 +3,78 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Bay 1 - Greenhouse Monitoring</title>
+    <title>Greenhouse Nodes</title>
     <link rel="stylesheet" href="bay1.css">
 </head>
 <body>
     <div class="container">
         <div class="header">
-            <h1>Greenhouse Monitoring - Bay 1</h1>
+            <h1>Greenhouse Monitoring</h1>
         </div>
         <div class="content">
-            <div class="greenhouse">
-                <img src="GreenHouseBay.png" alt="Greenhouse Bay">
-                <div class="node" id="node1">
-                    <p>Node 1</p>
-                    <div class="node-info">
-                        <p>Temperature: <span id="tempA">22.5°C</span></p>
-                        <p>Humidity: <span id="humidityA">55%</span></p>
-                        <p>Soil Moisture: <span id="soilA">40%</span></p>
-                    </div>
+            <div class="sidebar">
+                <div class="average-readings">
+                    <h2>Average Readings</h2>
+                    <p>Temperature: <span id="avg-temp">22.3°C</span></p>
+                    <p>Humidity: <span id="avg-humidity">55.3%</span></p>
+                    <p>Soil Moisture: <span id="avg-soil">39.5%</span></p>
                 </div>
-                <div class="node" id="node2">
-                    <p>Node 2</p>
-                    <div class="node-info">
-                        <p>Temperature: <span id="tempB">23.0°C</span></p>
-                        <p>Humidity: <span id="humidityB">50%</span></p>
-                        <p>Soil Moisture: <span id="soilB">42%</span></p>
-                    </div>
+                <div class="control-status">
+                    <h2>Control Status</h2>
+                    <p>Water Supply: <span id="water-supply-status">On</span></p>
+                    <p>Fan Status: <span id="fan-status">Off</span></p>
                 </div>
-          
+            </div>
+            <div class="nodes-container">
+                <img src="GreenHouseBay.png" alt="Greenhouse Bay" class="main-image">
+                <div class="node" onclick="redirectToNode1()" style="top: 10%; left: 10%;">
+                    <h2>Node 1</h2>
+                    <p>Temperature: <span id="tempA">22.5°C</span></p>
+                    <p>Humidity: <span id="humidityA">55%</span></p>
+                    <p>Soil Moisture: <span id="soilA">40%</span></p>
+                    <p>Water Supply: <span id="waterA">On</span></p>
+                    <p>Fan Status: <span id="fanA">Off</span></p>
+                    <p>Reading: <span id="readingA">22:30, July 13</span></p>
+                </div>
+                <div class="node" onclick="redirectToNode2()" style="top: 10%; left: 30%;">
+                    <h2>Node 2</h2>
+                    <p>Temperature: <span id="tempB">23.0°C</span></p>
+                    <p>Humidity: <span id="humidityB">50%</span></p>
+                    <p>Soil Moisture: <span id="soilB">42%</span></p>
+                    <p>Water Supply: <span id="waterB">Off</span></p>
+                    <p>Fan Status: <span id="fanB">On</span></p>
+                    <p>Reading: <span id="readingB">22:30, July 13</span></p>
+                </div>
+                <div class="node" onclick="redirectToNode3()" style="top: 10%; left: 50%;">
+                    <h2>Node 3</h2>
+                    <p>Temperature: <span id="tempC">24.0°C</span></p>
+                    <p>Humidity: <span id="humidityC">53%</span></p>
+                    <p>Soil Moisture: <span id="soilC">38%</span></p>
+                    <p>Water Supply: <span id="waterC">On</span></p>
+                    <p>Fan Status: <span id="fanC">Off</span></p>
+                    <p>Reading: <span id="readingC">22:30, July 13</span></p>
+                </div>
+                <div class="node" onclick="redirectToNode4()" style="top: 10%; left: 70%;">
+                    <h2>Node 4</h2>
+                    <p>Temperature: <span id="tempD">22.8°C</span></p>
+                    <p>Humidity: <span id="humidityD">56%</span></p>
+                    <p>Soil Moisture: <span id="soilD">37%</span></p>
+                    <p>Water Supply: <span id="waterD">Off</span></p>
+                    <p>Fan Status: <span id="fanD">On</span></p>
+                    <p>Reading: <span id="readingD">22:30, July 13</span></p>
+                </div>
+                <div class="node" onclick="redirectToNode5()" style="top: 10%; left: 90%;">
+                    <h2>Node 5</h2>
+                    <p>Temperature: <span id="tempE">21.9°C</span></p>
+                    <p>Humidity: <span id="humidityE">54%</span></p>
+                    <p>Soil Moisture: <span id="soilE">36%</span></p>
+                    <p>Water Supply: <span id="waterE">On</span></p>
+                    <p>Fan Status: <span id="fanE">Off</span></p>
+                    <p>Reading: <span id="readingE">22:30, July 13</span></p>
+                </div>
+            </div>
+        </div>
+    </div>
 
     <script src="bay1.js"></script>
 </body>
