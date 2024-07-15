@@ -2,23 +2,18 @@
 function redirectToNode1() {
     window.location.href = 'node1.html';
 }
-
 function redirectToNode2() {
     window.location.href = 'node2.html';
 }
-
 function redirectToNode3() {
     window.location.href = 'node3.html';
 }
-
 function redirectToNode4() {
     window.location.href = 'node4.html';
 }
-
 function redirectToNode5() {
     window.location.href = 'node5.html';
 }
-
 function redirectToNode6() {
     window.location.href = 'node6.html';
 }
