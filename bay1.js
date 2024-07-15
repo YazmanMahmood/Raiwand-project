@@ -1,23 +1,10 @@
-// Redirect functions for each node
+
 function redirectToNode1() {
     window.location.href = 'node1.html';
 }
 function redirectToNode2() {
     window.location.href = 'node2.html';
 }
-function redirectToNode3() {
-    window.location.href = 'node3.html';
-}
-function redirectToNode4() {
-    window.location.href = 'node4.html';
-}
-function redirectToNode5() {
-    window.location.href = 'node5.html';
-}
-function redirectToNode6() {
-    window.location.href = 'node6.html';
-}
-
 document.addEventListener('DOMContentLoaded', () => {
     // Check if summary-chart canvas exists before accessing getContext
     const summaryCanvas = document.getElementById('summary-chart');
@@ -52,7 +39,6 @@ document.addEventListener('DOMContentLoaded', () => {
             }
         });
     }
-
     // Create gauges if the corresponding elements exist
     const createGauge = (id, value, title, label) => {
         const gaugeElement = document.getElementById(id);
@@ -73,5 +59,11 @@ document.addEventListener('DOMContentLoaded', () => {
 
     createGauge("soil-moisture-gauge", 87.5, "Soil Moisture", "%");
     createGauge("temperature-gauge", 32.5, "Temperature", "°C");
-    createGauge("humidity-gauge", 55.5, "Humidity", "%");
+    createGauge("humidity-gauge", 85, "Humidity", "%");
+
+    // Set sample sensor data if the element exists
+    const lastReadingElement = document.getElementById('last-reading');
+    if (lastReadingElement) {
+        lastReadingElement.innerText = '8:00pm, September 7, 2019';
+    }
 });
