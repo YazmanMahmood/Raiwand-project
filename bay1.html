@@ -1,11 +1,11 @@
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Greenhouse Nodes</title>
-    <link rel="stylesheet" href="./bay1.css">
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link rel="stylesheet" href="bay1.css">
 </head>
 <body>
     <div class="container">
@@ -27,8 +27,7 @@
                 </div>
             </div>
             <div class="nodes-container">
-               <img src="./images/GreenHouseBay.png" alt="Greenhouse Bay" class="main-image">
-                <div class="node" onclick="showNodeDetails(1)" style="top: 10%; left: 10%;">
+                <div class="node" onclick="redirectToNode1()">
                     <h2>Node 1</h2>
                     <p>Temperature: <span id="tempA">22.5°C</span></p>
                     <p>Humidity: <span id="humidityA">55%</span></p>
@@ -37,7 +36,7 @@
                     <p>Fan Status: <span id="fanA">Off</span></p>
                     <p>Reading: <span id="readingA">22:30, July 13</span></p>
                 </div>
-                <div class="node" onclick="redirectToNode2()" style="top: 10%; left: 30%;">
+                <div class="node" onclick="redirectToNode2()">
                     <h2>Node 2</h2>
                     <p>Temperature: <span id="tempB">23.0°C</span></p>
                     <p>Humidity: <span id="humidityB">50%</span></p>
@@ -46,48 +45,46 @@
                     <p>Fan Status: <span id="fanB">On</span></p>
                     <p>Reading: <span id="readingB">22:30, July 13</span></p>
                 </div>
-                <div class="node" onclick="redirectToNode3()" style="top: 10%; left: 50%;">
+                <div class="node">
                     <h2>Node 3</h2>
-                    <p>Temperature: <span id="tempC">24.0°C</span></p>
-                    <p>Humidity: <span id="humidityC">53%</span></p>
+                    <p>Temperature: <span id="tempC">21.5°C</span></p>
+                    <p>Humidity: <span id="humidityC">60%</span></p>
                     <p>Soil Moisture: <span id="soilC">38%</span></p>
                     <p>Water Supply: <span id="waterC">On</span></p>
                     <p>Fan Status: <span id="fanC">Off</span></p>
                     <p>Reading: <span id="readingC">22:30, July 13</span></p>
                 </div>
-                <div class="node" onclick="redirectToNode4()" style="top: 10%; left: 70%;">
+                <div class="node">
                     <h2>Node 4</h2>
-                    <p>Temperature: <span id="tempD">22.8°C</span></p>
-                    <p>Humidity: <span id="humidityD">56%</span></p>
-                    <p>Soil Moisture: <span id="soilD">37%</span></p>
+                    <p>Temperature: <span id="tempD">22.0°C</span></p>
+                    <p>Humidity: <span id="humidityD">57%</span></p>
+                    <p>Soil Moisture: <span id="soilD">41%</span></p>
                     <p>Water Supply: <span id="waterD">Off</span></p>
                     <p>Fan Status: <span id="fanD">On</span></p>
                     <p>Reading: <span id="readingD">22:30, July 13</span></p>
                 </div>
-                <div class="node" onclick="redirectToNode5()" style="top: 50%; left: 10%;">
+                <div class="node">
                     <h2>Node 5</h2>
-                    <p>Temperature: <span id="tempE">21.9°C</span></p>
-                    <p>Humidity: <span id="humidityE">54%</span></p>
-                    <p>Soil Moisture: <span id="soilE">36%</span></p>
+                    <p>Temperature: <span id="tempE">23.2°C</span></p>
+                    <p>Humidity: <span id="humidityE">52%</span></p>
+                    <p>Soil Moisture: <span id="soilE">39%</span></p>
                     <p>Water Supply: <span id="waterE">On</span></p>
                     <p>Fan Status: <span id="fanE">Off</span></p>
                     <p>Reading: <span id="readingE">22:30, July 13</span></p>
                 </div>
-                <div class="node" onclick="redirectToNode6()" style="top: 50%; left: 30%;">
+                <div class="node">
                     <h2>Node 6</h2>
-                    <p>Temperature: <span id="tempF">21.0°C</span></p>
-                    <p>Humidity: <span id="humidityF">52%</span></p>
-                    <p>Soil Moisture: <span id="soilF">39%</span></p>
+                    <p>Temperature: <span id="tempF">21.8°C</span></p>
+                    <p>Humidity: <span id="humidityF">58%</span></p>
+                    <p>Soil Moisture: <span id="soilF">37%</span></p>
                     <p>Water Supply: <span id="waterF">Off</span></p>
                     <p>Fan Status: <span id="fanF">On</span></p>
                     <p>Reading: <span id="readingF">22:30, July 13</span></p>
                 </div>
             </div>
         </div>
-        <div class="footer">
-            <canvas id="summary-chart"></canvas>
-        </div>
     </div>
-    <script src="./bay1.js"></script>
+
+    <script src="bay1.js"></script>
 </body>
 </html>
