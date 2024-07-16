@@ -1,5 +1,11 @@
 {
+  "name": "raiwand-project",
+  "version": "1.0.0",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js"
+  },
   "dependencies": {
-    "chart.js": "^3.9.1"
+    "express": "^4.19.2"
   }
 }

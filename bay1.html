@@ -3,87 +3,120 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Greenhouse Nodes</title>
+    <title>Greenhouse Monitoring</title>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="bay1.css">
+
 </head>
 <body>
     <div class="container">
-        <div class="header">
+        <header class="header">
             <h1>Greenhouse Monitoring</h1>
-        </div>
+        </header>
+
         <div class="content">
-            <div class="nodes-container">
-                <div class="node" onclick="redirectToNode1()">
-    <h2>Node 1</h2>
-    <p>Temperature: <span id="tempA">22.5°C</span></p>
-    <p>Humidity: <span id="humidityA">55%</span></p>
-    <p>Soil Moisture: <span id="soilA">40%</span></p>
-    <p>Water Supply: <span id="waterA">On</span></p>
-    <p>Fan Status: <span id="fanA">Off</span></p>
-    <p>Reading: <span id="readingA">22:30, July 13</span></p>
-</div>
-                <div class="node">
-                    <h2>Node 2</h2>
-                    <p>Temperature: <span id="tempB">23.0°C</span></p>
-                    <p>Humidity: <span id="humidityB">50%</span></p>
-                    <p>Soil Moisture: <span id="soilB">42%</span></p>
-                    <p>Water Supply: <span id="waterB">Off</span></p>
-                    <p>Fan Status: <span id="fanB">On</span></p>
-                    <p>Reading: <span id="readingB">22:30, July 13</span></p>
-                </div>
-                <div class="node">
-                    <h2>Node 3</h2>
-                    <p>Temperature: <span id="tempC">21.5°C</span></p>
-                    <p>Humidity: <span id="humidityC">60%</span></p>
-                    <p>Soil Moisture: <span id="soilC">38%</span></p>
-                    <p>Water Supply: <span id="waterC">On</span></p>
-                    <p>Fan Status: <span id="fanC">Off</span></p>
-                    <p>Reading: <span id="readingC">22:30, July 13</span></p>
-                </div>
-                <div class="node">
-                    <h2>Node 4</h2>
-                    <p>Temperature: <span id="tempD">22.0°C</span></p>
-                    <p>Humidity: <span id="humidityD">57%</span></p>
-                    <p>Soil Moisture: <span id="soilD">41%</span></p>
-                    <p>Water Supply: <span id="waterD">Off</span></p>
-                    <p>Fan Status: <span id="fanD">On</span></p>
-                    <p>Reading: <span id="readingD">22:30, July 13</span></p>
-                </div>
-                <div class="node">
-                    <h2>Node 5</h2>
-                    <p>Temperature: <span id="tempE">23.2°C</span></p>
-                    <p>Humidity: <span id="humidityE">52%</span></p>
-                    <p>Soil Moisture: <span id="soilE">39%</span></p>
-                    <p>Water Supply: <span id="waterE">On</span></p>
-                    <p>Fan Status: <span id="fanE">Off</span></p>
-                    <p>Reading: <span id="readingE">22:30, July 13</span></p>
-                </div>
-                <div class="node">
-                    <h2>Node 6</h2>
-                    <p>Temperature: <span id="tempF">21.8°C</span></p>
-                    <p>Humidity: <span id="humidityF">58%</span></p>
-                    <p>Soil Moisture: <span id="soilF">37%</span></p>
-                    <p>Water Supply: <span id="waterF">Off</span></p>
-                    <p>Fan Status: <span id="fanF">On</span></p>
-                    <p>Reading: <span id="readingF">22:30, July 13</span></p>
+            <!-- Main Content Area -->
+            <div class="main-content">
+                <!-- Greenhouse Image with Nodes -->
+                <div class="greenhouse">
+                    <img src="GreenHouseBay.png" alt="Greenhouse Bay" class="greenhouse-image">
+                    <div class="node node1"></div>
+                    <div class="node node2"></div>
+                    <div class="node node3"></div>
+                    <div class="node node4"></div>
+                    <div class="node node5"></div>
+                    <div class="node node6"></div>
                 </div>
             </div>
-          <div class="sidebar">
-                <div class="average-readings">
-                    <h2>Average Readings</h2>
-                    <p>Temperature: <span id="avg-temp">22.3°C</span></p>
-                    <p>Humidity: <span id="avg-humidity">55.3%</span></p>
-                    <p>Soil Moisture: <span id="avg-soil">39.5%</span></p>
-                </div>
+
+            <!-- Side Panel -->
+            <div class="side-panel">
+                <!-- Control Status -->
                 <div class="control-status">
                     <h2>Control Status</h2>
-                    <p>Water Supply: <span id="water-supply-status">On</span></p>
-                    <p>Fan Status: <span id="fan-status">Off</span></p>
+                    <div class="status-item">
+                        Fan: <span id="fan-status">OFF</span>
+                    </div>
+                    <div class="status-item">
+                        Water Flow: <span id="water-flow-status">OFF</span>
+                    </div>
+                </div>
+
+                <!-- Average Measurements -->
+                <div class="average-measurements">
+                    <h2>Average Measurements</h2>
+                    <div class="measurement-item">
+                        Temperature: <span id="avg-temperature">--</span>°C
+                    </div>
+                    <div class="measurement-item">
+                        Humidity: <span id="avg-humidity">--</span>%
+                    </div>
+                    <div class="measurement-item">
+                        Soil Moisture: <span id="avg-soil-moisture">--</span>%
+                    </div>
                 </div>
             </div>
         </div>
     </div>
 
-    <script src="bay1.js"></script>
+    <!-- Hamburger Menu for Mobile View -->
+    <div class="hamburger">
+        <div class="bar"></div>
+        <div class="bar"></div>
+        <div class="bar"></div>
+    </div>
+
+    <div class="sidebar" id="sidebar">
+        <div class="sidebar-header">
+            <h2>SmartSpace Agri</h2>
+        </div>
+        <button class="dropdown-btn">Bay 1 <span class="arrow">&#9660;</span></button>
+        <div class="dropdown-container">
+            <a href="node1.html">Node 1</a>
+            <a href="node2.html">Node 2</a>
+            <a href="node3.html">Node 3</a>
+            <a href="node4.html">Node 4</a>
+            <a href="node5.html">Node 5</a>
+            <a href="node6.html">Node 6</a>
+        </div>
+        <a class="dimmed">Bay 2</a>
+        <a class="dimmed">Bay 3</a>
+        <a class="dimmed">Bay 4</a>
+        <a class="dimmed">Bay 5</a>
+        <a class="dimmed">Bay 6</a>
+        <a class="dimmed">Bay 7</a>
+        <a class="dimmed">Bay 8</a>
+        <a class="dimmed">Bay 9</a>
+        <a class="dimmed">Bay 10</a>
+        <a href="#">Settings</a>
+    </div>
+
+    <!-- Popup Nodes -->
+    <div id="popup-node1" class="popup">
+        <div class="popup-arrow"></div>
+        <div id="popup-content-node1" class="popup-content"></div>
+    </div>
+    <div id="popup-node2" class="popup">
+        <div class="popup-arrow"></div>
+        <div id="popup-content-node2" class="popup-content"></div>
+    </div>
+    <div id="popup-node3" class="popup">
+        <div class="popup-arrow"></div>
+        <div id="popup-content-node3" class="popup-content"></div>
+    </div>
+    <div id="popup-node4" class="popup">
+        <div class="popup-arrow"></div>
+        <div id="popup-content-node4" class="popup-content"></div>
+    </div>
+    <div id="popup-node5" class="popup">
+        <div class="popup-arrow"></div>
+        <div id="popup-content-node5" class="popup-content"></div>
+    </div>
+    <div id="popup-node6" class="popup">
+        <div class="popup-arrow"></div>
+        <div id="popup-content-node6" class="popup-content"></div>
+    </div>
+
+    <script type="module" src="bay1.js"></script>
 </body>
 </html>

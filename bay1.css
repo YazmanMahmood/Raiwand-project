@@ -7,104 +7,290 @@
 
 /* Body styles */
 body {
-    font-family: Arial, sans-serif;
-    background-color: #f0f0f0;
+    font-family: 'Roboto', Arial, sans-serif;
+    background-color: #f5f7fa;
+    padding: 20px;
+    color: #333;
+    margin: 0; /* Ensure no default margins */
 }
 
 /* Container styles */
 .container {
-    max-width: 1200px;
-    margin: 20px auto;
+    width: 100%; /* Full width */
     padding: 20px;
     background-color: #fff;
-    border-radius: 8px;
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    border-radius: 12px;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+    margin: auto; /* Center container */
+    max-width: 1200px; /* Limit maximum width */
 }
 
 /* Header styles */
 .header {
     text-align: center;
-    margin-bottom: 20px;
+    margin-bottom: 30px;
 }
 
 h1 {
     font-size: 32px;
     margin-bottom: 10px;
+    color: #2c3e50;
 }
 
 /* Content styles */
 .content {
     display: flex;
     justify-content: space-between;
+    align-items: flex-start;
 }
 
-/* Nodes container styles */
-.nodes-container {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 20px;
-    width: 70%;
+.main-content {
+    flex: 1;
+    margin-right: 30px;
 }
 
-/* Individual node styles */
+/* Greenhouse styles */
+.greenhouse {
+    position: relative;
+    width: 100%;
+    max-width: 800px;
+    margin: 0 auto;
+    border-radius: 8px;
+    overflow: hidden;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+}
+
+.greenhouse-image {
+    width: 100%;
+    height: auto;
+    display: block;
+}
+
+/* Node styles */
 .node {
-    width: calc(50% - 10px);
-    background-color: #8a8686;
+    position: absolute;
+    width: 200px;
+    height: 200px;
+    background-color: #8a868600; /* Light grey background color */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 14px;
     color: white;
-    padding: 20px;
-    border-radius: 8px;
+    font-weight: bold;
     cursor: pointer;
-    transition: background-color 0.3s ease;
+    border-radius: 50%; /* Rounded shape for nodes */
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Subtle shadow for nodes */
 }
 
-.node:hover {
-    background-color: #736f6f;
+/* Node specific positioning */
+.node.node1 {
+    top: 62%;
+    left: 15%;
+    height: 260px; /* Increased height for node 1 */
 }
 
-.node h2 {
-    font-size: 24px;
-    margin-bottom: 10px;
-    font-weight: bold;
+.node.node2 {
+    top: 62%;
+    left: 55%;
+    height: 260px; /* Increased height for node 2 */
 }
 
-.node p {
-    margin-bottom: 10px;
+.node.node3 {
+    top: 41%;
+    left: 18%;
 }
 
-/* Sidebar styles */
-.sidebar {
-    width: 25%;
+.node.node4 {
+    top: 41%;
+    left: 53%;
 }
 
-.average-readings, .control-status {
-    background-color: #8a8686;
-    color: white;
+.node.node5 {
+    top: 20%;
+    left: 20%;
+}
+
+.node.node6 {
+    top: 20%;
+    left: 53%;
+}
+
+/* Popup styles */
+.popup {
+    position: absolute;
+    display: none;
+    background-color: #fff;
+    border: 1px solid #ccc;
     padding: 20px;
-    border-radius: 8px;
-    margin-bottom: 20px;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+    z-index: 1;
+    width: 300px;
 }
 
-.average-readings h2, .control-status h2 {
-    font-size: 24px;
+.popup-content {
+    font-size: 16px;
+}
+
+.popup-content h2 {
+    margin-bottom: 15px;
+    color: #333;
+}
+
+.popup-content p {
     margin-bottom: 10px;
-    font-weight: bold;
+    line-height: 1.4;
 }
 
-/* Responsive styles */
+/* Popup arrow styles */
+.popup-arrow {
+    position: absolute;
+    width: 0;
+    height: 0;
+    border-top: 15px solid transparent;
+    border-bottom: 15px solid transparent;
+    top: 50%;
+    transform: translateY(-50%);
+}
+
+.popup-arrow-left {
+    border-right: 15px solid #fff;
+    left: -15px;
+}
+
+.popup-arrow-right {
+    border-left: 15px solid #fff;
+    right: -15px;
+}
+.sidebar {
+    width: 180px;
+    background-color: #333;
+    color: white;
+    padding: 15px;
+    display: flex;
+    flex-direction: column;
+    position: fixed;
+    top: 0;
+    left: 0;
+    height: 100%;
+    transition: transform 0.3s ease;
+    z-index: 10;
+  }
+  
+  .sidebar.open {
+    transform: translateX(0);
+  }
+  
+  .sidebar-header {
+    margin-bottom: 15px;
+  }
+  
+  .sidebar a, .dropdown-btn {
+    display: block;
+    color: white;
+    padding: 10px;
+    text-decoration: none;
+    margin-bottom: 5px;
+    font-size: 16px;
+  }
+  
+  .sidebar a:hover, .sidebar a.active, .dropdown-btn:hover {
+    background-color: #555;
+  }
+  
+  .dropdown-btn {
+    background-color: #333;
+    border: none;
+    cursor: pointer;
+    text-align: left;
+    outline: none;
+    position: relative;
+  }
+  
+  .dropdown-btn .arrow {
+    float: right;
+    transition: transform 0.3s;
+  }
+  
+  .dropdown-btn.active .arrow {
+    transform: rotate(180deg);
+  }
+  
+  .dropdown-container {
+    display: none;
+    background-color: #edbebe;
+    padding-left: 8px;
+    overflow: hidden;
+    max-height: 300px;
+    transition: max-height 0.3s ease-out;
+    color: #333; /* Adjust text color for better visibility */
+  }
+  
+  
+  .dropdown-container.show {
+    display: block;
+    max-height: 300px; /* Adjust this value as needed */
+    overflow-y: auto; /* Add this to enable scrolling if necessary */
+    transition: max-height 0.3s ease-out;
+  }
+  
+  
+  .dropdown-container a {
+    padding: 10px;
+    font-size: 14px;
+    color: #333; /* Match text color with background contrast */
+  }
+  
+
+/* Hamburger menu styles */
+.hamburger {
+    display: none; /* Hide by default */
+    cursor: pointer;
+    position: fixed;
+    top: 20px;
+    left: 20px;
+    z-index: 1000;
+}
+
+.bar {
+    display: block;
+    width: 30px;
+    height: 4px;
+    background-color: #333;
+    margin: 6px auto;
+    transition: all 0.3s ease-in-out;
+}
+
+/* Dimmed style */
+.dimmed {
+    display: block;
+    padding: 15px 20px;
+    color: #ccc;
+    text-decoration: none;
+    transition: background-color 0.3s;
+    pointer-events: none;
+}
+
+/* Media query for smaller screens */
 @media screen and (max-width: 768px) {
+    .sidebar {
+        left: -300px; /* Hide sidebar initially */
+    }
+
+    .hamburger {
+        display: block; /* Show hamburger menu */
+    }
+
     .content {
-        flex-direction: column;
+        flex-direction: column; /* Stack content vertically */
     }
 
-    .nodes-container, .sidebar {
-        width: 100%;
+    .main-content {
+        margin-right: 0; /* No margin on smaller screens */
     }
 
-    .nodes-container {
-        flex-direction: column;
-    }
-
-    .node {
-        width: 100%;
+    .sidebar.active {
+        left: 0; /* Show sidebar */
     }
 }

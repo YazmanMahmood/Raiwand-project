@@ -11,8 +11,16 @@
     <div class="sidebar-header">
       <h2>SmartSpace Agri</h2>
     </div>
-    <a href="bay1.html" class="active">Bay 1</a>
-    <a class="bay dimmed">Bay 2</a>
+    <button href="bay1.html" class="dropdown-btn">Bay 1 <span class="arrow">&#9660;</span></button>
+    <div class="dropdown-container">
+      <a href="node1.html">Node 1</a>
+      <a href="node2.html">Node 2</a>
+      <a href="node3.html">Node 3</a>
+      <a href="node4.html">Node 4</a>
+      <a href="node5.html">Node 5</a>
+      <a href="node6.html">Node 6</a>
+    </div>
+    <a class="dimmed">Bay 2</a>
     <a class="dimmed">Bay 3</a>
     <a class="dimmed">Bay 4</a>
     <a class="dimmed">Bay 5</a>
@@ -30,7 +38,6 @@
       <p>Last Reading as of <span id="last-reading">Loading...</span></p>
     </div>
     
-    <!-- Live Data Reception -->
     <div class="widgets">
       <div class="widget">
         <h3>Soil Moisture</h3>
@@ -46,7 +53,6 @@
       </div>
     </div>
     
-    <!-- Set Values Panel -->
     <div class="set-values">
       <h2>Set Values</h2>
       <div class="widgets">
@@ -65,7 +71,6 @@
       </div>
     </div>
     
-    <!-- Control Panel -->
     <div class="control-panel">
       <h2>Control Panel</h2>
       <div class="control-group">
@@ -73,14 +78,8 @@
         <input type="range" id="water-pump-slider" min="0" max="2" step="1" value="0">
         <div class="control-labels">
           <span>Auto</span>
-          <span>Manual</span>
+          <span>On</span>
           <span>Off</span>
-        </div>
-        <div class="dropdown" id="water-pump-dropdown" style="display: none;">
-          <select>
-            <option value="on">On</option>
-            <option value="off">Off</option>
-          </select>
         </div>
       </div>
       <div class="control-group">
@@ -88,21 +87,17 @@
         <input type="range" id="fans-slider" min="0" max="2" step="1" value="0">
         <div class="control-labels">
           <span>Auto</span>
-          <span>Manual</span>
+          <span>On</span>
           <span>Off</span>
-        </div>
-        <div class="dropdown" id="fans-dropdown" style="display: none;">
-          <select>
-            <option value="on">On</option>
-            <option value="off">Off</option>
-          </select>
         </div>
       </div>
     </div>
     
     <div class="summary">
-      <h3>Daily Summary</h3>
-      <canvas id="summary-chart"></canvas>
+      <h2>Daily Summary</h2>
+      <div class="chart-container">
+        <canvas id="summary-chart"></canvas>
+      </div>
     </div>
   </div>
   
