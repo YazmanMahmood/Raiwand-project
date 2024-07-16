@@ -76,6 +76,60 @@ document.addEventListener('DOMContentLoaded', () => {
     const selectedValue = event.target.value;
     console.log('Fans:', selectedValue);
     // Implement logic to control the fans based on selected value
+<<<<<<< HEAD
+  });
+
+  // Modify chart size
+  const summaryChartCanvas = document.getElementById('summary-chart');
+  summaryChartCanvas.style.width = '100%';
+  summaryChartCanvas.style.height = '100%';
+
+  // Ensure chart resizes with container
+  window.addEventListener('resize', () => {
+    if (window.summaryChart) {
+      window.summaryChart.resize();
+    }
+  });
+
+  // Dropdown functionality
+  const dropdownBtn = document.querySelector('.dropdown-btn');
+  const dropdownContainer = document.querySelector('.dropdown-container');
+
+  dropdownBtn.addEventListener('click', (e) => {
+    e.stopPropagation();
+    dropdownBtn.classList.toggle('active');
+    dropdownContainer.classList.toggle('show');
+  });
+
+  // Close dropdown when clicking outside
+  document.addEventListener('click', (event) => {
+    if (!event.target.matches('.dropdown-btn') && !event.target.closest('.dropdown-container')) {
+      dropdownContainer.classList.remove('show');
+      dropdownBtn.classList.remove('active');
+    }
+  });
+
+  // Redirect on dropdown item click
+  const dropdownLinks = document.querySelectorAll('.dropdown-container a');
+  dropdownLinks.forEach(link => {
+    link.addEventListener('click', (event) => {
+      event.stopPropagation();
+      window.location.href = event.target.getAttribute('href');
+    });
+  });
+
+  // Update layout on window resize
+  window.addEventListener('resize', () => {
+    if (window.innerWidth > 768) {
+      sidebar.classList.remove('open');
+      hamburger.classList.remove('open');
+      hamburger.style.left = '15px';
+      mainContent.style.marginLeft = '200px';
+    } else {
+      mainContent.style.marginLeft = '0';
+    }
+=======
+>>>>>>> 13c90efb91e502f7ee586068ee1e889efe8868d6
   });
 
   // Modify chart size

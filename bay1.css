@@ -1,3 +1,4 @@
+
 /* Reset styles */
 * {
     margin: 0;
@@ -40,6 +41,7 @@ h1 {
 /* Content styles */
 .content {
     display: flex;
+<<<<<<< HEAD
     justify-content: space-between;
     align-items: flex-start;
 }
@@ -47,6 +49,44 @@ h1 {
 .main-content {
     flex: 1;
     margin-right: 30px;
+=======
+    flex-direction: column;
+    gap: 20px;
+}
+
+/* Sidebar styles */
+.sidebar {
+    display: flex;
+    justify-content: center;
+    gap: 20px;
+}
+
+.average-readings, .control-status {
+    background-color: #8a8686;
+    color: white;
+    padding: 15px;
+    border-radius: 8px;
+    width: 30%;
+    max-width: 300px;
+}
+
+.average-readings h2, .control-status h2 {
+    font-size: 20px;
+    margin-bottom: 8px;
+    font-weight: bold;
+}
+
+.average-readings p, .control-status p {
+    font-size: 14px;
+    margin-bottom: 5px;
+}
+
+/* Nodes container styles */
+.nodes-container {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px;
+>>>>>>> 13c90efb91e502f7ee586068ee1e889efe8868d6
 }
 
 /* Greenhouse styles */
@@ -68,6 +108,7 @@ h1 {
 
 /* Node styles */
 .node {
+<<<<<<< HEAD
     position: absolute;
     width: 200px;
     height: 200px;
@@ -76,6 +117,11 @@ h1 {
     justify-content: center;
     align-items: center;
     font-size: 14px;
+=======
+    flex: 1 1 calc(50% - 10px);
+    min-width: 250px;
+    background-color: #8a8686;
+>>>>>>> 13c90efb91e502f7ee586068ee1e889efe8868d6
     color: white;
     font-weight: bold;
     cursor: pointer;
@@ -101,6 +147,7 @@ h1 {
     left: 18%;
 }
 
+<<<<<<< HEAD
 .node.node4 {
     top: 41%;
     left: 53%;
@@ -288,6 +335,18 @@ h1 {
 
     .main-content {
         margin-right: 0; /* No margin on smaller screens */
+=======
+/* Responsive styles */
+@media screen and (max-width: 768px) {
+    .sidebar {
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .average-readings, .control-status {
+        width: 80%;
+        max-width: none;
+>>>>>>> 13c90efb91e502f7ee586068ee1e889efe8868d6
     }
 
     .sidebar.active {

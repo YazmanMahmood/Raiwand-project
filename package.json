@@ -1,9 +1,16 @@
 {
+<<<<<<< HEAD
   "name": "raiwand-project",
   "version": "1.0.0",
   "main": "server.js",
   "scripts": {
     "start": "node server.js"
+=======
+  "name": "Raiwand project",
+  "version": "1.0.0",
+  "scripts": {
+    "build": "echo 'No build step required'"
+>>>>>>> 13c90efb91e502f7ee586068ee1e889efe8868d6
   },
   "dependencies": {
     "express": "^4.19.2"

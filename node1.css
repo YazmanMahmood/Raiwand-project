@@ -236,6 +236,23 @@ body {
   }
   .chart-container {
     height: 60vh;
+<<<<<<< HEAD
+=======
+  }
+}
+
+@media (max-width: 480px) {
+  .header {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+  .large-textbox, .large-inputbox {
+    height: 50px;
+    font-size: 1em;
+  }
+  .control-panel {
+    padding: 15px;
+>>>>>>> 13c90efb91e502f7ee586068ee1e889efe8868d6
   }
 }
 
