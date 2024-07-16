@@ -1,13 +1,9 @@
-<<<<<<< HEAD
-=======
-
 function redirectToNode1() {
     window.location.href = 'node1.html';
 }
 function redirectToNode2() {
     window.location.href = 'node2.html';
 }
->>>>>>> 13c90efb91e502f7ee586068ee1e889efe8868d6
 document.addEventListener('DOMContentLoaded', () => {
     const hamburger = document.querySelector('.hamburger');
     const sidebar = document.querySelector('.sidebar');
