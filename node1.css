@@ -1,5 +1,8 @@
+@import url('https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;700&display=swap');
+
+
 body {
-  font-family: Arial, sans-serif;
+  font-family: 'Roboto', Arial, sans-serif;
   margin: 0;
   padding: 0;
   display: flex;
@@ -67,22 +70,20 @@ body {
   overflow: hidden;
   max-height: 300px;
   transition: max-height 0.3s ease-out;
-  color: #333; /* Adjust text color for better visibility */
+  color: #333;
 }
-
 
 .dropdown-container.show {
   display: block;
-  max-height: 300px; /* Adjust this value as needed */
-  overflow-y: auto; /* Add this to enable scrolling if necessary */
+  max-height: 300px;
+  overflow-y: auto;
   transition: max-height 0.3s ease-out;
 }
-
 
 .dropdown-container a {
   padding: 10px;
   font-size: 14px;
-  color: #333; /* Match text color with background contrast */
+  color: #333;
 }
 
 .main-content {
@@ -92,180 +93,262 @@ body {
   transition: margin-left 0.3s ease;
 }
 
-.header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-bottom: 20px;
-  flex-wrap: wrap;
+.main-content.shifted {
+  margin-left: 0;
+}
+
+.header h1, .header p {
+  margin: 0;
 }
 
 .widgets {
   display: flex;
-  gap: 20px;
-  margin-bottom: 20px;
+  justify-content: space-around;
   flex-wrap: wrap;
+  margin-top: 20px;
 }
 
 .widget {
-  flex: 1;
+  width: 30%;
   min-width: 200px;
-  background-color: #f0f0f0;
-  padding: 15px;
-  border-radius: 5px;
+  padding: 10px;
+  margin: 10px;
+  background-color: #f9f9f9;
+  border-radius: 10px;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+  text-align: center;
+}
+
+.widget h3 {
+  margin-bottom: 10px;
+}
+
+.gauge-container {
+  position: relative;
+  width: 200px;
+  height: 200px;
+  margin: 0 auto;
+}
+
+.gauge {
+  transform: rotate(-90deg);
+}
+
+.gauge-text {
+  transform: rotate(90deg);
+}
+
+.gauge-value {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  font-size: 24px;
+  font-weight: 700;
+  color: #333;
+}
+
+.control-panel {
+  margin-top: 40px;
+}
+
+.control-panel h2 {
+  text-align: center;
+  font-weight: 300;
+  font-size: 28px;
+}
+
+.control-group {
+  margin: 20px 0;
+  text-align: center;
+}
+
+.control-group h3 {
+  font-weight: 400;
+  font-size: 20px;
+  margin-bottom: 10px;
+}
+
+.button-stack {
   display: flex;
   flex-direction: column;
   align-items: center;
+  gap: 10px;
 }
 
-.large-textbox, .large-inputbox {
-  width: 100%;
-  height: 60px;
-  font-size: 1.2em;
-  text-align: center;
-  background-color: #fff;
+.modern-button {
+  width: 120px;
+  padding: 10px 0;
+  border: none;
   border-radius: 5px;
-  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  background-color: #f0f0f0;
+  color: #333;
+  font-family: 'Roboto', Arial, sans-serif;
+  font-size: 16px;
+  font-weight: 400;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.modern-button:hover {
+  background-color: #e0e0e0;
+}
+
+.modern-button.auto {
+  background-color: #6FADCF;
+  color: white;
+}
+
+.modern-button.on {
+  background-color: #4CAF50;
+  color: white;
+}
+
+.modern-button.off {
+  background-color: #F44336;
+  color: white;
+}
+.set-values {
+  margin-top: 40px;
+}
+
+.set-values h2 {
+  text-align: center;
+}
+
+.set-values .widgets {
+  justify-content: space-around;
+}
+
+.set-values .widget {
+  flex-grow: 1;
+}
+
+h1, h2, h3, h4, h5, h6 {
+  font-weight: 700;
+}
+.set-values .large-inputbox {
+  width: 100%;
+  padding: 10px;
+  font-size: 16px;
+}
+
+control-panel {
+  margin-top: 40px;
+}
+
+.control-panel h2 {
+  text-align: center;
+  font-size: 28px;
+}
+
+.control-group-container {
+  display: flex;
+  justify-content: space-around;
+  flex-wrap: wrap;
+}
+
+.control-group {
+  margin: 20px 0;
+  text-align: center;
+  flex: 1;
+  min-width: 200px;
+  max-width: 300px;
+}
+
+.control-group h3 {
+  font-size: 20px;
+  margin-bottom: 10px;
+}
+
+.button-group {
   display: flex;
   justify-content: center;
-  align-items: center;
+  gap: 10px;
 }
 
-.large-inputbox {
-  border: 1px solid #ccc;
-  outline: none;
-  padding: 0 10px;
+.modern-button {
+  padding: 10px 20px;
+  border: none;
+  border-radius: 5px;
+  background-color: #f0f0f0;
+  color: #333;
+  font-family: 'Roboto', Arial, sans-serif;
+  font-size: 16px;
+  font-weight: 400;
+  cursor: pointer;
+  transition: all 0.3s ease;
 }
 
+.modern-button:hover {
+  background-color: #e0e0e0;
+}
+
+.modern-button.auto {
+  background-color: #6FADCF;
+  color: white;
+}
+
+.modern-button.on {
+  background-color: #4CAF50;
+  color: white;
+}
+
+.modern-button.off {
+  background-color: #F44336;
+  color: white;
+}
 .summary {
-  margin-top: 20px;
+  margin-top: 40px;
+}
+
+.summary h2 {
+  text-align: center;
 }
 
 .chart-container {
   width: 100%;
-  height: 50vh;
-  min-height: 300px;
-  max-height: 600px;
-  margin: 20px 0;
-  background-color: #f9f9f9;
-  border-radius: 5px;
-  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-}
-
-.control-panel {
-  width: 100%;
-  max-width: 500px;
-  margin: 20px auto;
-  background-color: #f0f0f0;
-  padding: 20px;
-  border-radius: 10px;
-  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-}
-
-.control-group {
-  margin-bottom: 15px;
-}
-
-.control-group label {
-  display: block;
-  margin-bottom: 5px;
-}
-
-.control-group input[type="range"] {
-  width: 100%;
-}
-
-.control-labels {
-  display: flex;
-  justify-content: space-between;
-  font-size: 14px;
-}
+  max-width: 1000px; /* Increased from 800px to 1000px */
+  margin: 0 auto;
+  height: 10px;
+  padding: 20px; /* Added padding for better spacing */
+  box-sizing: border-box; /* Ensure padding and border are included in the element's total width and height */
+}   
 
 .hamburger {
-  display: none;
+  position: fixed;
+  top: 10px;
+  left: 10px;
+  display: flex;
   flex-direction: column;
   justify-content: space-around;
   width: 30px;
   height: 30px;
-  background: transparent;
-  border: none;
   cursor: pointer;
-  padding: 0;
-  z-index: 11;
-  position: fixed;
-  top: 15px;
-  left: 15px;
+  z-index: 20;
 }
 
 .hamburger div {
-  width: 30px;
-  height: 3px;
+  width: 100%;
+  height: 4px;
   background-color: #333;
-  transition: all 0.3s linear;
-}
-
-@media (max-width: 1024px) {
-  .sidebar {
-    width: 180px;
-  }
-  .main-content {
-    margin-left: 180px;
-  }
+  border-radius: 2px;
 }
 
 @media (max-width: 768px) {
   .sidebar {
     transform: translateX(-100%);
-    width: 200px;
   }
+  
   .sidebar.open {
     transform: translateX(0);
   }
+  
   .main-content {
     margin-left: 0;
-    padding: 60px 15px 15px;
   }
-  .hamburger {
-    display: flex;
-  }
-  .widgets {
-    flex-direction: column;
-  }
-  .widget {
-    width: 100%;
-  }
-  .chart-container {
-    height: 60vh;
-<<<<<<< HEAD
-=======
-  }
-}
-
-@media (max-width: 480px) {
-  .header {
-    flex-direction: column;
-    align-items: flex-start;
-  }
-  .large-textbox, .large-inputbox {
-    height: 50px;
-    font-size: 1em;
-  }
-  .control-panel {
-    padding: 15px;
->>>>>>> 13c90efb91e502f7ee586068ee1e889efe8868d6
-  }
-}
-
-@media (max-width: 480px) {
-  .header {
-    flex-direction: column;
-    align-items: flex-start;
-  }
-  .large-textbox, .large-inputbox {
-    height: 50px;
-    font-size: 1em;
-  }
-  .control-panel {
-    padding: 15px;
+  
+  .main-content.shifted {
+    margin-left: 0;
   }
 }
