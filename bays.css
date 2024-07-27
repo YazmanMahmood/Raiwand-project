@@ -1,19 +1,51 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+/* Body styles */
 body {
     font-family: Arial, sans-serif;
     display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 20px;
+    background-color: #f0f0f0;
+}
+
+/* Title styles */
+h1 {
+    font-size: 36px;
+    color: #333;
+    margin-bottom: 40px;
+    text-align: center;
+}
+
+/* Bay styles */
+.bay-container {
+    display: flex;
     flex-wrap: wrap;
     justify-content: center;
-    padding: 20px;
+    width: 100%;
+}
+
+.bay-row {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    width: 100%;
+    margin-bottom: 60px; /* Increased margin between rows */
 }
 
 .bay {
     margin: 20px;
     text-align: center;
     cursor: pointer;
-    flex: 1 1 calc(20% - 40px); /* Adjusting width to fit 5 per row with margins */
+    flex: 1 1 calc(20% - 40px);
     box-sizing: border-box;
-    opacity: 0.3; /* Default dimmed state */
-    transition: opacity 0.3s ease; /* Smooth transition for opacity */
+    opacity: 0.3;
+    transition: opacity 0.3s ease;
 }
 
 .bay img {
@@ -27,25 +59,10 @@ body {
     color: #333;
 }
 
-.bay-container {
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: center;
-    width: 100%; /* Ensure full width */
+.bay:hover {
+    opacity: 0.7;
 }
 
-.bay-row {
-    display: flex;
-    flex-wrap: wrap; /* Allow wrapping within the row */
-    justify-content: center;
-    align-items: center;
-    flex-direction: column;
-}
-
-.bay.expanded .bay-data {
-    display: flex;
-}
-
-.dimmed {
-    background-color: #002d22; /* Darker color for dimmed bays */
+.bay.active {
+    opacity: 1;
 }
