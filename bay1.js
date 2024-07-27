@@ -1,61 +1,205 @@
-function redirectToNode1() {
-    window.location.href = 'node1.html';
-}
-function redirectToNode2() {
-    window.location.href = 'node2.html';
-}
-document.addEventListener('DOMContentLoaded', () => {
-    const hamburger = document.querySelector('.hamburger');
-    const sidebar = document.querySelector('.sidebar');
-    const mainContent = document.querySelector('.main-content');
+import { initializeApp } from 'https://www.gstatic.com/firebasejs/9.6.10/firebase-app.js';
+import { getDatabase, ref, onValue, set } from 'https://www.gstatic.com/firebasejs/9.6.10/firebase-database.js';
+import { firebaseConfig } from './firebase-config.js';
 
-    // Function to toggle sidebar and hamburger button
-    hamburger.addEventListener('click', () => {
-        sidebar.classList.toggle('open');
-        hamburger.classList.toggle('open');
-        if (sidebar.classList.contains('open')) {
-            hamburger.style.left = '215px';
-        } else {
-            hamburger.style.left = '15px';
-        }
+// Initialize Firebase
+const app = initializeApp(firebaseConfig);
+const database = getDatabase(app);
+
+document.addEventListener('DOMContentLoaded', () => {
+    const elements = {
+        hamburger: document.querySelector('.hamburger'),
+        sidebar: document.querySelector('.sidebar'),
+        mainContent: document.querySelector('.main-content'),
+        container: document.querySelector('.container')
+    };
+
+    // Firebase references
+    const nodeRefs = {};
+    for (let i = 1; i <= 6; i++) {
+        nodeRefs[`node${i}`] = {
+            temperature: ref(database, `bay 1/node ${i}/temperature`),
+            humidity: ref(database, `bay 1/node ${i}/humidity`),
+            soilMoisture: ref(database, `bay 1/node ${i}/soil_moisture`),
+            lastReading: ref(database, `bay 1/node ${i}/last_reading`)
+        };
+    }
+
+    // Toggle sidebar and hamburger button
+    elements.hamburger.addEventListener('click', () => {
+        elements.sidebar.classList.toggle('open');
+        elements.mainContent.classList.toggle('shifted');
     });
 
     // Close sidebar when clicking outside
-    mainContent.addEventListener('click', () => {
-        if (sidebar.classList.contains('open') && window.innerWidth <= 768) {
-            sidebar.classList.remove('open');
-            hamburger.classList.remove('open');
-            hamburger.style.left = '15px';
+    document.addEventListener('click', (event) => {
+        if (!elements.sidebar.contains(event.target) && !elements.hamburger.contains(event.target)) {
+            elements.sidebar.classList.remove('open');
+            elements.mainContent.classList.remove('shifted');
         }
     });
 
-    // Update layout on window resize
-    window.addEventListener('resize', () => {
-        if (window.innerWidth > 768) {
-            sidebar.classList.remove('open');
-            hamburger.classList.remove('open');
-            hamburger.style.left = '15px';
-            mainContent.style.marginLeft = '200px'; // Adjust margin as needed
+    // Fan control functionality
+    const fanButtons = {
+        fan1: {
+            auto: document.getElementById('fan1-auto'),
+            on: document.getElementById('fan1-on'),
+            off: document.getElementById('fan1-off')
+        },
+        fan2: {
+            auto: document.getElementById('fan2-auto'),
+            on: document.getElementById('fan2-on'),
+            off: document.getElementById('fan2-off')
+        },
+        fan3: {
+            auto: document.getElementById('fan3-auto'),
+            on: document.getElementById('fan3-on'),
+            off: document.getElementById('fan3-off')
+        }
+    };
+
+    const fanStates = {
+        fan1: { auto: false, state: 'OFF' },
+        fan2: { auto: false, state: 'OFF' },
+        fan3: { auto: false, state: 'OFF' }
+    };
+
+    function updateFanButton(fanId, mode, state) {
+        if (mode === 'auto') {
+            fanButtons[fanId].auto.textContent = `Auto: ${state ? 'ON' : 'OFF'}`;
+            fanButtons[fanId].auto.classList.toggle('active', state);
         } else {
-            mainContent.style.marginLeft = '0';
+            fanButtons[fanId].on.classList.toggle('active', state === 'ON');
+            fanButtons[fanId].off.classList.toggle('active', state === 'OFF');
         }
+    }
+
+    function setFanState(fanId, mode, state) {
+        const fanRef = ref(database, `bay 1/controls/${fanId}`);
+        set(fanRef, mode === 'auto' ? (state ? 'AUTO' : 'OFF') : state);
+    }
+
+    Object.keys(fanButtons).forEach(fanId => {
+        fanButtons[fanId].auto.addEventListener('click', () => {
+            const newState = !fanStates[fanId].auto;
+            fanStates[fanId].auto = newState;
+            updateFanButton(fanId, 'auto', newState);
+            setFanState(fanId, 'auto', newState);
+        });
+
+        fanButtons[fanId].on.addEventListener('click', () => {
+            fanStates[fanId].state = 'ON';
+            fanStates[fanId].auto = false;
+            updateFanButton(fanId, 'manual', 'ON');
+            updateFanButton(fanId, 'auto', false);
+            setFanState(fanId, 'manual', 'ON');
+        });
+
+        fanButtons[fanId].off.addEventListener('click', () => {
+            fanStates[fanId].state = 'OFF';
+            fanStates[fanId].auto = false;
+            updateFanButton(fanId, 'manual', 'OFF');
+            updateFanButton(fanId, 'auto', false);
+            setFanState(fanId, 'manual', 'OFF');
+        });
+
+        // Set up Firebase listeners for fan states
+        const fanRef = ref(database, `bay 1/controls/${fanId}`);
+        onValue(fanRef, (snapshot) => {
+            const value = snapshot.val();
+            if (value === 'AUTO') {
+                fanStates[fanId].auto = true;
+                updateFanButton(fanId, 'auto', true);
+            } else {
+                fanStates[fanId].auto = false;
+                fanStates[fanId].state = value;
+                updateFanButton(fanId, 'auto', false);
+                updateFanButton(fanId, 'manual', value);
+            }
+        });
     });
 
-    // Function to handle node interactions
+    // Function to control fans automatically based on temperature
+    function controlFansAutomatically(temperature) {
+        Object.keys(fanStates).forEach(fanId => {
+            if (fanStates[fanId].auto) {
+                let newState;
+                if (temperature > 28) {
+                    newState = 'ON';
+                } else if (temperature > 25 && fanId !== 'fan3') {
+                    newState = 'ON';
+                } else if (temperature > 22 && fanId === 'fan1') {
+                    newState = 'ON';
+                } else {
+                    newState = 'OFF';
+                }
+                if (newState !== fanStates[fanId].state) {
+                    fanStates[fanId].state = newState;
+                    updateFanButton(fanId, 'manual', newState);
+                    setFanState(fanId, 'manual', newState);
+                }
+            }
+        });
+    }
+
     function handleNodeInteraction(nodeId) {
         const node = document.querySelector(`.node.${nodeId}`);
         const popup = document.getElementById(`popup-${nodeId}`);
+    
+        function handleClick(event) {
+            event.preventDefault();
+            const nodeNumber = nodeId.replace('node', '');
+            window.location.href = `node${nodeNumber}.html`;
+        }
+    
+        function handleMouseEnter() {
+            if (window.innerWidth > 768) {
+                updateNodeData(nodeId, popup);
+                showPopup(node, popup);
+            }
+        }
+    
+        function handleMouseLeave() {
+            if (window.innerWidth > 768) {
+                hidePopup(popup);
+            }
+        }
+    
+        // Add event listeners
+        node.addEventListener('click', handleClick);
+        node.addEventListener('mouseenter', handleMouseEnter);
+        node.addEventListener('mouseleave', handleMouseLeave);
+    
+        // Store the event listeners for potential removal
+        node.nodeInteractionListeners = {
+            click: handleClick,
+            mouseenter: handleMouseEnter,
+            mouseleave: handleMouseLeave
+        };
+    }
 
-        node.addEventListener('mouseenter', () => {
-            showPopup(node, popup);
+    // Function to update node data
+    function updateNodeData(nodeId, popup) {
+        const popupContent = popup.querySelector('.popup-content');
+        
+        onValue(nodeRefs[nodeId].temperature, (snapshot) => {
+            const temperature = snapshot.val();
+            popupContent.innerHTML = `<p><strong>Temperature:</strong> ${temperature}°C</p>`;
         });
 
-        node.addEventListener('mouseleave', () => {
-            hidePopup(popup);
+        onValue(nodeRefs[nodeId].humidity, (snapshot) => {
+            const humidity = snapshot.val();
+            popupContent.innerHTML += `<p><strong>Humidity:</strong> ${humidity}%</p>`;
         });
 
-        node.addEventListener('click', () => {
-            window.location.href = `node${nodeId.replace('node', '')}.html`; // Replace with actual redirection logic
+        onValue(nodeRefs[nodeId].soilMoisture, (snapshot) => {
+            const soilMoisture = snapshot.val();
+            popupContent.innerHTML += `<p><strong>Soil Moisture:</strong> ${soilMoisture}%</p>`;
+        });
+
+        onValue(nodeRefs[nodeId].lastReading, (snapshot) => {
+            const lastReading = snapshot.val();
+            popupContent.innerHTML += `<p><strong>Last Reading:</strong> ${lastReading}</p>`;
         });
     }
 
@@ -63,43 +207,23 @@ document.addEventListener('DOMContentLoaded', () => {
     function showPopup(node, popup) {
         popup.style.display = 'block';
 
-        // Position the popup relative to the node
         const rect = node.getBoundingClientRect();
         const popupRect = popup.getBoundingClientRect();
-        let top = rect.top + window.scrollY + rect.height / 2 - popupRect.height / 2;
-        let left;
+        let top, left;
 
-        const popupArrow = popup.querySelector('.popup-arrow');
-
-        // Determine if the popup should be on the left or right side of the node
-        if (['node1', 'node3', 'node5'].includes(node.classList[1])) {
-            left = rect.left - popupRect.width - 15;
-            popupArrow.classList.remove('popup-arrow-left');
-            popupArrow.classList.add('popup-arrow-right');
+        if (window.innerWidth <= 768) {
+            top = rect.bottom + window.scrollY + 10;
+            left = Math.max(10, Math.min(window.innerWidth - popupRect.width - 10, rect.left));
         } else {
-            left = rect.right + 15;
-            popupArrow.classList.remove('popup-arrow-right');
-            popupArrow.classList.add('popup-arrow-left');
-        }
-
-        // Adjust if popup goes out of viewport
-        if (top + popupRect.height > window.innerHeight) {
-            top = window.innerHeight - popupRect.height - 10;
-        }
-        if (top < 0) {
-            top = 10;
-        }
-        if (left < 0) {
-            left = 10;
-        }
-        if (left + popupRect.width > window.innerWidth) {
-            left = window.innerWidth - popupRect.width - 10;
+            top = rect.top + window.scrollY + rect.height / 2 - popupRect.height / 2;
+            left = ['node1', 'node3', 'node5'].includes(node.classList[1]) ?
+                rect.left - popupRect.width - 15 :
+                rect.right + 15;
         }
 
         popup.style.top = `${top}px`;
         popup.style.left = `${left}px`;
 
-        // Add animation class after a short delay
         setTimeout(() => {
             popup.classList.add('show');
         }, 10);
@@ -110,102 +234,148 @@ document.addEventListener('DOMContentLoaded', () => {
         popup.classList.remove('show');
         setTimeout(() => {
             popup.style.display = 'none';
-        }, 300); // Wait for the animation to complete
+        }, 300);
     }
 
-    // Loop through all nodes and add event listeners
-    document.querySelectorAll('.node').forEach((node) => {
-        const nodeId = node.classList[1]; // Assumes node classes are like 'node1', 'node2', etc.
-        handleNodeInteraction(nodeId);
-    });
+    function initializeNodeOpacity() {
+        document.querySelectorAll('.node').forEach((node) => {
+            node.style.opacity = '0.5';
+        });
+    }
+
+    // Function to initialize node interactions
+    function initializeNodeInteractions() {
+        document.querySelectorAll('.node').forEach((node) => {
+            const nodeId = node.classList[1];
+            handleNodeInteraction(nodeId);
+            // Set node opacity to 0.5
+            node.style.opacity = '0.5';
+        });
+    }
 
     // Add event listener for window resize to reposition popups
     window.addEventListener('resize', () => {
-        document.querySelectorAll('.popup').forEach((popup) => {
-            if (popup.style.display === 'block') {
-                const nodeId = popup.id.replace('popup-', '');
-                const node = document.querySelector(`.node.${nodeId}`);
-                showPopup(node, popup);
-            }
+        document.querySelectorAll('.node').forEach((node) => {
+            const nodeId = node.classList[1];
+            handleNodeInteraction(nodeId);
         });
     });
 
-    // Function to update popup content with random values and more information
-    function updatePopupContent(nodeId) {
-        const temperature = (Math.random() * (30 - 20) + 20).toFixed(1);
-        const humidity = Math.floor(Math.random() * (80 - 40) + 40);
-        const soilMoisture = Math.floor(Math.random() * (100 - 20) + 20);
+    // Update average measurements periodically
+    function updateAverageMeasurements() {
+        let totalTemperature = 0;
+        let totalHumidity = 0;
+        let totalSoilMoisture = 0;
+        let count = 0;
 
-        const popupContent = document.getElementById(`popup-content-${nodeId}`);
-        popupContent.innerHTML = `
-            <h2>Node ${nodeId.replace('node', '')} Information</h2>
-            <p><strong>Temperature:</strong> ${temperature}°C</p>
-            <p><strong>Humidity:</strong> ${humidity}%</p>
-            <p><strong>Soil Moisture:</strong> ${soilMoisture}%</p>
-            <p><strong>Last Updated:</strong> ${new Date().toLocaleString()}</p>
-        `;
+        Object.values(nodeRefs).forEach(node => {
+            onValue(node.temperature, (snapshot) => {
+                totalTemperature += snapshot.val();
+                count++;
+                if (count === 6) {
+                    const avgTemperature = (totalTemperature / 6).toFixed(1);
+                    document.getElementById('avg-temperature').textContent = avgTemperature;
+                    controlFansAutomatically(parseFloat(avgTemperature));
+                }
+            });
+
+            onValue(node.humidity, (snapshot) => {
+                totalHumidity += snapshot.val();
+                document.getElementById('avg-humidity').textContent = (totalHumidity / 6).toFixed(1);
+            });
+
+            onValue(node.soilMoisture, (snapshot) => {
+                totalSoilMoisture += snapshot.val();
+                document.getElementById('avg-soil-moisture').textContent = (totalSoilMoisture / 6).toFixed(1);
+            });
+        });
     }
 
-    // Update popup content on hover
-    document.querySelectorAll('.node').forEach((node) => {
-        const nodeId = node.classList[1]; // Assumes node classes are like 'node1', 'node2', etc.
-        node.addEventListener('mouseenter', () => {
-            updatePopupContent(nodeId);
-        });
-    });
+    // Function to update fan status
+    function updateFanStatus() {
+        const fanStatusElement = document.getElementById('fan-status');
+        const fanPaths = ['fan1', 'fan2', 'fan3'];
+        let statusTexts = [];
 
-    // Initial update of popup content
-    document.querySelectorAll('.popup-content').forEach((popupContent) => {
-        const nodeId = popupContent.id.replace('popup-content-', '');
-        updatePopupContent(nodeId);
-    });
-
-    // Toggle dropdown on button click
-    document.querySelectorAll('.dropdown-btn').forEach((btn) => {
-        btn.addEventListener('click', () => {
-            const dropdownContainer = btn.nextElementSibling;
-            dropdownContainer.classList.toggle('show');
+        fanPaths.forEach((fanPath, index) => {
+            const fanRef = ref(database, `bay 1/controls/${fanPath}`);
+            onValue(fanRef, (snapshot) => {
+                const status = snapshot.val();
+                let statusText = '';
+                
+                if (status === 'AUTO') {
+                    statusText = 'Auto';
+                } else if (status === 'ON') {
+                    statusText = 'On';
+                } else if (status === 'OFF') {
+                    statusText = 'Off';
+                }
+                
+                statusTexts[index] = `Fan ${index + 1}: ${statusText}`;
+                fanStatusElement.innerHTML = statusTexts.join('<br>');
+            });
         });
-    });
+    }
+
+    // Update measurements and fan status every 10 seconds
+    updateAverageMeasurements();
+    updateFanStatus();
+    setInterval(() => {
+        updateAverageMeasurements();
+        updateFanStatus();
+    }, 10000);
+
+    // Dropdown functionality for sidebar
+    function setupDropdown() {
+        const dropdownBtns = document.querySelectorAll('.dropdown-btn');
+        
+        dropdownBtns.forEach((dropdownBtn) => {
+            const dropdownContainer = dropdownBtn.nextElementSibling;
+
+            if (dropdownBtn && dropdownContainer) {
+                dropdownBtn.addEventListener('click', function() {
+                    this.classList.toggle('active');
+                    dropdownContainer.classList.toggle('show');
+                });
+            }
+        });
+    }
+
+    setupDropdown();
 
     // Close dropdowns when clicking outside
-    window.addEventListener('click', (event) => {
-        const dropdowns = document.querySelectorAll('.dropdown-container');
-        dropdowns.forEach((dropdown) => {
-            if (!event.target.matches('.dropdown-btn') && !event.target.closest('.dropdown-btn')) {
-                dropdown.classList.remove('show');
+    document.addEventListener('click', (event) => {
+        if (!event.target.matches('.dropdown-btn')) {
+            const dropdowns = document.querySelectorAll('.dropdown-container');
+            dropdowns.forEach((dropdown) => {
+                if (dropdown.classList.contains('show')) {
+                    dropdown.classList.remove('show');
+                }
+            });
+
+            const dropdownBtns = document.querySelectorAll('.dropdown-btn');
+            dropdownBtns.forEach((btn) => {
+                if (btn.classList.contains('active')) {
+                    btn.classList.remove('active');
+                }
+            });
+        }
+    });
+
+    // Event listener for dropdown button
+    const dropdownBtns = document.querySelectorAll('.dropdown-btn');
+    dropdownBtns.forEach(btn => {
+        btn.addEventListener('click', function () {
+            this.classList.toggle('active');
+            const dropdownContent = this.nextElementSibling;
+            if (dropdownContent.style.display === 'block') {
+                dropdownContent.style.display = 'none';
+            } else {
+                dropdownContent.style.display = 'block';
             }
         });
     });
 
-    // Function to update average measurements
-    function updateAverageMeasurements() {
-        const temperatures = [];
-        const humidities = [];
-        const soilMoistures = [];
-
-        document.querySelectorAll('.popup-content').forEach(content => {
-            const tempMatch = content.innerHTML.match(/Temperature:<\/strong> ([\d.]+)°C/);
-            const humidityMatch = content.innerHTML.match(/Humidity:<\/strong> ([\d.]+)%/);
-            const soilMoistureMatch = content.innerHTML.match(/Soil Moisture:<\/strong> ([\d.]+)%/);
-
-            if (tempMatch) temperatures.push(parseFloat(tempMatch[1]));
-            if (humidityMatch) humidities.push(parseFloat(humidityMatch[1]));
-            if (soilMoistureMatch) soilMoistures.push(parseFloat(soilMoistureMatch[1]));
-        });
-
-        const avgTemperature = temperatures.length ? (temperatures.reduce((a, b) => a + b) / temperatures.length).toFixed(1) : '--';
-        const avgHumidity = humidities.length ? Math.round(humidities.reduce((a, b) => a + b) / humidities.length) : '--';
-        const avgSoilMoisture = soilMoistures.length ? Math.round(soilMoistures.reduce((a, b) => a + b) / soilMoistures.length) : '--';
-
-        document.getElementById('avg-temperature').textContent = avgTemperature;
-        document.getElementById('avg-humidity').textContent = avgHumidity;
-        document.getElementById('avg-soil-moisture').textContent = avgSoilMoisture;
-    }
-
-    // Update average measurements on initial load
-    updateAverageMeasurements();
-
-    // Update average measurements every 10 seconds
-    setInterval(updateAverageMeasurements, 10000); // Adjust interval as needed
+    // Initialize node interactions
+    initializeNodeInteractions();
 });
