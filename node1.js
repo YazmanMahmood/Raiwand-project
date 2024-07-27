@@ -1,22 +1,34 @@
-import { database, ref, onValue } from "./firebase-config.js";
+import { initializeApp } from 'https://www.gstatic.com/firebasejs/9.6.10/firebase-app.js';
+import { getDatabase, ref, set, onValue, get } from 'https://www.gstatic.com/firebasejs/9.6.10/firebase-database.js';
+import { firebaseConfig } from './firebase-config.js';
+
+// Initialize Firebase
+const app = initializeApp(firebaseConfig);
+const database = getDatabase(app);
 
 document.addEventListener('DOMContentLoaded', () => {
   const elements = {
     hamburger: document.querySelector('.hamburger'),
     sidebar: document.querySelector('.sidebar'),
     mainContent: document.querySelector('.main-content'),
-    dropdownBtn: document.querySelector('.dropdown-btn'),
-    dropdownContainer: document.querySelector('.dropdown-container'),
-    waterPumpSlider: document.getElementById('water-pump-slider'),
-    fansSlider: document.getElementById('fans-slider'),
-    lastReading: document.getElementById('last-reading')
+    lastReading: document.getElementById('last-reading'),
+    popup: document.getElementById('popup'),
+    popupMessage: document.getElementById('popup-message'),
+    popupClose: document.getElementById('popup-close'),
+    chartContainer: document.getElementById('summary-chart-container')
+  };
+
+  let latestData = {
+    temperature: 0,
+    humidity: 0,
+    soil_moisture: 0
   };
 
   function updateGauge(gaugeId, valueId, value, min, max, unit) {
     const gauge = document.getElementById(gaugeId);
     const valueDisplay = document.getElementById(valueId);
     const valueTextbox = document.getElementById(`${valueId}-textbox`);
-    
+
     if (gauge && valueDisplay && valueTextbox && value !== null) {
       const percentage = ((value - min) / (max - min)) * 100;
       const dashOffset = 565.48 - (565.48 * percentage / 100);
@@ -29,9 +41,30 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   }
 
+  function updateSetValueIndicator(gaugeId, value, min, max) {
+    const setValueGauge = document.getElementById(`${gaugeId}-set-value`);
+    if (setValueGauge && value !== null) {
+      const percentage = ((value - min) / (max - min)) * 100;
+      const dashOffset = 565.48 - (565.48 * percentage / 100);
+      setValueGauge.style.strokeDashoffset = dashOffset;
+    }
+  }
+
   function updateLastReadingTime() {
     if (elements.lastReading) {
       elements.lastReading.textContent = new Date().toLocaleString();
+    }
+  }
+
+  function updateChartPosition(temperature, humidity, soilMoisture) {
+    const maxPosition = window.innerHeight - elements.chartContainer.offsetHeight;
+    const avgValue = (temperature + humidity + soilMoisture) / 3;
+    const newPosition = maxPosition * (1 - avgValue / 100);
+    elements.chartContainer.style.top = `${newPosition}px`;
+    
+    // Update the chart data
+    if (window.updateChartData) {
+      window.updateChartData(latestData);
     }
   }
 
@@ -39,10 +72,29 @@ document.addEventListener('DOMContentLoaded', () => {
     const dataRef = ref(database, path);
     onValue(dataRef, (snapshot) => {
       const value = snapshot.val();
-      updateGauge(gaugeId, valueId, value, 0, 100, unit);
-      updateLastReadingTime();
+      if (value !== null) {
+        updateGauge(gaugeId, valueId, value, 0, 100, unit);
+        
+        // Update latestData
+        latestData[path.split('/').pop()] = value;
+        
+        // Call updateChartPosition with all latest data
+        updateChartPosition(latestData.temperature, latestData.humidity, latestData.soil_moisture);
+        
+        updateLastReadingTime();
+      }
     }, (error) => {
       console.error(`Error fetching ${path}:`, error);
+    });
+
+    const setValueRef = ref(database, `bay 1/node 1/set values/${path.split('/').pop()}`);
+    onValue(setValueRef, (snapshot) => {
+      const setValue = snapshot.val();
+      if (setValue !== null) {
+        updateSetValueIndicator(gaugeId, setValue, 0, 100);
+      }
+    }, (error) => {
+      console.error(`Error fetching set value:`, error);
     });
   }
 
@@ -50,63 +102,123 @@ document.addEventListener('DOMContentLoaded', () => {
   setupFirebaseListener('bay 1/node 1/soil_moisture', 'soil-moisture-gauge', 'soil-moisture-value', '%');
   setupFirebaseListener('bay 1/node 1/humidity', 'humidity-gauge', 'humidity-value', '%');
 
-  if (elements.hamburger && elements.sidebar) {
-    elements.hamburger.addEventListener('click', () => {
-      elements.sidebar.classList.toggle('open');
-      elements.hamburger.classList.toggle('open');
-      elements.hamburger.style.left = elements.sidebar.classList.contains('open') ? '215px' : '15px';
-    });
+  function showPopup(message) {
+    elements.popupMessage.textContent = message;
+    elements.popup.style.display = 'block';
   }
 
-  if (elements.mainContent && elements.sidebar) {
-    elements.mainContent.addEventListener('click', () => {
-      if (elements.sidebar.classList.contains('open') && window.innerWidth <= 768) {
-        elements.sidebar.classList.remove('open');
-        elements.hamburger.classList.remove('open');
-        elements.hamburger.style.left = '15px';
-      }
-    });
+  function hidePopup() {
+    elements.popup.style.display = 'none';
   }
 
-  if (elements.dropdownBtn && elements.dropdownContainer) {
-    elements.dropdownBtn.addEventListener('click', (e) => {
-      e.stopPropagation();
-      elements.dropdownBtn.classList.toggle('active');
-      elements.dropdownContainer.classList.toggle('show');
-    });
-  }
+  elements.popupClose.addEventListener('click', hidePopup);
 
+  // Sidebar functionality
+  elements.hamburger.addEventListener('click', () => {
+    elements.sidebar.classList.toggle('open');
+    elements.mainContent.classList.toggle('shifted');
+  });
+
+  // Close sidebar when clicking outside
   document.addEventListener('click', (event) => {
-    if (elements.dropdownContainer && elements.dropdownBtn && 
-        !event.target.matches('.dropdown-btn') && !event.target.closest('.dropdown-container')) {
-      elements.dropdownContainer.classList.remove('show');
-      elements.dropdownBtn.classList.remove('active');
+    if (!elements.sidebar.contains(event.target) && !elements.hamburger.contains(event.target)) {
+      elements.sidebar.classList.remove('open');
+      elements.mainContent.classList.remove('shifted');
     }
   });
 
-  const dropdownLinks = document.querySelectorAll('.dropdown-container a');
-  dropdownLinks.forEach(link => {
-    link.addEventListener('click', (event) => {
-      event.stopPropagation();
-      window.location.href = event.target.getAttribute('href');
+  // Set value functionality with validation
+  function setupSetValueButton(buttonId, inputId, path, valueName) {
+    const button = document.getElementById(buttonId);
+    const input = document.getElementById(inputId);
+    if (button && input) {
+      button.addEventListener('click', () => {
+        let setValue = parseFloat(input.value);
+        if (!isNaN(setValue) && setValue >= 0 && setValue <= 100) {
+          const setValueRef = ref(database, path);
+          set(setValueRef, setValue)
+            .then(() => {
+              showPopup(`Set ${valueName} updated to ${setValue}`);
+              input.value = ''; // Clear the text box
+            })
+            .catch((error) => showPopup(`Error updating ${valueName}: ${error.message}`));
+        } else {
+          showPopup('Please enter a valid number (0-100)');
+        }
+      });
+    } else {
+      console.error(`Button ${buttonId} or input ${inputId} not found`);
+    }
+  }
+
+  setupSetValueButton('set-temperature', 'temperature-input', 'bay 1/node 1/set values/temperature', 'temperature');
+  setupSetValueButton('set-humidity', 'humidity-input', 'bay 1/node 1/set values/humidity', 'humidity');
+  setupSetValueButton('set-soil-moisture', 'soil-moisture-input', 'bay 1/node 1/set values/soil_moisture', 'soil moisture');
+
+  // Mobile responsiveness improvements
+  function adjustForMobile() {
+    const isMobile = window.innerWidth <= 768;
+    document.body.classList.toggle('mobile', isMobile);
+
+    if (isMobile) {
+      elements.sidebar.classList.remove('open');
+      elements.mainContent.classList.remove('shifted');
+    }
+  }
+
+  window.addEventListener('resize', adjustForMobile);
+  adjustForMobile(); // Call once on load
+
+  // Fetch initial set values and update inputs
+  function fetchInitialSetValues() {
+    const setValuePaths = [
+      'bay 1/node 1/set values/temperature',
+      'bay 1/node 1/set values/humidity',
+      'bay 1/node 1/set values/soil_moisture'
+    ];
+
+    setValuePaths.forEach(path => {
+      get(ref(database, path)).then((snapshot) => {
+        const setValue = snapshot.val();
+        if (setValue !== null) {
+          const inputId = `${path.split('/').pop()}-input`;
+          const inputElement = document.getElementById(inputId);
+          if (inputElement) {
+            inputElement.value = setValue;
+          }
+        }
+      }).catch((error) => console.error(`Error fetching initial set value for ${path}:`, error));
+    });
+  }
+
+  fetchInitialSetValues();
+
+  // Set initial position for chart container
+  elements.chartContainer.style.position = 'relative';
+  elements.chartContainer.style.top = '0px';
+
+  // Dropdown functionality
+  function setupDropdown() {
+    const dropdownBtns = document.querySelectorAll('.dropdown-btn');
+    
+    dropdownBtns.forEach((dropdownBtn) => {
+        const dropdownContainer = dropdownBtn.nextElementSibling;
+
+        if (dropdownBtn && dropdownContainer) {
+            dropdownBtn.addEventListener('click', function() {
+                this.classList.toggle('active');
+                dropdownContainer.classList.toggle('show');
+            });
+        }
+    });
+}
+
+  setupDropdown();
+
+  // Modern button functionality
+  document.querySelectorAll('.modern-button').forEach(function(button) {
+    button.addEventListener('click', function() {
+      this.classList.toggle('bright');
     });
   });
-
-  window.addEventListener('resize', () => {
-    if (window.innerWidth > 768) {
-      if (elements.sidebar) elements.sidebar.classList.remove('open');
-      if (elements.hamburger) {
-        elements.hamburger.classList.remove('open');
-        elements.hamburger.style.left = '15px';
-      }
-      if (elements.mainContent) elements.mainContent.style.marginLeft = '200px';
-    } else {
-      if (elements.mainContent) elements.mainContent.style.marginLeft = '0';
-    }
-  });
-
-  // Initial gauge setup
-  updateGauge('temperature-gauge', 'temperature-value', 0, 0, 100, '°C');
-  updateGauge('soil-moisture-gauge', 'soil-moisture-value', 0, 0, 100, '%');
-  updateGauge('humidity-gauge', 'humidity-value', 0, 0, 100, '%');
 });
