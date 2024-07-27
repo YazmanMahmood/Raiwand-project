@@ -1,30 +1,29 @@
+<!-- login.html -->
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Login</title>
+    <title>Greenhouse Monitoring - Login</title>
     <link rel="stylesheet" href="login.css">
-    <!-- Add these script tags in the head -->
-    <script src="https://www.gstatic.com/firebasejs/10.12.3/firebase-app-compat.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/10.12.3/firebase-database-compat.js"></script>
+    <script type="module" src="login.js"></script>
 </head>
 <body>
     <div class="login-container">
+        <h1>Greenhouse Monitoring</h1>
         <h2>Login</h2>
         <form id="loginForm">
-            <label for="username">Username</label>
-            <input type="text" id="username" name="username" required>
-            
-            <label for="password">Password</label>
-            <input type="password" id="password" name="password" required>
-            
+            <div class="input-group">
+                <input type="text" id="username" required>
+                <label for="username">Username</label>
+            </div>
+            <div class="input-group">
+                <input type="password" id="password" required>
+                <label for="password">Password</label>
+            </div>
             <button type="submit">Login</button>
         </form>
         <p id="error-message"></p>
     </div>
-    <!-- Change these to regular scripts -->
-    <script src="firebase-config.js"></script>
-    <script src="login.js"></script>
 </body>
 </html>
