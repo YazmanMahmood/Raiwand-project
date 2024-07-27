@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Data Log</title>
+    <link rel="stylesheet" href="log.css">
+</head>
+<body>
+    <button class="hamburger">☰</button>
+
+    <div class="sidebar">
+        <div class="sidebar-header">
+            <h2>Smart Agri</h2>
+        </div>
+
+        <a href="node1.html">Bay 1 - Node 1</a>
+
+        <button class="dropdown-btn">Bay 1 <span class="arrow">▼</span></button>
+        <div class="dropdown-container">
+            <a href="node1.html">Node 1</a>
+            <a href="node2.html">Node 2</a>
+            <a href="node3.html">Node 3</a>
+            <a href="node4.html">Node 4</a>
+            <a href="node5.html">Node 5</a>
+            <a href="node6.html">Node 6</a>
+        </div>
+
+        <a href="#" class="dimmed">Bay 2</a>
+        <a href="#" class="dimmed">Bay 3</a>
+        <a href="#" class="dimmed">Bay 4</a>
+        <a href="#" class="dimmed">Bay 5</a>
+        <a href="#" class="dimmed">Bay 6</a>
+        <a href="#" class="dimmed">Bay 7</a>
+        <a href="#" class="dimmed">Bay 8</a>
+        <a href="#" class="dimmed">Bay 9</a>
+        <a href="#" class="dimmed">Bay 10</a>
+        <a href="log.html" class="active">Log</a>
+        <a href="#">Settings</a>
+    </div>
+
+    <div class="main-content">
+        <div class="top-right">
+            <button class="history-button" id="set-values-button">Set Values History</button>
+        </div>
+
+        <h1>Data Log</h1>
+
+        <table id="data-table">
+            <thead>
+                <tr>
+                    <th>Timestamp</th>
+                    <th>Temperature</th>
+                    <th>Soil Moisture</th>
+                    <th>Humidity</th>
+                </tr>
+            </thead>
+            <tbody id="log-table-body">
+                <!-- Table rows will be dynamically added here -->
+            </tbody>
+        </table>
+    </div>
+
+    <script type="module" src="log.js"></script>
+</body>
+</html>
