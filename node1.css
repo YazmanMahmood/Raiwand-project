@@ -1,31 +1,29 @@
 @import url('https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;700&display=swap');
 
-
 body {
   font-family: 'Roboto', Arial, sans-serif;
   margin: 0;
   padding: 0;
   display: flex;
-  flex-direction: column;
+  background-color: #f0f0f0;
 }
 
 .sidebar {
-  width: 180px;
+  width: 200px;
   background-color: #333;
   color: white;
   padding: 15px;
-  display: flex;
-  flex-direction: column;
   position: fixed;
   top: 0;
   left: 0;
   height: 100%;
-  transition: transform 0.3s ease;
-  z-index: 10;
+  overflow-y: auto;
+  z-index: 1000;
+  transition: transform 0.3s ease-in-out;
 }
 
 .sidebar.open {
-  transform: translateX(0);
+    transform: translateX(0);
 }
 
 .sidebar-header {
@@ -44,7 +42,6 @@ body {
 .sidebar a:hover, .sidebar a.active, .dropdown-btn:hover {
   background-color: #555;
 }
-
 .dropdown-btn {
   background-color: #333;
   border: none;
@@ -52,6 +49,7 @@ body {
   text-align: left;
   outline: none;
   position: relative;
+  width: 100%;
 }
 
 .dropdown-btn .arrow {
@@ -65,290 +63,349 @@ body {
 
 .dropdown-container {
   display: none;
-  background-color: #edbebe;
+  background-color: #444;
   padding-left: 8px;
-  overflow: hidden;
-  max-height: 300px;
-  transition: max-height 0.3s ease-out;
-  color: #333;
 }
 
 .dropdown-container.show {
   display: block;
-  max-height: 300px;
-  overflow-y: auto;
-  transition: max-height 0.3s ease-out;
 }
 
 .dropdown-container a {
-  padding: 10px;
-  font-size: 14px;
-  color: #333;
+    padding: 10px;
+    font-size: 14px;
 }
 
 .main-content {
-  margin-left: 200px;
+  margin-left: 220px;
   padding: 20px;
   flex: 1;
   transition: margin-left 0.3s ease;
 }
 
 .main-content.shifted {
-  margin-left: 0;
+    margin-left: 0;
 }
 
 .header h1, .header p {
-  margin: 0;
+    margin: 0;
 }
 
 .widgets {
-  display: flex;
-  justify-content: space-around;
-  flex-wrap: wrap;
-  margin-top: 20px;
+    display: flex;
+    justify-content: space-around;
+    flex-wrap: wrap;
+    margin-top: 20px;
 }
 
 .widget {
-  width: 30%;
-  min-width: 200px;
-  padding: 10px;
-  margin: 10px;
-  background-color: #f9f9f9;
-  border-radius: 10px;
-  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-  text-align: center;
+    width: 30%;
+    min-width: 200px;
+    padding: 10px;
+    margin: 10px;
+    background-color: #f9f9f9;
+    border-radius: 10px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    text-align: center;
 }
 
 .widget h3 {
-  margin-bottom: 10px;
+    margin-bottom: 10px;
 }
 
 .gauge-container {
-  position: relative;
-  width: 200px;
-  height: 200px;
-  margin: 0 auto;
+    position: relative;
+    width: 200px;
+    height: 200px;
+    margin: 0 auto;
+}
+
+.gauge-indicator {
+    stroke: #FF6347;
+    stroke-width: 5;
+    transition: stroke-dashoffset 0.3s;
 }
 
 .gauge {
-  transform: rotate(-90deg);
+    transform: rotate(-90deg);
+}
+
+.gauge-background {
+    stroke: #eee;
+}
+
+.gauge-progress {
+    stroke: #6FADCF;
+    transition: stroke-dashoffset 0.3s;
+}
+
+.gauge-set-value {
+    stroke: #FF6347;
+    stroke-width: 5;
+    transition: stroke-dashoffset 0.3s;
 }
 
 .gauge-text {
-  transform: rotate(90deg);
+    transform: rotate(90deg);
+    font-size: 30px;
+    font-weight: bold;
 }
 
 .gauge-value {
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  font-size: 24px;
-  font-weight: 700;
-  color: #333;
-}
-
-.control-panel {
-  margin-top: 40px;
-}
-
-.control-panel h2 {
-  text-align: center;
-  font-weight: 300;
-  font-size: 28px;
-}
-
-.control-group {
-  margin: 20px 0;
-  text-align: center;
-}
-
-.control-group h3 {
-  font-weight: 400;
-  font-size: 20px;
-  margin-bottom: 10px;
-}
-
-.button-stack {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 10px;
-}
-
-.modern-button {
-  width: 120px;
-  padding: 10px 0;
-  border: none;
-  border-radius: 5px;
-  background-color: #f0f0f0;
-  color: #333;
-  font-family: 'Roboto', Arial, sans-serif;
-  font-size: 16px;
-  font-weight: 400;
-  cursor: pointer;
-  transition: all 0.3s ease;
-}
-
-.modern-button:hover {
-  background-color: #e0e0e0;
-}
-
-.modern-button.auto {
-  background-color: #6FADCF;
-  color: white;
-}
-
-.modern-button.on {
-  background-color: #4CAF50;
-  color: white;
-}
-
-.modern-button.off {
-  background-color: #F44336;
-  color: white;
-}
-.set-values {
-  margin-top: 40px;
-}
-
-.set-values h2 {
-  text-align: center;
-}
-
-.set-values .widgets {
-  justify-content: space-around;
-}
-
-.set-values .widget {
-  flex-grow: 1;
-}
-
-h1, h2, h3, h4, h5, h6 {
-  font-weight: 700;
-}
-.set-values .large-inputbox {
-  width: 100%;
-  padding: 10px;
-  font-size: 16px;
-}
-
-control-panel {
-  margin-top: 40px;
-}
-
-.control-panel h2 {
-  text-align: center;
-  font-size: 28px;
-}
-
-.control-group-container {
-  display: flex;
-  justify-content: space-around;
-  flex-wrap: wrap;
-}
-
-.control-group {
-  margin: 20px 0;
-  text-align: center;
-  flex: 1;
-  min-width: 200px;
-  max-width: 300px;
-}
-
-.control-group h3 {
-  font-size: 20px;
-  margin-bottom: 10px;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    font-size: 24px;
+    font-weight: 700;
+    color: #333;
 }
 
 .button-group {
-  display: flex;
-  justify-content: center;
-  gap: 10px;
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+    flex-wrap: wrap;
+}
+
+.control-panel {
+    margin-top: 40px;
+}
+
+h2 {
+  display: block;
+  font-size: 1.5em;
+  margin-block-start: 0.83em;
+  margin-block-end: 0.83em;
+  margin-inline-start: 0px;
+  margin-inline-end: 0px;
+  font-weight: bold;
+  unicode-bidi: isolate;
+}
+
+.control-panel h2 {
+    text-align: center;
+    font-weight: 300;
+    font-size: 28px;
+}
+
+.center-heading {
+    text-align: center;
+    font-size: 24px;
+    font-weight: bold;
+    margin-top: 20px;
+}
+
+.control-group h3, .control-group h4 {
+    font-weight: 400;
+    font-size: 20px;
+    margin-bottom: 10px;
+}
+
+.button-stack {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 10px;
 }
 
 .modern-button {
-  padding: 10px 20px;
-  border: none;
-  border-radius: 5px;
-  background-color: #f0f0f0;
-  color: #333;
-  font-family: 'Roboto', Arial, sans-serif;
-  font-size: 16px;
-  font-weight: 400;
-  cursor: pointer;
-  transition: all 0.3s ease;
+    width: 80px;
+    padding: 10px 0;
+    border: none;
+    border-radius: 5px;
+    font-family: 'Roboto', Arial, sans-serif;
+    font-size: 14px;
+    font-weight: 400;
+    cursor: pointer;
+    transition: opacity 0.3s, background-color 0.3s;
+    opacity: 0.6;
+    background-color: #6FADCF;
+    color: white;
 }
 
 .modern-button:hover {
-  background-color: #e0e0e0;
+    opacity: 0.8;
 }
 
-.modern-button.auto {
-  background-color: #6FADCF;
-  color: white;
+.modern-button.active {
+    opacity: 1;
+    background-color: #3E8CB1;
 }
 
-.modern-button.on {
-  background-color: #4CAF50;
-  color: white;
+.control-group {
+    margin: 20px 0;
+    text-align: center;
 }
 
-.modern-button.off {
-  background-color: #F44336;
-  color: white;
+.set-values {
+    margin-top: 40px;
 }
+
+.set-values h2 {
+    text-align: center;
+}
+
+.set-values-container {
+    display: flex;
+    justify-content: space-around;
+    flex-wrap: wrap;
+    width: 100%;
+    max-width: 1000px;
+    margin: 0 auto;
+}
+
+.set-value-widget {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin: 10px;
+    width: 30%;
+    min-width: 200px;
+}
+
+.set-value-widget h3 {
+    margin-bottom: 5px;
+}
+
+.large-inputbox {
+    width: 100%;
+    padding: 10px;
+    font-size: 16px;
+    margin-bottom: 10px;
+    box-sizing: border-box;
+}
+
+.set-button {
+    width: 100%;
+    padding: 10px;
+    font-size: 16px;
+    background-color: #6FADCF;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+.set-button:hover {
+    background-color: #5A91AD;
+}
+
+.control-group-container {
+    display: flex;
+    justify-content: space-around;
+    flex-wrap: wrap;
+}
+
+.control-box {
+    background-color: #f9f9f9;
+    border-radius: 10px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    padding: 20px;
+    margin: 10px;
+    width: 45%;
+    min-width: 300px;
+}
+
+.control-box h3 {
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+
 .summary {
-  margin-top: 40px;
+  position: relative;
+  padding-top: 10px; /* Reduce top padding to decrease the gap */
+  margin: 0 auto; /* Center the summary section */
+  width: 100%;
+  max-width: 1000px;
 }
 
 .summary h2 {
   text-align: center;
+  margin-bottom: 10px; /* Add a small margin below the heading */
 }
 
 .chart-container {
   width: 100%;
-  max-width: 1000px; /* Increased from 800px to 1000px */
+  height: 700px;
   margin: 0 auto;
-  height: 10px;
-  padding: 20px; /* Added padding for better spacing */
-  box-sizing: border-box; /* Ensure padding and border are included in the element's total width and height */
-}   
+  padding: 20px;
+  box-sizing: border-box;
+}
+
+
+
+
+
 
 .hamburger {
+  display: none;
   position: fixed;
   top: 10px;
   left: 10px;
-  display: flex;
-  flex-direction: column;
-  justify-content: space-around;
-  width: 30px;
-  height: 30px;
+  font-size: 24px;
   cursor: pointer;
-  z-index: 20;
+  z-index: 1100;
+  background: none;
+  border: none;
+  color: #333;
 }
 
-.hamburger div {
-  width: 100%;
-  height: 4px;
-  background-color: #333;
-  border-radius: 2px;
+
+.popup {
+    display: none;
+    position: fixed;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+    z-index: 1000;
+}
+
+.popup-content {
+    background-color: #fff;
+    margin: 15% auto;
+    padding: 20px;
+    border-radius: 5px;
+    width: 300px;
+    text-align: center;
+}
+
+#popup-close {
+    margin-top: 10px;
+    padding: 5px 10px;
+    background-color: #6FADCF;
+    color: white;
+    border: none;
+    border-radius: 3px;
+    cursor: pointer;
+}
+
+#popup-close:hover {
+    background-color: #5A91AD;
 }
 
 @media (max-width: 768px) {
-  .sidebar {
-    transform: translateX(-100%);
+    .sidebar {
+        transform: translateX(-100%);
+    }
+    
+    .sidebar.open {
+        transform: translateX(0);
+    }
+    
+    .main-content {
+        margin-left: 0;
+    }
+
+    .hamburger {
+      display: block;
   }
-  
-  .sidebar.open {
-    transform: translateX(0);
-  }
-  
-  .main-content {
-    margin-left: 0;
-  }
-  
-  .main-content.shifted {
-    margin-left: 0;
-  }
+
+    .control-box {
+        width: 100%;
+    }
 }
