@@ -1,33 +1,48 @@
+// login.js
+import { database, ref, get } from './firebase-config.js';
+
 document.addEventListener('DOMContentLoaded', () => {
-    document.getElementById('loginForm').addEventListener('submit', function(event) {
+    const loginForm = document.getElementById('loginForm');
+    const errorMessage = document.getElementById('error-message');
+
+    loginForm.addEventListener('submit', function(event) {
         event.preventDefault();
         const username = document.getElementById('username').value;
         const password = document.getElementById('password').value;
-        const errorMessage = document.getElementById('error-message');
 
         // Reference to the users in the database
-        const usersRef = firebase.database().ref('user');
+        const usersRef = ref(database, 'users');
 
-        // Get the user data
-        usersRef.child('id1').once('value').then((snapshot) => {
-            const storedUsername = snapshot.val();
-            if (username === storedUsername) {
-                usersRef.child('password1').once('value').then((pwSnapshot) => {
-                    const storedPassword = pwSnapshot.val();
+        // Check if the entered username exists in the database
+        get(usersRef).then((snapshot) => {
+            if (snapshot.exists()) {
+                const users = snapshot.val();
+                if (users[username]) {
+                    const storedPassword = users[username].password;
                     if (password === storedPassword) {
                         // Credentials are correct
                         sessionStorage.setItem('loggedIn', 'true');
-                        window.location.href = 'bays.html';
+                        window.location.href = 'bays.html'; // Redirect to bays.html on successful login
                     } else {
-                        errorMessage.textContent = 'Invalid username or password';
+                        showError('Invalid username or password');
                     }
-                });
+                } else {
+                    showError('Invalid username or password');
+                }
             } else {
-                errorMessage.textContent = 'Invalid username or password';
+                showError('An error occurred. Please try again.');
             }
         }).catch((error) => {
             console.error('Error:', error);
-            errorMessage.textContent = 'An error occurred. Please try again.';
+            showError('An error occurred. Please try again.');
         });
     });
+
+    function showError(message) {
+        errorMessage.textContent = message;
+        errorMessage.style.opacity = '1';
+        setTimeout(() => {
+            errorMessage.style.opacity = '0';
+        }, 3000);
+    }
 });
