@@ -3,20 +3,44 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Greenhouse Monitoring</title>
-    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;700&display=swap" rel="stylesheet">
+    <title>Greenhouse Monitoring - Bay 1</title>
     <link rel="stylesheet" href="bay1.css">
 </head>
 <body>
+    <button class="hamburger">☰</button>
+
+    <div class="sidebar">
+        <div class="sidebar-header">
+            <h2>Smart Agri</h2>
+        </div>
+        <button class="dropdown-btn">Bay 1<span class="arrow">▼</span></button>
+        <div class="dropdown-container">
+            <a href="node1.html">Node 1</a>
+            <a href="node2.html">Node 2</a>
+            <a href="node3.html">Node 3</a>
+            <a href="node4.html">Node 4</a>
+            <a href="node5.html">Node 5</a>
+            <a href="node6.html">Node 6</a>
+        </div>
+        <a href="#" class="dimmed">Bay 2</a>
+        <a href="#" class="dimmed">Bay 3</a>
+        <a href="#" class="dimmed">Bay 4</a>
+        <a href="#" class="dimmed">Bay 5</a>
+        <a href="#" class="dimmed">Bay 6</a>
+        <a href="#" class="dimmed">Bay 7</a>
+        <a href="#" class="dimmed">Bay 8</a>
+        <a href="#" class="dimmed">Bay 9</a>
+        <a href="#" class="dimmed">Bay 10</a>
+        <a href="#">Settings</a>
+    </div>
+
     <div class="container">
-        <header class="header">
-            <h1>Greenhouse Monitoring</h1>
-        </header>
+        <div class="header">
+            <h1>Greenhouse Monitoring - Bay 1</h1>
+        </div>
 
         <div class="content">
-            <!-- Main Content Area -->
-            <div class="main-content">
-                <!-- Greenhouse Image with Nodes -->
+            <div class="main-content" role="main">
                 <div class="greenhouse">
                     <img src="GreenHouseBay.png" alt="Greenhouse Bay" class="greenhouse-image">
                     <div class="node node1"></div>
@@ -28,21 +52,20 @@
                 </div>
             </div>
 
-            <!-- Side Panel -->
             <div class="side-panel">
-                <!-- Control Status -->
-                <div class="control-status">
+                <div class="section control-status">
                     <h2>Control Status</h2>
                     <div class="status-item">
-                        Fan: <span id="fan-status">OFF</span>
+                        <span class="status-label">Fans:</span>
+                        <span id="fan-status">--</span>
                     </div>
                     <div class="status-item">
-                        Water Flow: <span id="water-flow-status">OFF</span>
+                        <span class="status-label">Water Flow:</span>
+                        <span id="water-flow-status">OFF</span>
                     </div>
                 </div>
 
-                <!-- Average Measurements -->
-                <div class="average-measurements">
+                <div class="section average-measurements">
                     <h2>Average Measurements</h2>
                     <div class="measurement-item">
                         Temperature: <span id="avg-temperature">--</span>°C
@@ -54,63 +77,57 @@
                         Soil Moisture: <span id="avg-soil-moisture">--</span>%
                     </div>
                 </div>
+
+                <div class="section fan-controls">
+                    <h2>Fan Controls</h2>
+                    <div class="fan-control">
+                        Fan 1:
+                        <button id="fan1-auto" class="fan-button">Auto: OFF</button>
+                        <button id="fan1-on" class="fan-button">ON</button>
+                        <button id="fan1-off" class="fan-button">OFF</button>
+                    </div>
+                    <div class="fan-control">
+                        Fan 2:
+                        <button id="fan2-auto" class="fan-button">Auto: OFF</button>
+                        <button id="fan2-on" class="fan-button">ON</button>
+                        <button id="fan2-off" class="fan-button">OFF</button>
+                    </div>
+                    <div class="fan-control">
+                        Fan 3:
+                        <button id="fan3-auto" class="fan-button">Auto: OFF</button>
+                        <button id="fan3-on" class="fan-button">ON</button>
+                        <button id="fan3-off" class="fan-button">OFF</button>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
 
-    <!-- Hamburger Menu for Mobile View -->
-    <div class="hamburger">
-        <div class="bar"></div>
-        <div class="bar"></div>
-        <div class="bar"></div>
-    </div>
-
-    <div class="sidebar" id="sidebar">
-        <div class="sidebar-header">
-            <h2>SmartSpace Agri</h2>
-        </div>
-        <button class="dropdown-btn">Bay 1 <span class="arrow">&#9660;</span></button>
-        <div class="dropdown-container">
-            <a href="node1.html">Node 1</a>
-            <a href="node2.html">Node 2</a>
-            <a href="node3.html">Node 3</a>
-            <a href="node4.html">Node 4</a>
-            <a href="node5.html">Node 5</a>
-            <a href="node6.html">Node 6</a>
-        </div>
-        <a class="dimmed">Bay 2</a>
-        <a class="dimmed">Bay 3</a>
-        <a class="dimmed">Bay 4</a>
-        <a class="dimmed">Bay 5</a>
-        <a class="dimmed">Bay 6</a>
-        <a class="dimmed">Bay 7</a>
-        <a class="dimmed">Bay 8</a>
-        <a class="dimmed">Bay 9</a>
-        <a class="dimmed">Bay 10</a>
-        <a href="#">Settings</a>
-    </div>
-
-    <!-- Popup Nodes -->
     <div id="popup-node1" class="popup">
         <div class="popup-arrow"></div>
         <div id="popup-content-node1" class="popup-content"></div>
     </div>
+
     <div id="popup-node2" class="popup">
         <div class="popup-arrow"></div>
         <div id="popup-content-node2" class="popup-content"></div>
     </div>
+
     <div id="popup-node3" class="popup">
         <div class="popup-arrow"></div>
         <div id="popup-content-node3" class="popup-content"></div>
     </div>
+
     <div id="popup-node4" class="popup">
         <div class="popup-arrow"></div>
         <div id="popup-content-node4" class="popup-content"></div>
     </div>
+
     <div id="popup-node5" class="popup">
         <div class="popup-arrow"></div>
         <div id="popup-content-node5" class="popup-content"></div>
     </div>
+
     <div id="popup-node6" class="popup">
         <div class="popup-arrow"></div>
         <div id="popup-content-node6" class="popup-content"></div>
