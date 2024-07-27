@@ -1,140 +1,175 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Greenhouse Monitoring - Bay 1</title>
-  <link rel="stylesheet" href="node1.css">
-  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;700&display=swap" rel="stylesheet">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bay 1 Node 1</title>
+    <link rel="stylesheet" href="node1.css">
 </head>
 <body>
-  <div class="sidebar" id="sidebar">
-    <div class="sidebar-header">
-      <h2>SmartSpace Agri</h2>
+    <div class="sidebar">
+        <div class="sidebar-header">
+            <h2>Smart Agri</h2>
+        </div>
+        <button class="dropdown-btn">Bay 1 - Node 1 <span class="arrow">▼</span></button>
+        <div class="dropdown-container">
+            <a href="node1.html">Node 1</a>
+            <a href="node2.html">Node 2</a>
+            <a href="node3.html">Node 3</a>
+            <a href="node4.html">Node 4</a>
+            <a href="node5.html">Node 5</a>
+            <a href="node6.html">Node 6</a>
+        </div>
+        <a href="#" class="dimmed">Bay 2</a>
+        <a href="#" class="dimmed">Bay 3</a>
+        <a href="#" class="dimmed">Bay 4</a>
+        <a href="#" class="dimmed">Bay 5</a>
+        <a href="#" class="dimmed">Bay 6</a>
+        <a href="#" class="dimmed">Bay 7</a>
+        <a href="#" class="dimmed">Bay 8</a>
+        <a href="#" class="dimmed">Bay 9</a>
+        <a href="#" class="dimmed">Bay 10</a>
+        <a href="log.html">Log</a>
+        <a href="#">Settings</a>
     </div>
-    <button class="dropdown-btn">Bay 1 - Node 1 <span class="arrow">&#9660;</span></button>
-    <div class="dropdown-container">
-      <a href="node1.html">Node 1</a>
-      <a href="node2.html">Node 2</a>
-      <a href="node3.html">Node 3</a>
-      <a href="node4.html">Node 4</a>
-      <a href="node5.html">Node 5</a>
-      <a href="node6.html">Node 6</a>
-    </div>
-    <a class="dimmed">Bay 2</a>
-    <a class="dimmed">Bay 3</a>
-    <a class="dimmed">Bay 4</a>
-    <a class="dimmed">Bay 5</a>
-    <a class="dimmed">Bay 6</a>
-    <a class="dimmed">Bay 7</a>
-    <a class="dimmed">Bay 8</a>
-    <a class="dimmed">Bay 9</a>
-    <a class="dimmed">Bay 10</a>
-    <a href="#">Settings</a>
-  </div>
 
-  <div class="main-content">
-    <div class="header">
-      <h1>Bay 1</h1>
-      <p>Last Reading as of <span id="last-reading">Loading...</span></p>
-    </div>
-    
-    <div class="widgets">
-      <div class="widget">
-        <h3>Soil Moisture</h3>
-        <div class="gauge-container">
-          <svg class="gauge" width="200" height="200">
-            <circle class="gauge-background" cx="100" cy="100" r="90" fill="none" stroke="#eee" stroke-width="20"/>
-            <circle class="gauge-progress" id="soil-moisture-gauge" cx="100" cy="100" r="90" fill="none" stroke="#6FADCF" stroke-width="20" stroke-dasharray="565.48" stroke-dashoffset="565.48"/>
-            <text class="gauge-text" id="soil-moisture-value" x="100" y="115" text-anchor="middle" font-size="30" font-weight="bold">0%</text>
-          </svg>
-          <div id="soil-moisture-value-textbox" class="gauge-value">0%</div>
+    <div class="main-content">
+        <div class="header">
+            <h1 class="center-heading">Bay 1 Node 1</h1>
+            <p>Last Reading as of <span id="last-reading">Loading...</span></p>
         </div>
-      </div>
-      <div class="widget">
-        <h3>Temperature</h3>
-        <div class="gauge-container">
-          <svg class="gauge" width="200" height="200">
-            <circle class="gauge-background" cx="100" cy="100" r="90" fill="none" stroke="#eee" stroke-width="20"/>
-            <circle class="gauge-progress" id="temperature-gauge" cx="100" cy="100" r="90" fill="none" stroke="#6FADCF" stroke-width="20" stroke-dasharray="565.48" stroke-dashoffset="565.48"/>
-            <text class="gauge-text" id="temperature-value" x="100" y="115" text-anchor="middle" font-size="30" font-weight="bold">0°C</text>
-          </svg>
-          <div id="temperature-value-textbox" class="gauge-value">0°C</div>
-        </div>
-      </div>
-      <div class="widget">
-        <h3>Humidity</h3>
-        <div class="gauge-container">
-          <svg class="gauge" width="200" height="200">
-            <circle class="gauge-background" cx="100" cy="100" r="90" fill="none" stroke="#eee" stroke-width="20"/>
-            <circle class="gauge-progress" id="humidity-gauge" cx="100" cy="100" r="90" fill="none" stroke="#6FADCF" stroke-width="20" stroke-dasharray="565.48" stroke-dashoffset="565.48"/>
-            <text class="gauge-text" id="humidity-value" x="100" y="115" text-anchor="middle" font-size="30" font-weight="bold">0%</text>
-          </svg>
-          <div id="humidity-value-textbox" class="gauge-value">0%</div>
-        </div>
-      </div>
-    </div>
-    
-    <div class="set-values">
-      <h2>Set Values</h2>
-      <div class="widgets">
-        <div class="widget">
-          <h3>Soil Moisture</h3>
-          <input type="number" id="set-soil-moisture" class="large-inputbox" placeholder="Enter soil moisture value">
-        </div>
-        <div class="widget">
-          <h3>Temperature</h3>
-          <input type="number" id="set-temperature" class="large-inputbox" placeholder="Enter temperature value">
-        </div>
-        <div class="widget">
-          <h3>Humidity</h3>
-          <input type="number" id="set-humidity" class="large-inputbox" placeholder="Enter humidity value">
-        </div>
-      </div>
-    </div>
-    
-    <div class="control-panel">
-      <h2>Control Panel</h2>
-      
-      <div class="control-group-container">
-        <div class="control-group">
-          <h3>Water Pump</h3>
-          <div class="button-group">
-            <button class="modern-button auto">Auto</button>
-            <button class="modern-button on">On</button>
-            <button class="modern-button off">Off</button>
-          </div>
-        </div>
-    
-        <div class="control-group">
-          <h3>Fans</h3>
-          <div class="button-group">
-            <button class="modern-button auto">Auto</button>
-            <button class="modern-button on">On</button>
-            <button class="modern-button off">Off</button>
-          </div>
-        </div>
-      </div>
-    </div>
-    
-    <div class="summary">
-      <h2>Daily Summary</h2>
-      <div class="chart-container">
-        <canvas id="summary-chart"></canvas>
-      </div>
-    </div>
-  </div>
-  
-  <div class="hamburger" id="hamburger-menu">
-    <div></div>
-    <div></div>
-    <div></div>
-  </div>
 
-  <script type="module" src="firebase-config.js"></script>
-  <script type="module" src="summary-chart.js"></script>
-  <script type="module" src="node1.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+        <div class="widgets">
+            <div class="widget">
+                <h3>Soil Moisture</h3>
+                <div class="gauge-container">
+                    <svg class="gauge" width="200" height="200">
+                        <circle class="gauge-background" cx="100" cy="100" r="90" fill="none" stroke="#eee" stroke-width="20"></circle>
+                        <circle class="gauge-progress" id="soil-moisture-gauge" cx="100" cy="100" r="90" fill="none" stroke="#6FADCF" stroke-width="20" stroke-dasharray="565.48" stroke-dashoffset="565.48"></circle>
+                        <circle class="gauge-set-value" id="soil-moisture-set-value" cx="100" cy="100" r="90" fill="none" stroke="#FF6347" stroke-width="5" stroke-dasharray="565.48" stroke-dashoffset="565.48"></circle>
+                        <text class="gauge-text" id="soil-moisture-value" x="100" y="115" text-anchor="middle" font-size="30" font-weight="bold">0%</text>
+                    </svg>
+                    <div id="soil-moisture-value-textbox" class="gauge-value">0%</div>
+                </div>
+            </div>
+            <div class="widget">
+                <h3>Temperature</h3>
+                <div class="gauge-container">
+                    <svg class="gauge" width="200" height="200">
+                        <circle class="gauge-background" cx="100" cy="100" r="90" fill="none" stroke="#eee" stroke-width="20"></circle>
+                        <circle class="gauge-progress" id="temperature-gauge" cx="100" cy="100" r="90" fill="none" stroke="#6FADCF" stroke-width="20" stroke-dasharray="565.48" stroke-dashoffset="565.48"></circle>
+                        <circle class="gauge-set-value" id="temperature-set-value" cx="100" cy="100" r="90" fill="none" stroke="#FF6347" stroke-width="5" stroke-dasharray="565.48" stroke-dashoffset="565.48"></circle>
+                        <text class="gauge-text" id="temperature-value" x="100" y="115" text-anchor="middle" font-size="30" font-weight="bold">0°C</text>
+                    </svg>
+                    <div id="temperature-value-textbox" class="gauge-value">0°C</div>
+                </div>
+            </div>
+            <div class="widget">
+                <h3>Humidity</h3>
+                <div class="gauge-container">
+                    <svg class="gauge" width="200" height="200">
+                        <circle class="gauge-background" cx="100" cy="100" r="90" fill="none" stroke="#eee" stroke-width="20"></circle>
+                        <circle class="gauge-progress" id="humidity-gauge" cx="100" cy="100" r="90" fill="none" stroke="#6FADCF" stroke-width="20" stroke-dasharray="565.48" stroke-dashoffset="565.48"></circle>
+                        <circle class="gauge-set-value" id="humidity-set-value" cx="100" cy="100" r="90" fill="none" stroke="#FF6347" stroke-width="5" stroke-dasharray="565.48" stroke-dashoffset="565.48"></circle>
+                        <text class="gauge-text" id="humidity-value" x="100" y="115" text-anchor="middle" font-size="30" font-weight="bold">0%</text>
+                    </svg>
+                    <div id="humidity-value-textbox" class="gauge-value">0%</div>
+                </div>
+            </div>
+        </div>
 
+        <div class="set-values">
+            <h2>Set Values</h2>
+            <div class="set-values-container">
+                <div class="set-value-widget">
+                    <h3>Soil Moisture</h3>
+                    <input type="text" class="large-inputbox" id="soil-moisture-input" placeholder="Enter value">
+                    <button class="set-button" id="set-soil-moisture">Set</button>
+                </div>
+                <div class="set-value-widget">
+                    <h3>Temperature</h3>
+                    <input type="text" class="large-inputbox" id="temperature-input" placeholder="Enter value">
+                    <button class="set-button" id="set-temperature">Set</button>
+                </div>
+                <div class="set-value-widget">
+                    <h3>Humidity</h3>
+                    <input type="text" class="large-inputbox" id="humidity-input" placeholder="Enter value">
+                    <button class="set-button" id="set-humidity">Set</button>
+                </div>
+            </div>
+        </div>
+
+        <div class="control-panel">
+            <h2>Control Panel</h2>
+            <div class="control-group-container" id="water">
+            
+                <div class="control-box">
+                    <h2>Water Control</h2>
+                    <div class="control-group">
+                        <h4>Water Valve 1</h4>
+                        <div class="button-group">
+                            <button class="modern-button">Auto</button>
+                            <button class="modern-button">On</button>
+                            <button class="modern-button">Off</button>
+                        </div>
+                    </div>
+                    <div class="control-group">
+                        <h4>Water Valve 2</h4>
+                        <div class="button-group">
+                            <button class="modern-button">Auto</button>
+                            <button class="modern-button">On</button>
+                            <button class="modern-button">Off</button>
+                        </div>
+                    </div>
+                    <div class="control-group">
+                        <h4>Water Valve 3</h4>
+                        <div class="button-group">
+                            <button class="modern-button">Auto</button>
+                            <button class="modern-button">On</button>
+                            <button class="modern-button">Off</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="summary">
+            <h2>Daily Summary</h2>
+            <div id="summary-chart-container" class="chart-container">
+                <canvas id="summary-chart"></canvas>
+            </div>
+        </div>
+    </div>
+
+    <button class="hamburger">☰</button>
+
+    <div id="popup" class="popup">
+        <div class="popup-content">
+            <p id="popup-message"></p>
+            <button id="popup-close">Close</button>
+        </div>
+    </div>
+
+    <script src="https://www.gstatic.com/firebasejs/9.6.10/firebase-app.js" type="module"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.6.10/firebase-database.js" type="module"></script>
+
+    <!-- Chart.js -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chartjs-adapter-date-fns/dist/chartjs-adapter-date-fns.bundle.min.js"></script>
+
+    <!-- Your custom scripts -->
+    <script src="firebase-config.js" type="module"></script>
+    <script src="node1.js" type="module"></script>
+    <script src="summary-chart.js"></script>
+
+    <script>
+    document.addEventListener('DOMContentLoaded', function() {
+        document.querySelectorAll('.modern-button').forEach(function(button) {
+            button.addEventListener('click', function() {
+                this.classList.toggle('bright');
+            });
+        });
+    });
+    </script>
 </body>
 </html>
