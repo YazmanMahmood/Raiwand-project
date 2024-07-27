@@ -1,18 +1,15 @@
 {
-<<<<<<< HEAD
+  "type": "module",
   "name": "raiwand-project",
   "version": "1.0.0",
-  "main": "server.js",
+  "main": "index.js",
   "scripts": {
-    "start": "node server.js"
-=======
-  "name": "Raiwand project",
-  "version": "1.0.0",
-  "scripts": {
-    "build": "echo 'No build step required'"
->>>>>>> 13c90efb91e502f7ee586068ee1e889efe8868d6
+    "start": "node updateFirebaseData.mjs"
   },
   "dependencies": {
-    "express": "^4.19.2"
+    "@firebase/app": "^0.6.28",
+    "@firebase/database": "^0.12.4",
+    "chart.js": "^4.4.3",
+    "chartjs-adapter-date-fns": "^3.0.0"
   }
 }
