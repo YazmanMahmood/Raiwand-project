@@ -33,7 +33,7 @@ document.addEventListener('DOMContentLoaded', () => {
             return;
         }
 
-        const logsRef = ref(database, 'bay 1/node 1/logs');
+        const logsRef = ref(database, 'bay 1/node 1/log');
 
         onValue(logsRef, (snapshot) => {
             const logs = [];
