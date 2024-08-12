@@ -1,5 +1,5 @@
 import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.12.3/firebase-app.js';
-import { getDatabase, ref, onValue } from 'https://www.gstatic.com/firebasejs/10.12.3/firebase-database.js';
+import { getDatabase, ref, onValue, push } from 'https://www.gstatic.com/firebasejs/10.12.3/firebase-database.js';
 
 // Your Firebase configuration
 const firebaseConfig = {
@@ -17,7 +17,17 @@ const firebaseConfig = {
 const app = initializeApp(firebaseConfig);
 const database = getDatabase(app);
 
+// Test database connection
+const testRef = ref(database, '/');
+onValue(testRef, (snapshot) => {
+    console.log('Database connection successful. Root data:', snapshot.val());
+}, (error) => {
+    console.error('Error connecting to database:', error);
+});
+
 document.addEventListener('DOMContentLoaded', () => {
+    console.log('DOM content loaded');
+
     const elements = {
         hamburger: document.querySelector('.hamburger'),
         sidebar: document.querySelector('.sidebar'),
@@ -26,6 +36,7 @@ document.addEventListener('DOMContentLoaded', () => {
     };
 
     function updateSetValuesTable() {
+        console.log('Updating set values table');
         const tableBody = document.getElementById('log-table-body');
 
         if (!tableBody) {
@@ -33,9 +44,10 @@ document.addEventListener('DOMContentLoaded', () => {
             return;
         }
 
-        const logsRef = ref(database, 'bay 1/node 1/set-values-log');
+        const logsRef = ref(database, 'bay 1/node 1/set_values_log');
 
         onValue(logsRef, (snapshot) => {
+            console.log('Received set values data:', snapshot.val());
             const logs = [];
             snapshot.forEach((childSnapshot) => {
                 const log = childSnapshot.val();
@@ -59,53 +71,56 @@ document.addEventListener('DOMContentLoaded', () => {
                 `;
                 tableBody.appendChild(row);
             });
+            console.log('Table updated with', limitedLogs.length, 'entries');
         }, (error) => {
             console.error('Error fetching set values logs:', error);
         });
     }
 
-    // Sidebar functionality
-    elements.hamburger.addEventListener('click', () => {
-        elements.sidebar.classList.toggle('open');
-        elements.mainContent.classList.toggle('shifted');
-    });
+    // Listen for value changes and update the set values log
+    function listenForSetValueChanges() {
+        const humidityRef = ref(database, 'bay 1/node 1/set values/humidity');
+        const soilMoistureRef = ref(database, 'bay 1/node 1/set values/soil_moisture');
+        const temperatureRef = ref(database, 'bay 1/node 1/set values/temperature');
 
-    // Close sidebar when clicking outside
-    document.addEventListener('click', (event) => {
-        if (!elements.sidebar.contains(event.target) && !elements.hamburger.contains(event.target)) {
-            elements.sidebar.classList.remove('open');
-            elements.mainContent.classList.remove('shifted');
+        function logValueChange(snapshot, type) {
+            const value = snapshot.val();
+            const logEntry = {
+                timestamp: Date.now(),
+                temperature: type === 'temperature' ? value : null,
+                soil_moisture: type === 'soil_moisture' ? value : null,
+                humidity: type === 'humidity' ? value : null
+            };
+
+            const logRef = ref(database, 'bay 1/node 1/set_values_log');
+            push(logRef, logEntry);
         }
+
+        onValue(humidityRef, (snapshot) => {
+            logValueChange(snapshot, 'humidity');
+        }, (error) => {
+            console.error('Error listening for humidity value changes:', error);
+        });
+
+        onValue(soilMoistureRef, (snapshot) => {
+            logValueChange(snapshot, 'soil_moisture');
+        }, (error) => {
+            console.error('Error listening for soil moisture value changes:', error);
+        });
+
+        onValue(temperatureRef, (snapshot) => {
+            logValueChange(snapshot, 'temperature');
+        }, (error) => {
+            console.error('Error listening for temperature value changes:', error);
+        });
+    }
+
+    // Add event listener to the button
+    elements.dataLogButton.addEventListener('click', () => {
+        window.location.href = 'log.html';
     });
 
-    // Handle data log button click
-    if (elements.dataLogButton) {
-        elements.dataLogButton.addEventListener('click', (event) => {
-            event.preventDefault();
-            window.location.href = 'log.html';
-        });
-    } else {
-        console.error('Data log button not found');
-    }
-
-    // Dropdown functionality
-    function setupDropdown() {
-        const dropdownBtns = document.querySelectorAll('.dropdown-btn');
-        
-        dropdownBtns.forEach((dropdownBtn) => {
-            const dropdownContainer = dropdownBtn.nextElementSibling;
-
-            if (dropdownBtn && dropdownContainer) {
-                dropdownBtn.addEventListener('click', function() {
-                    this.classList.toggle('active');
-                    dropdownContainer.classList.toggle('show');
-                });
-            }
-        });
-    }
-
-    setupDropdown();
-
-    // Initialize the table
+    // Initialize the table and start listening for set value changes
     updateSetValuesTable();
+    listenForSetValueChanges();
 });
