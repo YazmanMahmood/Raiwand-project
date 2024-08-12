@@ -1,33 +1,122 @@
 import { initializeApp } from 'https://www.gstatic.com/firebasejs/9.6.10/firebase-app.js';
-import { getDatabase, ref, set, onValue, get } from 'https://www.gstatic.com/firebasejs/9.6.10/firebase-database.js';
+import { getDatabase, ref, set, onValue, get, off, remove } from 'https://www.gstatic.com/firebasejs/9.6.10/firebase-database.js';
 import { firebaseConfig } from './firebase-config.js';
 
 // Initialize Firebase
 const app = initializeApp(firebaseConfig);
 const database = getDatabase(app);
 
+const debounce = (func, wait) => {
+  let timeout;
+  return function(...args) {
+    clearTimeout(timeout);
+    timeout = setTimeout(() => func(...args), wait);
+  };
+};
+
 document.addEventListener('DOMContentLoaded', () => {
   const elements = {
-    hamburger: document.querySelector('.hamburger'),
+    hamburger: document.querySelector('#sidebarToggle'),
     sidebar: document.querySelector('.sidebar'),
     mainContent: document.querySelector('.main-content'),
+    container: document.querySelector('.container'),
+    dropdownBtns: document.querySelectorAll('.dropdown-btn'),
     lastReading: document.getElementById('last-reading'),
-    popup: document.getElementById('popup'),
+
     popupMessage: document.getElementById('popup-message'),
     popupClose: document.getElementById('popup-close'),
-    chartContainer: document.getElementById('summary-chart-container')
+    chartContainer: document.getElementById('summary-chart-container'),
+    gauges: {
+      temperature: document.getElementById('temperature-gauge'),
+      soilMoisture: document.getElementById('soil-moisture-gauge'),
+      humidity: document.getElementById('humidity-gauge')
+    },
+    values: {
+      temperature: document.getElementById('temperature-value'),
+      soilMoisture: document.getElementById('soil-moisture-value'),
+      humidity: document.getElementById('humidity-value')
+    },
+    textboxes: {
+      temperature: document.getElementById('temperature-value-textbox'),
+      soilMoisture: document.getElementById('soil-moisture-value-textbox'),
+      humidity: document.getElementById('humidity-value-textbox')
+    },
+    setValues: {
+      temperature: document.getElementById('temperature-set-value'),
+      soilMoisture: document.getElementById('soil-moisture-set-value'),
+      humidity: document.getElementById('humidity-set-value')
+    },
+    commentInput: document.getElementById('comment-input'),
+    postCommentBtn: document.getElementById('post-comment'),
+    commentsContainer: document.getElementById('comments-container'),
+    deleteAllCommentsBtn: document.getElementById('delete-all-comments')
   };
 
-  let latestData = {
-    temperature: 0,
-    humidity: 0,
-    soil_moisture: 0
+  let nodeRef, setValuesRef, commentsRef;
+
+  const initializeFirebase = () => {
+    nodeRef = ref(database, 'bay 1/node 1');
+    setValuesRef = ref(database, 'bay 1/node 1/set values');
+    commentsRef = ref(database, 'bay 1/Comments/node1');
+
+    setupFirebaseListeners();
+    loadInitialSetValues();
   };
 
-  function updateGauge(gaugeId, valueId, value, min, max, unit) {
-    const gauge = document.getElementById(gaugeId);
-    const valueDisplay = document.getElementById(valueId);
-    const valueTextbox = document.getElementById(`${valueId}-textbox`);
+  const setupFirebaseListeners = () => {
+    onValue(nodeRef, (snapshot) => {
+      const data = snapshot.val();
+      if (data) {
+        updateVisuals(data);
+      }
+    }, (error) => {
+      console.error('Error fetching node data:', error);
+      showPopup('Error fetching data. Please refresh the page.');
+    });
+
+    onValue(setValuesRef, (snapshot) => {
+      const setValues = snapshot.val();
+      if (setValues) {
+        updateSetValueIndicator('temperature', setValues.temperature, 0, 100);
+        updateSetValueIndicator('soilMoisture', setValues.soil_moisture, 0, 100);
+        updateSetValueIndicator('humidity', setValues.humidity, 0, 100);
+        
+        document.getElementById('temperature-input').value = setValues.temperature || '';
+        document.getElementById('humidity-input').value = setValues.humidity || '';
+        document.getElementById('soil-moisture-input').value = setValues.soil_moisture || '';
+      }
+    }, (error) => {
+      console.error('Error fetching set values:', error);
+      showPopup('Error fetching set values. Please refresh the page.');
+    });
+
+    onValue(commentsRef, (snapshot) => {
+      const comments = snapshot.val();
+      displayComments(comments);
+    }, (error) => {
+      console.error('Error fetching comments:', error);
+      showPopup('Error fetching comments. Please refresh the page.');
+    });
+  };
+
+  const loadInitialSetValues = () => {
+    get(setValuesRef).then((snapshot) => {
+      const setValues = snapshot.val();
+      if (setValues) {
+        document.getElementById('temperature-input').value = setValues.temperature || '';
+        document.getElementById('humidity-input').value = setValues.humidity || '';
+        document.getElementById('soil-moisture-input').value = setValues.soil_moisture || '';
+      }
+    }).catch((error) => {
+      console.error('Error fetching initial set values:', error);
+      showPopup('Error fetching initial values. Please refresh the page.');
+    });
+  };
+
+  const updateGauge = (gaugeId, valueId, value, min, max, unit) => {
+    const gauge = elements.gauges[gaugeId];
+    const valueDisplay = elements.values[valueId];
+    const valueTextbox = elements.textboxes[valueId];
 
     if (gauge && valueDisplay && valueTextbox && value !== null) {
       const percentage = ((value - min) / (max - min)) * 100;
@@ -36,189 +125,260 @@ document.addEventListener('DOMContentLoaded', () => {
       const formattedValue = `${value.toFixed(1)}${unit}`;
       valueDisplay.textContent = formattedValue;
       valueTextbox.textContent = formattedValue;
-    } else {
-      console.error(`Unable to update gauge: ${gaugeId}`);
     }
-  }
+  };
 
-  function updateSetValueIndicator(gaugeId, value, min, max) {
-    const setValueGauge = document.getElementById(`${gaugeId}-set-value`);
+  const updateSetValueIndicator = (gaugeId, value, min, max) => {
+    const setValueGauge = elements.setValues[gaugeId];
     if (setValueGauge && value !== null) {
       const percentage = ((value - min) / (max - min)) * 100;
       const dashOffset = 565.48 - (565.48 * percentage / 100);
       setValueGauge.style.strokeDashoffset = dashOffset;
     }
-  }
+  };
 
-  function updateLastReadingTime() {
+  const updateLastReadingTime = () => {
     if (elements.lastReading) {
-      elements.lastReading.textContent = new Date().toLocaleString();
+      const now = new Date();
+      const formattedDate = now.toLocaleString('en-GB', {
+        day: '2-digit',
+        month: '2-digit',
+        year: 'numeric',
+        hour: '2-digit',
+        minute: '2-digit',
+        second: '2-digit',
+        hour12: false
+      }).replace(/\//g, '/').replace(',', '');
+      elements.lastReading.textContent = formattedDate;
     }
-  }
+  };
 
-  function updateChartPosition(temperature, humidity, soilMoisture) {
+  const debouncedChartUpdate = debounce((data) => {
     const maxPosition = window.innerHeight - elements.chartContainer.offsetHeight;
-    const avgValue = (temperature + humidity + soilMoisture) / 3;
+    const avgValue = (data.temperature + data.humidity + data.soil_moisture) / 3;
     const newPosition = maxPosition * (1 - avgValue / 100);
     elements.chartContainer.style.top = `${newPosition}px`;
-    
-    // Update the chart data
+
     if (window.updateChartData) {
-      window.updateChartData(latestData);
+      window.updateChartData(data);
     }
-  }
-
-  function setupFirebaseListener(path, gaugeId, valueId, unit) {
-    const dataRef = ref(database, path);
-    onValue(dataRef, (snapshot) => {
-      const value = snapshot.val();
-      if (value !== null) {
-        updateGauge(gaugeId, valueId, value, 0, 100, unit);
-        
-        // Update latestData
-        latestData[path.split('/').pop()] = value;
-        
-        // Call updateChartPosition with all latest data
-        updateChartPosition(latestData.temperature, latestData.humidity, latestData.soil_moisture);
-        
-        updateLastReadingTime();
-      }
-    }, (error) => {
-      console.error(`Error fetching ${path}:`, error);
-    });
-
-    const setValueRef = ref(database, `bay 1/node 1/set values/${path.split('/').pop()}`);
-    onValue(setValueRef, (snapshot) => {
-      const setValue = snapshot.val();
-      if (setValue !== null) {
-        updateSetValueIndicator(gaugeId, setValue, 0, 100);
-      }
-    }, (error) => {
-      console.error(`Error fetching set value:`, error);
-    });
-  }
-
-  setupFirebaseListener('bay 1/node 1/temperature', 'temperature-gauge', 'temperature-value', '°C');
-  setupFirebaseListener('bay 1/node 1/soil_moisture', 'soil-moisture-gauge', 'soil-moisture-value', '%');
-  setupFirebaseListener('bay 1/node 1/humidity', 'humidity-gauge', 'humidity-value', '%');
-
-  function showPopup(message) {
-    elements.popupMessage.textContent = message;
-    elements.popup.style.display = 'block';
-  }
-
-  function hidePopup() {
-    elements.popup.style.display = 'none';
-  }
-
-  elements.popupClose.addEventListener('click', hidePopup);
+  }, 1000);
 
   // Sidebar functionality
-  elements.hamburger.addEventListener('click', () => {
+  elements.hamburger.addEventListener('click', (e) => {
+    e.stopPropagation();
+    elements.hamburger.classList.toggle('active');
     elements.sidebar.classList.toggle('open');
     elements.mainContent.classList.toggle('shifted');
   });
 
   // Close sidebar when clicking outside
   document.addEventListener('click', (event) => {
-    if (!elements.sidebar.contains(event.target) && !elements.hamburger.contains(event.target)) {
+    const isSidebarOpen = elements.sidebar.classList.contains('open');
+    const clickedInsideSidebar = elements.sidebar.contains(event.target);
+    const clickedHamburger = elements.hamburger.contains(event.target);
+
+    if (isSidebarOpen && !clickedInsideSidebar && !clickedHamburger) {
+      elements.hamburger.classList.remove('active');
       elements.sidebar.classList.remove('open');
       elements.mainContent.classList.remove('shifted');
     }
   });
 
-  // Set value functionality with validation
-  function setupSetValueButton(buttonId, inputId, path, valueName) {
-    const button = document.getElementById(buttonId);
-    const input = document.getElementById(inputId);
-    if (button && input) {
-      button.addEventListener('click', () => {
-        let setValue = parseFloat(input.value);
-        if (!isNaN(setValue) && setValue >= 0 && setValue <= 100) {
-          const setValueRef = ref(database, path);
-          set(setValueRef, setValue)
-            .then(() => {
-              showPopup(`Set ${valueName} updated to ${setValue}`);
-              input.value = ''; // Clear the text box
-            })
-            .catch((error) => showPopup(`Error updating ${valueName}: ${error.message}`));
-        } else {
-          showPopup('Please enter a valid number (0-100)');
-        }
-      });
-    } else {
-      console.error(`Button ${buttonId} or input ${inputId} not found`);
-    }
-  }
+  // Prevent sidebar from closing when clicking inside it
+  elements.sidebar.addEventListener('click', (e) => {
+    e.stopPropagation();
+  });
 
-  setupSetValueButton('set-temperature', 'temperature-input', 'bay 1/node 1/set values/temperature', 'temperature');
-  setupSetValueButton('set-humidity', 'humidity-input', 'bay 1/node 1/set values/humidity', 'humidity');
-  setupSetValueButton('set-soil-moisture', 'soil-moisture-input', 'bay 1/node 1/set values/soil_moisture', 'soil moisture');
+  const updateVisuals = (data) => {
+    updateGauge('temperature', 'temperature', data.temperature, 0, 100, '°C');
+    updateGauge('soilMoisture', 'soilMoisture', data.soil_moisture, 0, 100, '%');
+    updateGauge('humidity', 'humidity', data.humidity, 0, 100, '%');
+    updateLastReadingTime();
+    debouncedChartUpdate(data);
+  };
+
+  const displayComments = (comments) => {
+    elements.commentsContainer.innerHTML = ''; // Clear existing comments
+    if (comments) {
+      const fragment = document.createDocumentFragment();
+      Object.entries(comments)
+        .sort(([, a], [, b]) => b.timestamp.localeCompare(a.timestamp)) // Sort comments by timestamp, newest first
+        .forEach(([key, comment]) => {
+          const commentElement = document.createElement('div');
+          commentElement.className = 'comment';
+          commentElement.innerHTML = `
+            <p>${comment.text} - ${comment.timestamp}</p>
+            <button class="delete-comment" data-key="${key}">Delete</button>
+          `;
+          fragment.appendChild(commentElement);
+        });
+      elements.commentsContainer.appendChild(fragment);
+    }
+  };
+
+  const showPopup = (message) => {
+    elements.popupMessage.textContent = message;
+    elements.popup.classList.add('show');
+  };
+
+  const hidePopup = () => {
+    elements.popup.classList.remove('show');
+  };
 
   // Mobile responsiveness improvements
-  function adjustForMobile() {
+  const adjustForMobile = () => {
     const isMobile = window.innerWidth <= 768;
     document.body.classList.toggle('mobile', isMobile);
 
     if (isMobile) {
       elements.sidebar.classList.remove('open');
       elements.mainContent.classList.remove('shifted');
+      elements.hamburger.classList.remove('active');
     }
-  }
+  };
 
   window.addEventListener('resize', adjustForMobile);
   adjustForMobile(); // Call once on load
 
-  // Fetch initial set values and update inputs
-  function fetchInitialSetValues() {
-    const setValuePaths = [
-      'bay 1/node 1/set values/temperature',
-      'bay 1/node 1/set values/humidity',
-      'bay 1/node 1/set values/soil_moisture'
-    ];
+  const cleanupFirebaseListeners = () => {
+    if (nodeRef) off(nodeRef);
+    if (setValuesRef) off(setValuesRef);
+    if (commentsRef) off(commentsRef);
+  };
 
-    setValuePaths.forEach(path => {
-      get(ref(database, path)).then((snapshot) => {
-        const setValue = snapshot.val();
-        if (setValue !== null) {
-          const inputId = `${path.split('/').pop()}-input`;
-          const inputElement = document.getElementById(inputId);
-          if (inputElement) {
-            inputElement.value = setValue;
-          }
+  elements.popupClose.addEventListener('click', hidePopup);
+
+  elements.postCommentBtn.addEventListener('click', () => {
+    const commentText = elements.commentInput.value.trim();
+    if (commentText) {
+      const comments = commentText.split('\n').filter(comment => comment.trim() !== '');
+      
+      get(commentsRef).then((snapshot) => {
+        const existingComments = snapshot.val() || {};
+        let nextIndex = 0;
+        while (existingComments.hasOwnProperty(nextIndex.toString())) {
+          nextIndex++;
         }
-      }).catch((error) => console.error(`Error fetching initial set value for ${path}:`, error));
-    });
-  }
 
-  fetchInitialSetValues();
+        const updates = {};
+        comments.forEach((comment) => {
+          const now = new Date();
+          const timestamp = now.toLocaleString('en-GB', {
+            day: '2-digit',
+            month: '2-digit',
+            year: 'numeric',
+            hour: '2-digit',
+            minute: '2-digit',
+            second: '2-digit',
+            hour12: false
+          }).replace(/\//g, '/').replace(',', '');
 
-  // Set initial position for chart container
-  elements.chartContainer.style.position = 'relative';
-  elements.chartContainer.style.top = '0px';
+          updates[nextIndex.toString()] = {
+            text: comment.trim(),
+            timestamp: timestamp
+          };
+          nextIndex++;
+        });
 
-  // Dropdown functionality
-  function setupDropdown() {
-    const dropdownBtns = document.querySelectorAll('.dropdown-btn');
-    
-    dropdownBtns.forEach((dropdownBtn) => {
-        const dropdownContainer = dropdownBtn.nextElementSibling;
+        set(commentsRef, {...updates, ...existingComments}) // Place new comments at the top
+          .then(() => {
+            elements.commentInput.value = '';
+            showPopup('Comments posted successfully');
+          })
+          .catch((error) => {
+            console.error('Error posting comments:', error);
+            showPopup('Error posting comments. Please try again.');
+          });
+      }).catch((error) => {
+        console.error('Error fetching existing comments:', error);
+        showPopup('Error posting comments. Please try again.');
+      });
+    } else {
+      showPopup('Please enter at least one comment before posting');
+    }
+  });
 
-        if (dropdownBtn && dropdownContainer) {
-            dropdownBtn.addEventListener('click', function() {
-                this.classList.toggle('active');
-                dropdownContainer.classList.toggle('show');
+  elements.commentsContainer.addEventListener('click', (event) => {
+    if (event.target.classList.contains('delete-comment')) {
+      const commentKey = event.target.getAttribute('data-key');
+      const commentRef = ref(database, `bay 1/Comments/node1/${commentKey}`);
+      remove(commentRef).then(() => {
+        showPopup('Comment deleted successfully');
+      }).catch((error) => {
+        console.error('Error deleting comment:', error);
+        showPopup('Error deleting comment. Please try again.');
+      });
+    }
+  });
+
+  elements.deleteAllCommentsBtn.addEventListener('click', () => {
+    if (confirm('Are you sure you want to delete all comments?')) {
+      remove(commentsRef).then(() => {
+        showPopup('All comments deleted successfully');
+      }).catch((error) => {
+        console.error('Error deleting all comments:', error);
+        showPopup('Error deleting all comments. Please try again.');
+      });
+    }
+  });
+
+  document.addEventListener('click', (event) => {
+    if (event.target.matches('.set-button')) {
+      const inputId = event.target.getAttribute('data-input');
+      const path = event.target.getAttribute('data-path');
+      const valueName = event.target.getAttribute('data-name');
+      const input = document.getElementById(inputId);
+
+      if (input) {
+        let setValue = parseFloat(input.value);
+        if (!isNaN(setValue) && setValue >= 0 && setValue <= 100) {
+          const setValueRef = ref(database, path);
+          set(setValueRef, setValue)
+            .then(() => {
+              showPopup(`Set ${valueName} updated to ${setValue}`);
+            })
+            .catch((error) => {
+              console.error(`Error updating ${valueName}:`, error);
+              showPopup(`Error updating ${valueName}. Please try again.`);
             });
+        } else {
+          showPopup('Please enter a valid number (0-100)');
         }
-    });
-}
+      }
+    }
+  });
 
-  setupDropdown();
-
-  // Modern button functionality
-  document.querySelectorAll('.modern-button').forEach(function(button) {
-    button.addEventListener('click', function() {
-      this.classList.toggle('bright');
+  // Dropdown functionality for sidebar
+  elements.dropdownBtns.forEach((dropdownBtn) => {
+    dropdownBtn.addEventListener('click', function(e) {
+      e.stopPropagation();
+      this.classList.toggle('active');
+      const dropdownContainer = this.nextElementSibling;
+      if (dropdownContainer.style.maxHeight) {
+        dropdownContainer.style.maxHeight = null;
+      } else {
+        dropdownContainer.style.maxHeight = dropdownContainer.scrollHeight + "px";
+      }
     });
   });
+
+  // Close dropdowns when clicking outside
+  document.addEventListener("click", function(event) {
+    if (!event.target.matches('.dropdown-btn')) {
+      var dropdowns = document.getElementsByClassName("dropdown-container");
+      for (var i = 0; i < dropdowns.length; i++) {
+        var openDropdown = dropdowns[i];
+        if (openDropdown.style.maxHeight) {
+          openDropdown.style.maxHeight = null;
+          openDropdown.previousElementSibling.classList.remove('active');
+        }
+      }
+    }
+  });
+
+  // Initialize Firebase and setup listeners
+  initializeFirebase();
+
+  window.addEventListener('beforeunload', cleanupFirebaseListeners);
 });
