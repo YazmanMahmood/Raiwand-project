@@ -1,3 +1,5 @@
+@import url('https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;700&display=swap');
+
 /* Reset styles */
 * {
     margin: 0;
@@ -33,6 +35,7 @@ body {
 h1 {
     font-size: 32px;
     color: #2c3e50;
+    margin-top: 40px;
 }
 
 /* Content styles */
@@ -67,15 +70,14 @@ h1 {
 /* Node styles */
 .node {
     position: absolute;
-    width: 80px;
-    height: 80px;
-    background-color: rgb(138, 134, 134);
+    background-color: rgba(138, 134, 134, 0);
     border-radius: 0;
     cursor: pointer;
+    transition: background-color 0.3s ease;
 }
 
 .node:hover {
-    background-color: rgba(138, 134, 134, 0.973);
+    background-color: rgba(138, 134, 134, 0);
 }
 
 .node.node1 {
@@ -107,16 +109,17 @@ h1 {
 }
 
 .node.node5 { 
-top: 23%; 
-left: 24%;
-height: 130px;
-width: 130px;
-
+    top: 23%; 
+    left: 24%;
+    height: 130px;
+    width: 130px;
 }
-.node.node6 { top: 22%; 
+
+.node.node6 { 
+    top: 22%; 
     left: 51%; 
     height: 130px;
-width: 130px;
+    width: 130px;
 }
 
 /* Side panel styles */
@@ -130,7 +133,10 @@ width: 130px;
 
 .control-status,
 .average-measurements,
-.fan-controls {
+.fan-controls,
+.water-controls,
+.temperature-control,
+.set-values {
     margin-bottom: 30px;
     background-color: #fff;
     border-radius: 8px;
@@ -139,43 +145,32 @@ width: 130px;
 }
 
 h2 {
-    font-size: 20px;
+    font-size: 1.5em;
     margin-bottom: 15px;
-    color: #333;
+    color: #2c3e50;
 }
 
 .status-item,
 .measurement-item {
     display: flex;
     justify-content: space-between;
-    margin-bottom: 10px;
+    margin-bottom: 8px;
     font-size: 14px;
 }
 
 .status-label {
     font-weight: bold;
-    margin-right: 10px;
 }
 
-#fan-status, #water-flow-status {
-    text-align: right;
-}
-
-#fan-status {
-    display: flex;
-    flex-direction: column;
-    align-items: flex-end;
-}
-
-/* Fan control styles */
-.fan-control {
+/* Fan and Water control styles */
+.fan-control, .water-control {
     display: flex;
     justify-content: space-between;
     align-items: center;
     margin-bottom: 15px;
 }
 
-.fan-button {
+.fan-button, .water-button {
     padding: 8px 12px;
     background-color: #f0f0f0;
     border: none;
@@ -184,15 +179,208 @@ h2 {
     transition: background-color 0.3s, color 0.3s;
 }
 
-.fan-button:hover {
+.fan-button:hover, .water-button:hover {
     background-color: #e0e0e0;
 }
 
-.fan-button.active {
+.fan-button.active, .water-button.active {
     background-color: #4CAF50;
     color: white;
 }
 
+
+
+
+
+
+/* Set values styles */
+.set-value-widget {
+    margin-bottom: 15px;
+}
+
+.large-inputbox {
+    width: 100%;
+    padding: 8px;
+    font-size: 14px;
+    margin-bottom: 10px;
+}
+
+.set-values {
+    margin-top: 20px;
+}
+
+.set-value-widget {
+    margin-bottom: 15px;
+}
+
+
+.set-button {
+    width: 100%;
+    padding: 8px;
+    font-size: 14px;
+    background-color: #4CAF50;
+    color: white;
+    border: none;
+    cursor: pointer;
+}
+
+.set-button:hover {
+    background-color: #45a049;
+}
+
+.set-button:hover {
+    background-color: #45a049;
+}
+
+/* Sidebar styles */
+.sidebar {
+    width: 200px;
+    background-color: #333;
+    color: white;
+    padding: 15px;
+    position: fixed;
+    top: 0;
+    left: 0;
+    height: 100%;
+    overflow-y: auto;
+    z-index: 1000;
+    transition: transform 0.3s ease-in-out, box-shadow 0.3s ease;
+}
+
+.sidebar.open {
+    transform: translateX(0);
+    box-shadow: 2px 0 10px rgba(0, 0, 0, 0.2);
+}
+
+.sidebar-header {
+    margin-bottom: 15px;
+}
+
+.sidebar a, .dropdown-btn {
+    display: block;
+    color: white;
+    padding: 12px 15px;
+    text-decoration: none;
+    margin-bottom: 5px;
+    font-size: 16px;
+    transition: background-color 0.2s ease, transform 0.2s ease;
+}
+
+.sidebar a:hover, .sidebar a.active, .dropdown-btn:hover {
+    background-color: #555;
+    transform: translateX(5px);
+}
+
+.dropdown-btn {
+    background-color: #333;
+    border: none;
+    cursor: pointer;
+    text-align: left;
+    outline: none;
+    position: relative;
+    width: 100%;
+}
+.dropdown-btn .arrow {
+    float: right;
+    transition: transform 0.3s;
+}
+
+.dropdown-btn.active .arrow {
+    transform: rotate(180deg);
+}
+
+.dropdown-container {
+    display: none;
+    background-color: #444;
+    padding-left: 8px;
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height 0.3s ease-out;
+}
+
+.dropdown-container.show {
+    display: block;
+    max-height: 500px;
+    transition: max-height 0.3s ease-in;
+}
+
+.dropdown-container a {
+    padding: 10px;
+    font-size: 14px;
+}
+
+.main-content {
+    margin-left: 220px;
+    padding: 20px;
+    flex: 1;
+    transition: margin-left 0.3s ease;
+}
+
+.dropdown-btn.active + .dropdown-container {
+    display: block;
+}
+
+/* Hamburger menu styles */
+.hamburger {
+    display: none;
+    position: fixed;
+    top: 10px;
+    left: 10px;
+    font-size: 24px;
+    cursor: pointer;
+    z-index: 9999;
+    background: none;
+    border: none;
+    color: #333;
+}
+
+.bar {
+    display: block;
+    width: 25px;
+    height: 3px;
+    margin: 5px auto;
+    transition: all 0.3s ease-in-out;
+    background-color: #2c3e50;
+}
+
+
+.set-value-popup {
+    display: none;
+    position: fixed;
+    z-index: 1000;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0,0,0,0.5);
+    backdrop-filter: blur(5px);
+}
+
+.set-value-popup-content {
+    background-color: #fefefe;
+    margin: 15% auto;
+    padding: 20px;
+    border: 1px solid #888;
+    width: 80%;
+    max-width: 400px;
+    border-radius: 5px;
+    text-align: center;
+}
+
+.set-value-close {
+    color: #aaa;
+    float: right;
+    font-size: 28px;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+.set-value-close:hover,
+.set-value-close:focus {
+    color: #000;
+    text-decoration: none;
+    cursor: pointer;
+}
 /* Popup styles */
 .popup {
     position: absolute;
@@ -201,10 +389,14 @@ h2 {
     border: 1px solid #ccc;
     padding: 20px;
     border-radius: 8px;
-    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
     z-index: 1;
     width: 250px;
 }
+.popup.show {
+    display: block; /* Show the popup when triggered */
+}
+
 
 .popup-content {
     font-size: 14px;
@@ -226,91 +418,6 @@ h2 {
 .popup-arrow-right {
     border-left: 10px solid #fff;
     right: -10px;
-}
-
-/* Sidebar styles */
-.sidebar {
-    width: 180px;
-    background-color: #333;
-    color: white;
-    padding: 15px;
-    position: fixed;
-    top: 0;
-    left: 0;
-    height: 100%;
-    overflow-y: auto;
-    transition: transform 0.3s ease-in-out;
-    z-index: 1000;
-}
-
-
-.sidebar-header {
-    margin-bottom: 15px;
-}
-
-.sidebar a, .dropdown-btn {
-    display: block;
-    color: white;
-    padding: 10px;
-    text-decoration: none;
-    margin-bottom: 5px;
-    font-size: 16px;
-}
-
-.sidebar a:hover, .sidebar a.active, .dropdown-btn:hover {
-    background-color: #555;
-}
-
-.dropdown-btn {
-    background-color: #333;
-    border: none;
-    cursor: pointer;
-    text-align: left;
-    outline: none;
-    position: relative;
-    width: 100%;
-}
-
-.dropdown-btn .arrow {
-    float: right;
-    transition: transform 0.3s;
-}
-
-.dropdown-btn.active .arrow {
-    transform: rotate(180deg);
-}
-
-.dropdown-container {
-    display: none;
-    background-color: #444;
-    padding-left: 8px;
-}
-
-.dropdown-container.show {
-    display: block;
-}
-
-/* Hamburger menu styles */
-.hamburger {
-    display: none;
-    position: fixed;
-    top: 10px;
-    left: 10px;
-    font-size: 24px;
-    cursor: pointer;
-    z-index: 1100;
-    background: none;
-    border: none;
-    color: #333;
-}
-
-.bar {
-    display: block;
-    width: 25px;
-    height: 3px;
-    margin: 5px auto;
-    transition: all 0.3s ease-in-out;
-    background-color: #2c3e50;
 }
 
 /* Responsive styles */
@@ -345,7 +452,6 @@ h2 {
         display: block;
     }
 
-
     .greenhouse {
         max-width: 100%;
     }
@@ -354,45 +460,47 @@ h2 {
         width: 40px;
         height: 40px;
     }
+
     .node.node1 {
         top: 62%;
         left: 16%;
         width: 97px;
         height: 128px;
     }
-    
+
     .node.node2 {
         top: 62%;
         left: 53%;
         width: 93px;
         height: 130px;
     }
-    
+
     .node.node3 { 
         top: 41%; 
         width: 80px;
         height: 85px;
         left: 21%;
     }
-    
+
     .node.node4 {
         top: 40%; 
         left: 53%; 
         height: 90px;
         width: 79px;
     }
-    
+
     .node.node5 { 
-    top: 23%; 
-    left: 24%;
-    height: 68px;
-    width: 67px;
-    
+        top: 23%; 
+        left: 24%;
+        height: 68px;
+        width: 67px;
     }
-    .node.node6 { top: 22%; 
+
+    .node.node6 { 
+        top: 22%; 
         left: 51%; 
         height: 77px;
-    width: 72px;
+        width: 72px;
     }
 
     .popup {
@@ -404,4 +512,44 @@ h2 {
 .sidebar a.dimmed {
     color: #888;
     pointer-events: none;
+}
+
+/* Animation for node1 */
+@keyframes moveToNode1 {
+    0% {
+        transform: translateX(0) translateY(0);
+    }
+    100% {
+        transform: translateX(300px) translateY(100px) scale(2);
+    }
+}
+
+.node {
+    cursor: pointer;
+    transition: transform 0.5s ease;
+}
+
+.node:hover {
+    transform: scale(1.1);
+}
+
+.node.node1.active {
+    animation: moveToNode1 0.5s forwards;
+}
+
+/* Hover effect for widgets */
+.widget:hover .gauge-container {
+    animation: pulse 1s infinite;
+}
+
+@keyframes pulse {
+    0% {
+        transform: scale(1);
+    }
+    50% {
+        transform: scale(1.05);
+    }
+    100% {
+        transform: scale(1);
+    }
 }
