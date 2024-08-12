@@ -30,7 +30,7 @@
         <a href="#" class="dimmed">Bay 9</a>
         <a href="#" class="dimmed">Bay 10</a>
         <a href="log.html">Log</a>
-        <a href="#">Settings</a>
+        <a href="settings.html">Settings</a>
     </div>
 
     <div class="main-content">
@@ -78,60 +78,21 @@
             </div>
         </div>
 
-        <div class="set-values">
-            <h2>Set Values</h2>
-            <div class="set-values-container">
-                <div class="set-value-widget">
-                    <h3>Soil Moisture</h3>
-                    <input type="text" class="large-inputbox" id="soil-moisture-input" placeholder="Enter value">
-                    <button class="set-button" id="set-soil-moisture">Set</button>
-                </div>
-                <div class="set-value-widget">
-                    <h3>Temperature</h3>
-                    <input type="text" class="large-inputbox" id="temperature-input" placeholder="Enter value">
-                    <button class="set-button" id="set-temperature">Set</button>
-                </div>
-                <div class="set-value-widget">
-                    <h3>Humidity</h3>
-                    <input type="text" class="large-inputbox" id="humidity-input" placeholder="Enter value">
-                    <button class="set-button" id="set-humidity">Set</button>
-                </div>
+        <button class="hamburger">☰</button>
+
+        
+        <div class="comment-section">
+            <h2>Comments</h2>
+            <div class="comment-form">
+                <textarea id="comment-input" placeholder="Enter your comment here..."></textarea>
+                <button id="post-comment" class="modern-button">Post Comment</button>
+
             </div>
+            
+            <div id="comments-container"></div>
+            <button id="delete-all-comments" class="modern-button">Delete All Comments</button>
         </div>
 
-        <div class="control-panel">
-            <h2>Control Panel</h2>
-            <div class="control-group-container" id="water">
-            
-                <div class="control-box">
-                    <h2>Water Control</h2>
-                    <div class="control-group">
-                        <h4>Water Valve 1</h4>
-                        <div class="button-group">
-                            <button class="modern-button">Auto</button>
-                            <button class="modern-button">On</button>
-                            <button class="modern-button">Off</button>
-                        </div>
-                    </div>
-                    <div class="control-group">
-                        <h4>Water Valve 2</h4>
-                        <div class="button-group">
-                            <button class="modern-button">Auto</button>
-                            <button class="modern-button">On</button>
-                            <button class="modern-button">Off</button>
-                        </div>
-                    </div>
-                    <div class="control-group">
-                        <h4>Water Valve 3</h4>
-                        <div class="button-group">
-                            <button class="modern-button">Auto</button>
-                            <button class="modern-button">On</button>
-                            <button class="modern-button">Off</button>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
 
         <div class="summary">
             <h2>Daily Summary</h2>
@@ -141,20 +102,21 @@
         </div>
     </div>
 
-    <button class="hamburger">☰</button>
+<button class="hamburger" id="sidebarToggle">☰</button>
 
     <div id="popup" class="popup">
         <div class="popup-content">
-            <p id="popup-message"></p>
-            <button id="popup-close">Close</button>
+          <p id="popup-message"></p>
+          <button id="popup-close">Close</button>
         </div>
-    </div>
+      </div>
 
     <script src="https://www.gstatic.com/firebasejs/9.6.10/firebase-app.js" type="module"></script>
     <script src="https://www.gstatic.com/firebasejs/9.6.10/firebase-database.js" type="module"></script>
 
     <!-- Chart.js -->
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    
     <script src="https://cdn.jsdelivr.net/npm/chartjs-adapter-date-fns/dist/chartjs-adapter-date-fns.bundle.min.js"></script>
 
     <!-- Your custom scripts -->
