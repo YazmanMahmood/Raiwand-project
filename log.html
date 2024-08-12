@@ -7,7 +7,7 @@
     <link rel="stylesheet" href="log.css">
 </head>
 <body>
-    <button class="hamburger">☰</button>
+    <button id="sidebarToggle" class="hamburger">☰</button>
 
     <div class="sidebar">
         <div class="sidebar-header">
@@ -41,24 +41,31 @@
 
     <div class="main-content">
         <div class="top-right">
-            <button class="history-button" id="set-values-button">Set Values History</button>
+            <button class="history-button">Set Values History</button>
         </div>
 
         <h1>Data Log</h1>
 
-        <table id="data-table">
-            <thead>
-                <tr>
-                    <th>Timestamp</th>
-                    <th>Temperature</th>
-                    <th>Soil Moisture</th>
-                    <th>Humidity</th>
-                </tr>
-            </thead>
-            <tbody id="log-table-body">
-                <!-- Table rows will be dynamically added here -->
-            </tbody>
-        </table>
+        <div class="table-container">
+            <table id="data-table">
+                <thead>
+                    <tr>
+                        <th>Timestamp</th>
+          <th>Temperature (°C)</th>
+          <th>Soil Moisture (%)</th>
+          <th>Humidity (%)</th>
+          <th>Battery (V)</th>
+          <th>DHT Check</th>
+          <th>Power Status</th>
+          <th>RSSI (dB)</th>
+          <th>Active</th>
+                    </tr>
+                </thead>
+                <tbody id="log-table-body">
+                    <!-- Table rows will be dynamically inserted here -->
+                </tbody>
+            </table>
+        </div>
     </div>
 
     <script type="module" src="log.js"></script>
