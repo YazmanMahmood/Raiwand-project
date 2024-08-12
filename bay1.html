@@ -7,13 +7,17 @@
     <link rel="stylesheet" href="bay1.css">
 </head>
 <body>
-    <button class="hamburger">☰</button>
+    <button class="hamburger">
+        <span class="bar"></span>
+        <span class="bar"></span>
+        <span class="bar"></span>
+    </button>
 
     <div class="sidebar">
         <div class="sidebar-header">
             <h2>Smart Agri</h2>
         </div>
-        <button class="dropdown-btn">Bay 1<span class="arrow">▼</span></button>
+        <button class="dropdown-btn">Bay 1-Nodes <span class="arrow">▼</span></button>
         <div class="dropdown-container">
             <a href="node1.html">Node 1</a>
             <a href="node2.html">Node 2</a>
@@ -43,7 +47,14 @@
             <div class="main-content" role="main">
                 <div class="greenhouse">
                     <img src="GreenHouseBay.png" alt="Greenhouse Bay" class="greenhouse-image">
-                    <div class="node node1"></div>
+                    <div class="node node1" onclick="navigateToNode1()">
+                        <div id="popup-node1" class="popup">
+                            <div class="popup-content">
+                                <div class="popup-arrow popup-arrow-right"></div>
+                                <div class="popup-text">Node 1</div>
+                            </div>
+                        </div>
+                    </div>
                     <div class="node node2"></div>
                     <div class="node node3"></div>
                     <div class="node node4"></div>
@@ -67,72 +78,99 @@
 
                 <div class="section average-measurements">
                     <h2>Average Measurements</h2>
-                    <div class="measurement-item">
-                        Temperature: <span id="avg-temperature">--</span>°C
-                    </div>
-                    <div class="measurement-item">
-                        Humidity: <span id="avg-humidity">--</span>%
-                    </div>
-                    <div class="measurement-item">
-                        Soil Moisture: <span id="avg-soil-moisture">--</span>%
-                    </div>
+                    <div class="measurement-item">Temperature: <span id="avg-temperature">--</span>°C</div>
+                    <div class="measurement-item">Humidity: <span id="avg-humidity">--</span>%</div>
+                    <div class="measurement-item">Soil Moisture: <span id="avg-soil-moisture">--</span>%</div>
                 </div>
 
                 <div class="section fan-controls">
                     <h2>Fan Controls</h2>
                     <div class="fan-control">
                         Fan 1:
-                        <button id="fan1-auto" class="fan-button">Auto: OFF</button>
+                        <button id="fan1-auto" class="fan-button">Auto</button>
                         <button id="fan1-on" class="fan-button">ON</button>
                         <button id="fan1-off" class="fan-button">OFF</button>
                     </div>
                     <div class="fan-control">
                         Fan 2:
-                        <button id="fan2-auto" class="fan-button">Auto: OFF</button>
+                        <button id="fan2-auto" class="fan-button">Auto</button>
                         <button id="fan2-on" class="fan-button">ON</button>
                         <button id="fan2-off" class="fan-button">OFF</button>
                     </div>
                     <div class="fan-control">
                         Fan 3:
-                        <button id="fan3-auto" class="fan-button">Auto: OFF</button>
+                        <button id="fan3-auto" class="fan-button">Auto</button>
                         <button id="fan3-on" class="fan-button">ON</button>
                         <button id="fan3-off" class="fan-button">OFF</button>
+                    </div>
+                </div>
+
+                <div class="section water-controls">
+                    <h2>Water Controls</h2>
+                    <div class="water-control">
+                        Valve:
+                        <button id="valve-auto" class="water-button">Auto</button>
+                        <button id="valve-on" class="water-button">ON</button>
+                        <button id="valve-off" class="water-button">OFF</button>
+                    </div>
+                </div>
+
+            
+
+                <div class="section set-values">
+                    <h2>Set Values</h2>
+                    <div class="set-value-widget">
+                        <h3>Soil Moisture</h3>
+                        <input type="number" id="soil-moisture-input" class="large-inputbox" placeholder="Set soil moisture">
+                        <button id="set-soil-moisture-btn" class="set-button">Set</button>
+                    </div>
+                    <div class="set-value-widget">
+                        <h3>Temperature</h3>
+                        <input type="number" id="temperature-input"class="large-inputbox" placeholder="Set temperature">
+                        <button id="set-temperature-btn" class="set-button">Set</button>
+                    </div>
+                    <div class="set-value-widget">
+                        <h3>Humidity</h3>
+                        <input type="number" id="humidity-input" class="large-inputbox" placeholder="Set humidity">
+                        <button id="set-humidity-btn" class="set-button">Set</button>
                     </div>
                 </div>
             </div>
         </div>
     </div>
 
+    <div id="set-value-popup" class="set-value-popup">
+        <div class="set-value-popup-content">
+            <span class="set-value-close">&times;</span>
+            <p id="set-value-message"></p>
+        </div>
+    </div>
+    
     <div id="popup-node1" class="popup">
         <div class="popup-arrow"></div>
         <div id="popup-content-node1" class="popup-content"></div>
     </div>
-
     <div id="popup-node2" class="popup">
         <div class="popup-arrow"></div>
         <div id="popup-content-node2" class="popup-content"></div>
     </div>
-
     <div id="popup-node3" class="popup">
         <div class="popup-arrow"></div>
         <div id="popup-content-node3" class="popup-content"></div>
     </div>
-
     <div id="popup-node4" class="popup">
         <div class="popup-arrow"></div>
         <div id="popup-content-node4" class="popup-content"></div>
     </div>
-
     <div id="popup-node5" class="popup">
         <div class="popup-arrow"></div>
         <div id="popup-content-node5" class="popup-content"></div>
     </div>
-
     <div id="popup-node6" class="popup">
         <div class="popup-arrow"></div>
         <div id="popup-content-node6" class="popup-content"></div>
     </div>
-
+    
     <script type="module" src="bay1.js"></script>
 </body>
 </html>
