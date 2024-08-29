@@ -8,7 +8,6 @@ const database = getDatabase(app);
 
 document.addEventListener('DOMContentLoaded', () => {
     const elements = {
-        hamburger: document.querySelector('.hamburger'),
         sidebar: document.querySelector('.sidebar'),
         mainContent: document.querySelector('.main-content'),
         popup: document.getElementById('popup'),
@@ -16,123 +15,95 @@ document.addEventListener('DOMContentLoaded', () => {
         popupClose: document.getElementById('popup-close'),
         nodes: document.querySelectorAll('.node'),
         fanStatusElement: document.getElementById('fan-status'),
-        dropdownBtns: document.querySelectorAll('.dropdown-btn')
+        waterFlowStatusElement: document.getElementById('water-flow-status'),
+        dropdownBtns: document.querySelectorAll('.dropdown-btn'),
+        sidePanelSections: document.querySelectorAll('.side-panel .section'),
+        settingsLink: document.querySelector('a[href="settings.html"]'),
+        errorBox: document.getElementById('error-box'),
+        errorMessage: document.getElementById('error-message'),
+        mobileToggle: document.querySelector('.mobile-toggle'),
+        avgTemperature: document.getElementById('avg-temperature'),
+        avgHumidity: document.getElementById('avg-humidity'),
+        avgSoilMoisture: document.getElementById('avg-soil-moisture'),
+        hamburger: document.getElementById('hamburger-btn'),
+        lastReading: document.getElementById('last-reading'),
+        commentInput: document.getElementById('comment-input'),
+        postCommentBtn: document.getElementById('post-comment'),
+        commentsContainer: document.getElementById('comments-container'),
+        deleteAllCommentsBtn: document.getElementById('delete-all-comments'),
     };
 
-    // Check if popup close button exists before adding event listener
-    if (elements.popupClose) {
-        elements.popupClose.addEventListener('click', hidePopup);
-    }
+    // Sidebar functionality
+    elements.hamburger.addEventListener('click', (e) => {
+        e.stopPropagation();
+        elements.hamburger.classList.toggle('active');
+        elements.sidebar.classList.toggle('open');
+        elements.mainContent.classList.toggle('shifted');
+    });
 
-    // Define showPopup and hidePopup functions
-    function showPopup(message) {
-        if (elements.popup && elements.popupMessage) {
-            elements.popupMessage.textContent = message;
-            elements.popup.style.display = 'block';
-            setTimeout(() => {
-                elements.popup.classList.add('show');
-            }, 10);
-        } else {
-            console.warn('Popup elements not found');
-        }
-    }
+    // Close sidebar when clicking outside
+    document.addEventListener('click', (event) => {
+        const isSidebarOpen = elements.sidebar.classList.contains('open');
+        const clickedInsideSidebar = elements.sidebar.contains(event.target);
+        const clickedHamburger = elements.hamburger.contains(event.target);
 
-    function hidePopup() {
-        if (elements.popup) {
-            elements.popup.classList.remove('show');
-            setTimeout(() => {
-                elements.popup.style.display = 'none';
-            }, 300);
+        if (isSidebarOpen && !clickedInsideSidebar && !clickedHamburger) {
+            elements.hamburger.classList.remove('active');
+            elements.sidebar.classList.remove('open');
+            elements.mainContent.classList.remove('shifted');
         }
-    }
+    });
+
+    // Prevent sidebar from closing when clicking inside it
+    elements.sidebar.addEventListener('click', (e) => {
+        e.stopPropagation();
+    });
 
     // Dropdown functionality for sidebar
-    if (elements.dropdownBtns.length > 0) {
-        elements.dropdownBtns.forEach((dropdownBtn) => {
-            dropdownBtn.addEventListener('click', function(e) {
-                e.stopPropagation();
-                this.classList.toggle('active');
-                const dropdownContainer = this.nextElementSibling;
-                if (dropdownContainer) {
-                    dropdownContainer.style.maxHeight = dropdownContainer.style.maxHeight ? null : dropdownContainer.scrollHeight + "px";
-                }
-            });
+    elements.dropdownBtns.forEach((dropdownBtn) => {
+        dropdownBtn.addEventListener('click', function (e) {
+            e.stopPropagation();
+            this.classList.toggle('active');
+            const dropdownContainer = this.nextElementSibling;
+            if (dropdownContainer.style.maxHeight) {
+                dropdownContainer.style.maxHeight = null;
+            } else {
+                dropdownContainer.style.maxHeight = dropdownContainer.scrollHeight + 'px';
+            }
         });
+    });
 
-        // Close dropdowns when clicking outside
-        document.addEventListener("click", function(event) {
-            if (!event.target.matches('.dropdown-btn')) {
-                const dropdowns = document.getElementsByClassName("dropdown-container");
-                for (let i = 0; i < dropdowns.length; i++) {
-                    const openDropdown = dropdowns[i];
+    // Close dropdowns when clicking outside
+    document.addEventListener('click', function (event) {
+        if (!event.target.matches('.dropdown-btn')) {
+            const dropdowns = document.getElementsByClassName('dropdown-container');
+            for (let i = 0; i < dropdowns.length; i++) {
+                const openDropdown = dropdowns[i];
+                if (openDropdown.style.maxHeight) {
                     openDropdown.style.maxHeight = null;
-                    if (openDropdown.previousElementSibling) {
-                        openDropdown.previousElementSibling.classList.remove('active');
-                    }
+                    openDropdown.previousElementSibling.classList.remove('active');
                 }
             }
-        });
-    } else {
-        console.warn('No dropdown buttons found');
-    }
-
-    // Firebase node references
-    const nodeRefs = {
-        node1: {
-            temperature: ref(database, 'bay 1/node 1/temperature'),
-            humidity: ref(database, 'bay 1/node 1/humidity'),
-            soilMoisture: ref(database, 'bay 1/node 1/soil_moisture'),
-            lastReading: ref(database, 'bay 1/node 1/last_reading')
-        },
-        node2: {
-            temperature: ref(database, 'bay 1/node 2/temperature'),
-            humidity: ref(database, 'bay 1/node 2/humidity'),
-            soilMoisture: ref(database, 'bay 1/node 2/soil_moisture'),
-            lastReading: ref(database, 'bay 1/node 2/last_reading')
-        },
-        node3: {
-            temperature: ref(database, 'bay 1/node 3/temperature'),
-            humidity: ref(database, 'bay 1/node 3/humidity'),
-            soilMoisture: ref(database, 'bay 1/node 3/soil_moisture'),
-            lastReading: ref(database, 'bay 1/node 3/last_reading')
-        },
-        node4: {
-            temperature: ref(database, 'bay 1/node 4/temperature'),
-            humidity: ref(database, 'bay 1/node 4/humidity'),
-            soilMoisture: ref(database, 'bay 1/node 4/soil_moisture'),
-            lastReading: ref(database, 'bay 1/node 4/last_reading')
-        },
-        node5: {
-            temperature: ref(database, 'bay 1/node 5/temperature'),
-            humidity: ref(database, 'bay 1/node 5/humidity'),
-            soilMoisture: ref(database, 'bay 1/node 5/soil_moisture'),
-            lastReading: ref(database, 'bay 1/node 5/last_reading')
-        },
-        node6: {
-            temperature: ref(database, 'bay 1/node 6/temperature'),
-            humidity: ref(database, 'bay 1/node 6/humidity'),
-            soilMoisture: ref(database, 'bay 1/node 6/soil_moisture'),
-            lastReading: ref(database, 'bay 1/node 6/last_reading')
         }
-    };
+    });
 
-    // Toggle sidebar and hamburger button
-    if (elements.hamburger && elements.sidebar && elements.mainContent) {
-        elements.hamburger.addEventListener('click', () => {
-            elements.sidebar.classList.toggle('open');
-            elements.mainContent.classList.toggle('shifted');
-        });
+    function adjustForMobile() {
+        const isMobile = window.innerWidth <= 768;
+        document.body.classList.toggle('mobile', isMobile);
 
-        // Close sidebar when clicking outside
-        document.addEventListener('click', (event) => {
-            if (!elements.sidebar.contains(event.target) && !elements.hamburger.contains(event.target)) {
-                elements.sidebar.classList.remove('open');
-                elements.mainContent.classList.remove('shifted');
-            }
-        });
+        if (isMobile) {
+            elements.sidebar.style.width = '0';
+            elements.mainContent.style.marginLeft = '0';
+        } else {
+            elements.sidebar.style.width = '200px';
+            elements.mainContent.style.marginLeft = '240px';
+        }
     }
 
-    // Fan control functionality
+    window.addEventListener('resize', adjustForMobile);
+    adjustForMobile(); // Call once on load
+
+    // Existing functionality for fan controls, water controls, and other features from bay1.js...
     const fanControls = ['fan1', 'fan2', 'fan3'].map(fanId => ({
         auto: document.getElementById(`${fanId}-auto`),
         on: document.getElementById(`${fanId}-on`),
@@ -140,54 +111,13 @@ document.addEventListener('DOMContentLoaded', () => {
         status: 'OFF'
     })).filter(control => control.auto && control.on && control.off);
 
-    function updateFanButton(fanControl) {
-        fanControl.auto.classList.toggle('active', fanControl.status === 'Auto');
-        fanControl.on.classList.toggle('active', fanControl.status === 'On');
-        fanControl.off.classList.toggle('active', fanControl.status === 'Off');
-    }
+    const waterControls = ['valve1', 'valve2', 'valve3'].map(valveId => ({
+        auto: document.getElementById(`${valveId}-auto`),
+        on: document.getElementById(`${valveId}-on`),
+        off: document.getElementById(`${valveId}-off`),
+        status: 'OFF'
+    })).filter(control => control.auto && control.on && control.off);
 
-    function setFanState(fanId, status) {
-        const fanRef = ref(database, `bay 1/controls/${fanId}`);
-        set(fanRef, status);
-    }
-
-    fanControls.forEach((fanControl, index) => {
-        const fanId = `fan${index + 1}`;
-
-        fanControl.auto.addEventListener('click', () => {
-            setFanState(fanId, 'Auto');
-        });
-
-        fanControl.on.addEventListener('click', () => {
-            setFanState(fanId, 'On');
-        });
-
-        fanControl.off.addEventListener('click', () => {
-            setFanState(fanId, 'Off');
-        });
-
-        // Set up Firebase listeners for fan states
-        const fanRef = ref(database, `bay 1/controls/${fanId}`);
-        onValue(fanRef, (snapshot) => {
-            const status = snapshot.val() || 'Off';
-            fanControl.status = status;
-            updateFanButton(fanControl);
-            updateFanStatus();
-        });
-    });
-
-    // Function to update the fan status display
-    function updateFanStatus() {
-        if (elements.fanStatusElement) {
-            elements.fanStatusElement.innerHTML = ''; // Clear previous status
-            fanControls.forEach((fanControl, index) => {
-                const statusText = `Fan ${index + 1}: ${fanControl.status}`;
-                elements.fanStatusElement.innerHTML += (index > 0 ? '<br>' : '') + statusText;
-            });
-        }
-    }
-
-    // Set values functionality
     const setValueInputs = {
         soilMoisture: document.getElementById('soil-moisture-input'),
         temperature: document.getElementById('temperature-input'),
@@ -200,29 +130,151 @@ document.addEventListener('DOMContentLoaded', () => {
         humidity: document.getElementById('set-humidity-btn')
     };
 
-    // Filter out any undefined elements
-    Object.keys(setValueInputs).forEach(key => {
-        if (!setValueInputs[key]) delete setValueInputs[key];
+    function adjustSidePanelHeights() {
+        elements.sidePanelSections.forEach(section => {
+            const title = section.querySelector('h2');
+            const content = section.querySelector('.status-item, .measurement-item, .fan-control, .water-control, .set-value-widget');
+            if (title && content) {
+                section.style.minHeight = `${title.offsetHeight + content.offsetHeight + 40}px`;
+            }
+        });
+    }
+
+    function showPopup(message) {
+        if (elements.popup && elements.popupMessage) {
+            elements.popupMessage.textContent = message;
+            elements.popup.style.display = 'block';
+            setTimeout(() => elements.popup.classList.add('show'), 10);
+        }
+    }
+
+    function hidePopup() {
+        if (elements.popup) {
+            elements.popup.classList.remove('show');
+            setTimeout(() => elements.popup.style.display = 'none', 0);
+        }
+    }
+
+    function showError(message) {
+        elements.errorMessage.innerHTML = message;
+        elements.errorBox.style.display = 'block';
+    }
+
+    function hideError() {
+        elements.errorBox.style.display = 'none';
+    }
+
+    function checkForErrors(data) {
+        const errorCodes = {
+            '001': { message: 'Power supply loss', color: '#FF9800' },
+            '002': { message: 'DHT sensor down', color: '#F44336' },
+            '003': { message: 'Battery low', color: '#FFC107' },
+            '004': { message: 'Connection lost', color: '#9C27B0' },
+            '005': { message: 'Sensor + low battery', color: '#E91E63' },
+            '006': { message: 'Sensor + power supply', color: '#673AB7' },
+            '007': { message: 'Low battery + power supply', color: '#3F51B5' },
+            '008': { message: 'Sensor + battery + power supply', color: '#2196F3' }
+        };
+
+        const allErrorMessages = Object.entries(data).reduce((acc, [nodeName, nodeData]) => {
+            if (nodeData && nodeName.startsWith('node ')) {
+                const nodeErrors = [];
+                if (nodeData.Power_1_status === 0 && nodeData.DHT_check === 0 && nodeData.Battery === 0) nodeErrors.push('008');
+                else if (nodeData.Battery === 0 && nodeData.Power_1_status === 0) nodeErrors.push('007');
+                else if (nodeData.DHT_check === 0 && nodeData.Power_1_status === 0) nodeErrors.push('006');
+                else if (nodeData.DHT_check === 0 && nodeData.Battery === 0) nodeErrors.push('005');
+                else if (nodeData.active === 0) nodeErrors.push('004');
+                else if (nodeData.Battery === 0) nodeErrors.push('003');
+                else if (nodeData.DHT_check === 0) nodeErrors.push('002');
+                else if (nodeData.Power_1_status === 0) nodeErrors.push('001');
+
+                if (nodeErrors.length) {
+                    const errorLinks = nodeErrors.map(code =>
+                        `<a href="${nodeName.replace(' ', '')}.html" style="color: ${errorCodes[code].color};">Error: ${code}</a>`
+                    );
+                    acc.push(`<strong>${nodeName.charAt(0).toUpperCase() + nodeName.slice(1)}</strong>: ${errorLinks.join(', ')}`);
+                }
+            }
+            return acc;
+        }, []);
+
+        allErrorMessages.length ? showError(allErrorMessages.join('<br><br>')) : hideError();
+    }
+
+    function updateFanButton(fanControl) {
+        ['auto', 'on', 'off'].forEach(state => 
+            fanControl[state].classList.toggle('active', fanControl.status.toLowerCase() === state));
+    }
+
+    function setFanState(fanId, status) {
+        const fanRef = ref(database, `bay 1/controls/${fanId}`);
+        set(fanRef, status).catch((error) => handleError(error, `setting fan state for ${fanId}`));
+    }
+
+    fanControls.forEach((fanControl, index) => {
+        const fanId = `fan${index + 1}`;
+        ['auto', 'on', 'off'].forEach(state => {
+            fanControl[state].addEventListener('click', () => setFanState(fanId, state.charAt(0).toUpperCase() + state.slice(1)));
+        });
+
+        const fanRef = ref(database, `bay 1/controls/${fanId}`);
+        onValue(fanRef, (snapshot) => {
+            fanControl.status = snapshot.val() || 'Off';
+            updateFanButton(fanControl);
+            updateFanStatus();
+        });
     });
 
-    Object.keys(setValueButtons).forEach(key => {
-        if (!setValueButtons[key]) delete setValueButtons[key];
-    });
+    function updateFanStatus() {
+        if (elements.fanStatusElement) {
+            elements.fanStatusElement.innerHTML = fanControls.map((fanControl, index) => 
+                `Fan ${index + 1}: ${fanControl.status}`).join('<br>');
+        }
+    }
+
+    function updateWaterFlowStatus() {
+        const waterFlowRef = ref(database, 'bay 1/controls/water_flow');
+        onValue(waterFlowRef, (snapshot) => {
+            if (elements.waterFlowStatusElement) {
+                elements.waterFlowStatusElement.textContent = snapshot.val() || 'OFF';
+            }
+        });
+    }
 
     function setValueForBay(valueType, value) {
-        const setValueRef = ref(database, `bay 1/set values/${valueType}`);
+        const setValuePaths = {
+            soilMoisture: 'bay 1/set values/soil_moisture',
+            temperature: 'bay 1/set values/temperature',
+            humidity: 'bay 1/set values/humidity'
+        };
+
+        const path = setValuePaths[valueType] || `bay 1/set values/${valueType}`;
+        const setValueRef = ref(database, path);
+
         set(setValueRef, value)
             .then(() => {
                 showPopup(`${valueType.charAt(0).toUpperCase() + valueType.slice(1)} set to ${value} for Bay 1`);
                 if (setValueInputs[valueType]) {
-                    setValueInputs[valueType].value = value; // Update the input box with the new value
+                    setValueInputs[valueType].value = value;
                 }
             })
             .catch((error) => {
-                console.error(`Error setting ${valueType}:`, error);
+                handleError(error, `setting ${valueType}`);
                 showPopup(`Error setting ${valueType}. Please try again.`);
             });
     }
+
+    function fetchAndDisplaySoilMoisture() {
+        const soilMoistureRef = ref(database, 'bay 1/set values/soil_moisture');
+        onValue(soilMoistureRef, (snapshot) => {
+            const value = snapshot.val();
+            if (value !== null && setValueInputs.soilMoisture) {
+                setValueInputs.soilMoisture.value = value;
+            }
+        });
+    }
+
+    fetchAndDisplaySoilMoisture();
 
     Object.keys(setValueButtons).forEach(valueType => {
         if (setValueButtons[valueType] && setValueInputs[valueType]) {
@@ -235,7 +287,6 @@ document.addEventListener('DOMContentLoaded', () => {
                 }
             });
 
-            // Set up Firebase listeners for set values
             const setValueRef = ref(database, `bay 1/set values/${valueType}`);
             onValue(setValueRef, (snapshot) => {
                 const value = snapshot.val();
@@ -246,40 +297,29 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     });
 
-    // Function to show node-specific popup
     function showNodePopup(node, popup) {
-        if (popup) {
-            popup.style.display = 'block';
-
+        if (popup && node) {
             const rect = node.getBoundingClientRect();
             const popupRect = popup.getBoundingClientRect();
-            let top, left;
 
-            if (window.innerWidth <= 768) {
-                top = rect.bottom + window.scrollY + 10;
-                left = Math.max(10, Math.min(window.innerWidth - popupRect.width - 10, rect.left));
-            } else {
-                top = rect.top + window.scrollY + rect.height / 2 - popupRect.height / 2;
-                left = ['node1', 'node3', 'node5'].includes(node.classList[1]) ?
-                    rect.left - popupRect.width - 15 :
-                    rect.right + 15;
-            }
+            const isLeftSide = ['node1', 'node3', 'node5'].includes(node.classList[1]);
+            const top = Math.max(10, rect.top + window.scrollY + rect.height / 2 - popupRect.height / 2);
+            const left = Math.max(10, isLeftSide ? rect.left - popupRect.width - 15 : rect.right + 15);
 
             popup.style.top = `${top}px`;
             popup.style.left = `${left}px`;
 
-            setTimeout(() => {
-                popup.classList.add('show');
-            }, 10);
+            popup.style.display = 'block';
+            setTimeout(() => popup.classList.add('show'), 10);
+        } else {
+            console.error("Popup or node not found:", node, popup);
         }
     }
 
     function hideNodePopup(popup) {
         if (popup) {
             popup.classList.remove('show');
-            setTimeout(() => {
-                popup.style.display = 'none';
-            }, 300);
+            setTimeout(() => popup.style.display = 'none', 100); // Hide after 100ms on mouse leave
         }
     }
 
@@ -288,20 +328,24 @@ document.addEventListener('DOMContentLoaded', () => {
             const popupContent = popup.querySelector('.popup-content');
             if (popupContent) {
                 popupContent.innerHTML = '';
-
-                const nodeData = ['temperature', 'humidity', 'soilMoisture', 'lastReading'];
-                nodeData.forEach(type => {
-                    const dataRef = ref(database, `bay 1/${nodeId}/${type}`);
+                const nodeNumber = nodeId.replace('node', '');
+                ['temperature', 'humidity', 'soil_moisture'].forEach(type => {
+                    const dataRef = ref(database, `bay 1/node ${nodeNumber}/${type}`);
                     onValue(dataRef, snapshot => {
                         const value = snapshot.val();
-                        popupContent.innerHTML += `<p><strong>${type.charAt(0).toUpperCase() + type.slice(1)}:</strong> ${value}</p>`;
+                        let displayValue = value !== null ? value.toFixed(2) : 'N/A';
+                        if (type === 'temperature') {
+                            displayValue += '°C';
+                        } else if (type === 'humidity' || type === 'soil_moisture') {
+                            displayValue += '%';
+                        }
+                        popupContent.innerHTML += `<p><strong>${type.charAt(0).toUpperCase() + type.slice(1)}:</strong> ${displayValue}</p>`;
                     });
                 });
             }
         }
     }
 
-    // Function to handle interaction with nodes
     function handleNodeInteraction(nodeId) {
         const node = document.querySelector(`.node.${nodeId}`);
         const popup = document.getElementById(`popup-${nodeId}`);
@@ -318,67 +362,51 @@ document.addEventListener('DOMContentLoaded', () => {
 
             node.addEventListener('click', (event) => {
                 event.preventDefault();
-                const nodeNumber = nodeId.replace('node', '');
-                window.location.href = `node${nodeNumber}.html`;
+                window.location.href = `${nodeId}.html`;
+            });
+        } else {
+            console.error(`Node or popup not found for ${nodeId}`);
+        }
+    }
+
+    function initializeAllPopups() {
+        for (let i = 1; i <= 6; i++) {
+            handleNodeInteraction(`node${i}`);
+        }
+    }
+
+    function updateAverageMeasurements() {
+        const total = { temperature: 0, humidity: 0, soilMoisture: 0 };
+        let count = 0;
+
+        for (let i = 1; i <= 6; i++) {
+            const nodePath = `bay 1/node ${i}`;
+            ['temperature', 'humidity', 'soil_moisture'].forEach(type => {
+                const dataRef = ref(database, `${nodePath}/${type}`);
+                onValue(dataRef, (snapshot) => {
+                    const value = parseFloat(snapshot.val());
+                    if (!isNaN(value)) {
+                        total[type] += value;
+                        count++;
+                    }
+
+                    if (count > 0) {
+                        const avgValue = (total[type] / count).toFixed(2);
+                        const avgElement = document.getElementById(`avg-${type.replace('_', '-')}`);
+                        if (avgElement) {
+                            avgElement.textContent = `${avgValue}${type === 'temperature' ? '°C' : '%'}`;
+                        }
+                    }
+                });
             });
         }
     }
 
-    // Initialize all node interactions
-    if (elements.nodes) {
-        elements.nodes.forEach(node => {
-            const nodeId = node.classList[1];
-            handleNodeInteraction(nodeId);
-        });
-    }
-
-    // Update average measurements for Bay 1
-    function updateAverageMeasurements() {
-        // References to the Firebase database paths
-        const averageRefs = {
-            temperature: ref(database, 'bay 1/Average/Temperature'),
-            humidity: ref(database, 'bay 1/Average/Humidity'),
-            soilMoisture: ref(database, 'bay 1/Average/Soil_moisture')
-        };
-
-        // Update the DOM elements with the average values from Firebase
-        onValue(averageRefs.temperature, (snapshot) => {
-            const avgTemperature = snapshot.val();
-            const avgTempElement = document.getElementById('avg-temperature');
-            if (avgTempElement) {
-                avgTempElement.textContent = avgTemperature.toFixed(1);
-            }
-            controlFansAutomatically(parseFloat(avgTemperature));
-        });
-
-        onValue(averageRefs.humidity, (snapshot) => {
-            const avgHumidity = snapshot.val();
-            const avgHumidityElement = document.getElementById('avg-humidity');
-            if (avgHumidityElement) {
-                avgHumidityElement.textContent = avgHumidity.toFixed(1);
-            }
-        });
-
-        onValue(averageRefs.soilMoisture, (snapshot) => {
-            const avgSoilMoisture = snapshot.val();
-            const avgSoilMoistureElement = document.getElementById('avg-soil-moisture');
-            if (avgSoilMoistureElement) {
-                avgSoilMoistureElement.textContent = avgSoilMoisture.toFixed(1);
-            }
-        });
-    }
-
-
-    // Function to control fans automatically based on average temperature
     function controlFansAutomatically(temperature) {
         fanControls.forEach((fanControl, index) => {
             if (fanControl.status === 'Auto') {
                 let newState = 'Auto';
-                if (temperature > 28) {
-                    newState = 'On';
-                } else if (temperature > 25 && index < 2) {
-                    newState = 'On';
-                } else if (temperature > 22 && index === 0) {
+                if (temperature > 28 || (temperature > 25 && index < 2) || (temperature > 22 && index === 0)) {
                     newState = 'On';
                 }
                 if (newState !== fanControl.status && newState !== 'Auto') {
@@ -388,11 +416,93 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
-    // Initialize all necessary interactions and updates
-    
-    updateAverageMeasurements();
-updateFanStatus();
+    function initializeWaterControls() {
+        waterControls.forEach((control, index) => {
+            const valveId = `valve${index + 1}`;
 
-    // Periodically update average measurements
-    setInterval(updateAverageMeasurements, 10000);
+            ['auto', 'on', 'off'].forEach(state => {
+                control[state].addEventListener('click', () => setWaterState(valveId, state.charAt(0).toUpperCase() + state.slice(1)));
+            });
+
+            const valveRef = ref(database, `bay 1/controls/${valveId}`);
+            onValue(valveRef, (snapshot) => {
+                control.status = snapshot.val() || 'Off';
+                updateWaterButton(control);
+                updateWaterFlowStatus();
+            });
+        });
+    }
+
+    function setWaterState(valveId, status) {
+        const valveRef = ref(database, `bay 1/controls/${valveId}`);
+        set(valveRef, status).catch((error) => handleError(error, `setting water state for ${valveId}`));
+    }
+
+    function updateWaterButton(control) {
+        ['auto', 'on', 'off'].forEach(state => 
+            control[state].classList.toggle('active', control.status.toLowerCase() === state));
+    }
+
+    function adjustTextSizes() {
+        elements.sidePanelSections.forEach(container => {
+            const containerWidth = container.offsetWidth;
+            const containerHeight = container.offsetHeight;
+            const fontSize = Math.min(containerWidth * 0.05, containerHeight * 0.1);
+            container.style.fontSize = `${fontSize}px`;
+        });
+    }
+
+    function handleError(error, context) {
+        console.error(`Error in ${context}:`, error);
+        showPopup(`An error occurred while ${context}. Please try again or contact support.`);
+    }
+
+    function initializeFirebaseListeners() {
+        const bayRef = ref(database, 'bay 1');
+        onValue(bayRef, (snapshot) => {
+            const data = snapshot.val();
+            if (data) {
+                checkForErrors(data);
+                updateAverageMeasurements();
+                controlFansAutomatically(data.temperature);
+            }
+        });
+    }
+
+    try {
+        adjustSidePanelHeights();
+        initializeWaterControls();
+        adjustForMobile();
+        initializeAllPopups();
+        updateAverageMeasurements();
+        initializeFirebaseListeners();
+
+        window.addEventListener('resize', adjustSidePanelHeights);
+        window.addEventListener('resize', adjustForMobile);
+        window.addEventListener('resize', adjustTextSizes);
+        window.addEventListener('load', adjustTextSizes);
+
+        if (elements.settingsLink) {
+            elements.settingsLink.addEventListener('click', (event) => {
+                event.preventDefault();
+                window.location.href = 'settings.html';
+            });
+        }
+
+        if (elements.popupClose) {
+            elements.popupClose.addEventListener('click', hidePopup);
+        }
+
+        if (elements.mobileToggle) {
+            elements.mobileToggle.addEventListener('click', () => {
+                elements.sidebar.classList.toggle('active');
+                const isSidebarActive = elements.sidebar.classList.contains('active');
+                elements.sidebar.style.width = isSidebarActive ? '50%' : '0';
+                elements.mainContent.style.marginLeft = isSidebarActive ? '50%' : '0';
+            });
+        }
+
+    } catch (error) {
+        handleError(error, 'initializing the application');
+    }
 });
