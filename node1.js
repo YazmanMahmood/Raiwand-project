@@ -1,5 +1,5 @@
 import { initializeApp } from 'https://www.gstatic.com/firebasejs/9.6.10/firebase-app.js';
-import { getDatabase, ref, set, onValue, get, off, remove } from 'https://www.gstatic.com/firebasejs/9.6.10/firebase-database.js';
+import { getDatabase, ref, onValue, off, remove, get, set } from 'https://www.gstatic.com/firebasejs/9.6.10/firebase-database.js';
 import { firebaseConfig } from './firebase-config.js';
 
 // Initialize Firebase
@@ -8,7 +8,7 @@ const database = getDatabase(app);
 
 const debounce = (func, wait) => {
   let timeout;
-  return function(...args) {
+  return function (...args) {
     clearTimeout(timeout);
     timeout = setTimeout(() => func(...args), wait);
   };
@@ -22,34 +22,36 @@ document.addEventListener('DOMContentLoaded', () => {
     container: document.querySelector('.container'),
     dropdownBtns: document.querySelectorAll('.dropdown-btn'),
     lastReading: document.getElementById('last-reading'),
-
+    errorDisplay: document.getElementById('error-display'),
     popupMessage: document.getElementById('popup-message'),
     popupClose: document.getElementById('popup-close'),
     chartContainer: document.getElementById('summary-chart-container'),
     gauges: {
       temperature: document.getElementById('temperature-gauge'),
       soilMoisture: document.getElementById('soil-moisture-gauge'),
-      humidity: document.getElementById('humidity-gauge')
+      humidity: document.getElementById('humidity-gauge'),
     },
     values: {
       temperature: document.getElementById('temperature-value'),
       soilMoisture: document.getElementById('soil-moisture-value'),
-      humidity: document.getElementById('humidity-value')
+      humidity: document.getElementById('humidity-value'),
     },
     textboxes: {
       temperature: document.getElementById('temperature-value-textbox'),
       soilMoisture: document.getElementById('soil-moisture-value-textbox'),
-      humidity: document.getElementById('humidity-value-textbox')
+      humidity: document.getElementById('humidity-value-textbox'),
     },
     setValues: {
       temperature: document.getElementById('temperature-set-value'),
       soilMoisture: document.getElementById('soil-moisture-set-value'),
-      humidity: document.getElementById('humidity-set-value')
+      humidity: document.getElementById('humidity-set-value'),
     },
     commentInput: document.getElementById('comment-input'),
     postCommentBtn: document.getElementById('post-comment'),
     commentsContainer: document.getElementById('comments-container'),
-    deleteAllCommentsBtn: document.getElementById('delete-all-comments')
+    deleteAllCommentsBtn: document.getElementById('delete-all-comments'),
+    errorBox: document.getElementById('error-box'),
+    errorMessage: document.getElementById('error-message'),
   };
 
   let nodeRef, setValuesRef, commentsRef;
@@ -68,6 +70,7 @@ document.addEventListener('DOMContentLoaded', () => {
       const data = snapshot.val();
       if (data) {
         updateVisuals(data);
+        checkForErrors(data);
       }
     }, (error) => {
       console.error('Error fetching node data:', error);
@@ -77,13 +80,7 @@ document.addEventListener('DOMContentLoaded', () => {
     onValue(setValuesRef, (snapshot) => {
       const setValues = snapshot.val();
       if (setValues) {
-        updateSetValueIndicator('temperature', setValues.temperature, 0, 100);
-        updateSetValueIndicator('soilMoisture', setValues.soil_moisture, 0, 100);
-        updateSetValueIndicator('humidity', setValues.humidity, 0, 100);
-        
-        document.getElementById('temperature-input').value = setValues.temperature || '';
-        document.getElementById('humidity-input').value = setValues.humidity || '';
-        document.getElementById('soil-moisture-input').value = setValues.soil_moisture || '';
+        updateSetValueIndicators(setValues);
       }
     }, (error) => {
       console.error('Error fetching set values:', error);
@@ -100,17 +97,17 @@ document.addEventListener('DOMContentLoaded', () => {
   };
 
   const loadInitialSetValues = () => {
-    get(setValuesRef).then((snapshot) => {
-      const setValues = snapshot.val();
-      if (setValues) {
-        document.getElementById('temperature-input').value = setValues.temperature || '';
-        document.getElementById('humidity-input').value = setValues.humidity || '';
-        document.getElementById('soil-moisture-input').value = setValues.soil_moisture || '';
-      }
-    }).catch((error) => {
-      console.error('Error fetching initial set values:', error);
-      showPopup('Error fetching initial values. Please refresh the page.');
-    });
+    get(setValuesRef)
+      .then((snapshot) => {
+        const setValues = snapshot.val();
+        if (setValues) {
+          updateSetValueIndicators(setValues);
+        }
+      })
+      .catch((error) => {
+        console.error('Error fetching initial set values:', error);
+        showPopup('Error fetching initial values. Please refresh the page.');
+      });
   };
 
   const updateGauge = (gaugeId, valueId, value, min, max, unit) => {
@@ -120,7 +117,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     if (gauge && valueDisplay && valueTextbox && value !== null) {
       const percentage = ((value - min) / (max - min)) * 100;
-      const dashOffset = 565.48 - (565.48 * percentage / 100);
+      const dashOffset = 565.48 - (565.48 * percentage) / 100;
       gauge.style.strokeDashoffset = dashOffset;
       const formattedValue = `${value.toFixed(1)}${unit}`;
       valueDisplay.textContent = formattedValue;
@@ -128,11 +125,17 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   };
 
+  const updateSetValueIndicators = (setValues) => {
+    updateSetValueIndicator('temperature', setValues.temperature, 0, 100);
+    updateSetValueIndicator('soilMoisture', setValues.soil_moisture, 0, 100);
+    updateSetValueIndicator('humidity', setValues.humidity, 0, 100);
+  };
+
   const updateSetValueIndicator = (gaugeId, value, min, max) => {
     const setValueGauge = elements.setValues[gaugeId];
     if (setValueGauge && value !== null) {
       const percentage = ((value - min) / (max - min)) * 100;
-      const dashOffset = 565.48 - (565.48 * percentage / 100);
+      const dashOffset = 565.48 - (565.48 * percentage) / 100;
       setValueGauge.style.strokeDashoffset = dashOffset;
     }
   };
@@ -140,15 +143,18 @@ document.addEventListener('DOMContentLoaded', () => {
   const updateLastReadingTime = () => {
     if (elements.lastReading) {
       const now = new Date();
-      const formattedDate = now.toLocaleString('en-GB', {
-        day: '2-digit',
-        month: '2-digit',
-        year: 'numeric',
-        hour: '2-digit',
-        minute: '2-digit',
-        second: '2-digit',
-        hour12: false
-      }).replace(/\//g, '/').replace(',', '');
+      const formattedDate = now
+        .toLocaleString('en-GB', {
+          day: '2-digit',
+          month: '2-digit',
+          year: 'numeric',
+          hour: '2-digit',
+          minute: '2-digit',
+          second: '2-digit',
+          hour12: false,
+        })
+        .replace(/\//g, '/')
+        .replace(',', '');
       elements.lastReading.textContent = formattedDate;
     }
   };
@@ -164,6 +170,34 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   }, 1000);
 
+  const showError = (message) => {
+    const errorLines = message.split(',').join('\n');
+    elements.errorMessage.textContent = errorLines;
+    elements.errorBox.style.display = 'block';
+  };
+  
+  const checkForErrors = (data) => {
+    let errorMessages = [];
+  
+    if (data.Power_1_status === 0) {
+      errorMessages.push('Error 001: Power supply loss');
+    }
+    if (data.DHT_check === 0) {
+      errorMessages.push('Error 002: DHT sensor down');
+    }
+    if (data.Battery === 0) {
+      errorMessages.push('Error 003: Battery low');
+    }
+    if (data.active === 0) {
+      errorMessages.push('Error 004: Connection lost');
+    }
+  
+    if (errorMessages.length > 0) {
+      showError(errorMessages.join(','));
+    } else {
+      hideError();
+    }
+  };
   // Sidebar functionality
   elements.hamburger.addEventListener('click', (e) => {
     e.stopPropagation();
@@ -252,48 +286,53 @@ document.addEventListener('DOMContentLoaded', () => {
   elements.postCommentBtn.addEventListener('click', () => {
     const commentText = elements.commentInput.value.trim();
     if (commentText) {
-      const comments = commentText.split('\n').filter(comment => comment.trim() !== '');
-      
-      get(commentsRef).then((snapshot) => {
-        const existingComments = snapshot.val() || {};
-        let nextIndex = 0;
-        while (existingComments.hasOwnProperty(nextIndex.toString())) {
-          nextIndex++;
-        }
+      const comments = commentText.split('\n').filter((comment) => comment.trim() !== '');
 
-        const updates = {};
-        comments.forEach((comment) => {
-          const now = new Date();
-          const timestamp = now.toLocaleString('en-GB', {
-            day: '2-digit',
-            month: '2-digit',
-            year: 'numeric',
-            hour: '2-digit',
-            minute: '2-digit',
-            second: '2-digit',
-            hour12: false
-          }).replace(/\//g, '/').replace(',', '');
+      get(commentsRef)
+        .then((snapshot) => {
+          const existingComments = snapshot.val() || {};
+          let nextIndex = 0;
+          while (existingComments.hasOwnProperty(nextIndex.toString())) {
+            nextIndex++;
+          }
 
-          updates[nextIndex.toString()] = {
-            text: comment.trim(),
-            timestamp: timestamp
-          };
-          nextIndex++;
-        });
+          const updates = {};
+          comments.forEach((comment) => {
+            const now = new Date();
+            const timestamp = now
+              .toLocaleString('en-GB', {
+                day: '2-digit',
+                month: '2-digit',
+                year: 'numeric',
+                hour: '2-digit',
+                minute: '2-digit',
+                second: '2-digit',
+                hour12: false,
+              })
+              .replace(/\//g, '/')
+              .replace(',', '');
 
-        set(commentsRef, {...updates, ...existingComments}) // Place new comments at the top
-          .then(() => {
-            elements.commentInput.value = '';
-            showPopup('Comments posted successfully');
-          })
-          .catch((error) => {
-            console.error('Error posting comments:', error);
-            showPopup('Error posting comments. Please try again.');
+            updates[nextIndex.toString()] = {
+              text: comment.trim(),
+              timestamp: timestamp,
+            };
+            nextIndex++;
           });
-      }).catch((error) => {
-        console.error('Error fetching existing comments:', error);
-        showPopup('Error posting comments. Please try again.');
-      });
+
+          set(commentsRef, { ...updates, ...existingComments }) // Place new comments at the top
+            .then(() => {
+              elements.commentInput.value = '';
+              showPopup('Comments posted successfully');
+            })
+            .catch((error) => {
+              console.error('Error posting comments:', error);
+              showPopup('Error posting comments. Please try again.');
+            });
+        })
+        .catch((error) => {
+          console.error('Error fetching existing comments:', error);
+          showPopup('Error posting comments. Please try again.');
+        });
     } else {
       showPopup('Please enter at least one comment before posting');
     }
@@ -303,70 +342,48 @@ document.addEventListener('DOMContentLoaded', () => {
     if (event.target.classList.contains('delete-comment')) {
       const commentKey = event.target.getAttribute('data-key');
       const commentRef = ref(database, `bay 1/Comments/node1/${commentKey}`);
-      remove(commentRef).then(() => {
-        showPopup('Comment deleted successfully');
-      }).catch((error) => {
-        console.error('Error deleting comment:', error);
-        showPopup('Error deleting comment. Please try again.');
-      });
+      remove(commentRef)
+        .then(() => {
+          showPopup('Comment deleted successfully');
+        })
+        .catch((error) => {
+          console.error('Error deleting comment:', error);
+          showPopup('Error deleting comment. Please try again.');
+        });
     }
   });
 
   elements.deleteAllCommentsBtn.addEventListener('click', () => {
     if (confirm('Are you sure you want to delete all comments?')) {
-      remove(commentsRef).then(() => {
-        showPopup('All comments deleted successfully');
-      }).catch((error) => {
-        console.error('Error deleting all comments:', error);
-        showPopup('Error deleting all comments. Please try again.');
-      });
-    }
-  });
-
-  document.addEventListener('click', (event) => {
-    if (event.target.matches('.set-button')) {
-      const inputId = event.target.getAttribute('data-input');
-      const path = event.target.getAttribute('data-path');
-      const valueName = event.target.getAttribute('data-name');
-      const input = document.getElementById(inputId);
-
-      if (input) {
-        let setValue = parseFloat(input.value);
-        if (!isNaN(setValue) && setValue >= 0 && setValue <= 100) {
-          const setValueRef = ref(database, path);
-          set(setValueRef, setValue)
-            .then(() => {
-              showPopup(`Set ${valueName} updated to ${setValue}`);
-            })
-            .catch((error) => {
-              console.error(`Error updating ${valueName}:`, error);
-              showPopup(`Error updating ${valueName}. Please try again.`);
-            });
-        } else {
-          showPopup('Please enter a valid number (0-100)');
-        }
-      }
+      remove(commentsRef)
+        .then(() => {
+          showPopup('All comments deleted successfully');
+        })
+        .catch((error) => {
+          console.error('Error deleting all comments:', error);
+          showPopup('Error deleting all comments. Please try again.');
+        });
     }
   });
 
   // Dropdown functionality for sidebar
   elements.dropdownBtns.forEach((dropdownBtn) => {
-    dropdownBtn.addEventListener('click', function(e) {
+    dropdownBtn.addEventListener('click', function (e) {
       e.stopPropagation();
       this.classList.toggle('active');
       const dropdownContainer = this.nextElementSibling;
       if (dropdownContainer.style.maxHeight) {
         dropdownContainer.style.maxHeight = null;
       } else {
-        dropdownContainer.style.maxHeight = dropdownContainer.scrollHeight + "px";
+        dropdownContainer.style.maxHeight = dropdownContainer.scrollHeight + 'px';
       }
     });
   });
 
   // Close dropdowns when clicking outside
-  document.addEventListener("click", function(event) {
+  document.addEventListener('click', function (event) {
     if (!event.target.matches('.dropdown-btn')) {
-      var dropdowns = document.getElementsByClassName("dropdown-container");
+      var dropdowns = document.getElementsByClassName('dropdown-container');
       for (var i = 0; i < dropdowns.length; i++) {
         var openDropdown = dropdowns[i];
         if (openDropdown.style.maxHeight) {
