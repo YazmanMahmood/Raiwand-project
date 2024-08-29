@@ -9,17 +9,22 @@
 <body>
     <div class="sidebar">
         <div class="sidebar-header">
-            <h2>Smart Agri</h2>
+            <h3>Smart Agri</h3>
         </div>
-        <button class="dropdown-btn">Bay 1 - Node 1 <span class="arrow">▼</span></button>
-        <div class="dropdown-container">
-            <a href="node1.html">Node 1</a>
-            <a href="node2.html">Node 2</a>
-            <a href="node3.html">Node 3</a>
-            <a href="node4.html">Node 4</a>
-            <a href="node5.html">Node 5</a>
-            <a href="node6.html">Node 6</a>
+        <div class="button-container">
+            <a href="#" class="bay-btn">Bay 1</a>
+            <button class="dropdown-btn"><span class="arrow">▼</span></button>
+        
+            <div class="dropdown-container">
+                <a href="node1.html">Node 1</a>
+                <a href="node2.html">Node 2</a>
+                <a href="node3.html">Node 3</a>
+                <a href="node4.html">Node 4</a>
+                <a href="node5.html">Node 5</a>
+                <a href="node6.html">Node 6</a>
+            </div>
         </div>
+        
         <a href="#" class="dimmed">Bay 2</a>
         <a href="#" class="dimmed">Bay 3</a>
         <a href="#" class="dimmed">Bay 4</a>
@@ -29,7 +34,7 @@
         <a href="#" class="dimmed">Bay 8</a>
         <a href="#" class="dimmed">Bay 9</a>
         <a href="#" class="dimmed">Bay 10</a>
-        <a href="log.html">Log</a>
+     <a href="log.html">Log</a>
         <a href="settings.html">Settings</a>
     </div>
 
@@ -80,19 +85,20 @@
 
         <button class="hamburger">☰</button>
 
+        <div id="error-box" class="error-box" style="display: none;">
+            <p id="error-message"></p>
+        </div>
+        
         
         <div class="comment-section">
             <h2>Comments</h2>
             <div class="comment-form">
                 <textarea id="comment-input" placeholder="Enter your comment here..."></textarea>
                 <button id="post-comment" class="modern-button">Post Comment</button>
-
             </div>
-            
             <div id="comments-container"></div>
             <button id="delete-all-comments" class="modern-button">Delete All Comments</button>
         </div>
-
 
         <div class="summary">
             <h2>Daily Summary</h2>
@@ -102,14 +108,14 @@
         </div>
     </div>
 
-<button class="hamburger" id="sidebarToggle">☰</button>
+    <button class="hamburger" id="sidebarToggle">☰</button>
 
     <div id="popup" class="popup">
         <div class="popup-content">
-          <p id="popup-message"></p>
-          <button id="popup-close">Close</button>
+            <p id="popup-message"></p>
+            <button id="popup-close">Close</button>
         </div>
-      </div>
+    </div>
 
     <script src="https://www.gstatic.com/firebasejs/9.6.10/firebase-app.js" type="module"></script>
     <script src="https://www.gstatic.com/firebasejs/9.6.10/firebase-database.js" type="module"></script>
