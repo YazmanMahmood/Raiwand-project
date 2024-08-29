@@ -7,25 +7,27 @@
     <link rel="stylesheet" href="bay1.css">
 </head>
 <body>
-    <button class="hamburger">
-        <span class="bar"></span>
-        <span class="bar"></span>
-        <span class="bar"></span>
-    </button>
+    <button class="hamburger" id="hamburger-btn">☰</button>
+
 
     <div class="sidebar">
         <div class="sidebar-header">
-            <h2>Smart Agri</h2>
+            <h3>Smart Agri</h3>
         </div>
-        <button class="dropdown-btn">Bay 1-Nodes <span class="arrow">▼</span></button>
-        <div class="dropdown-container">
-            <a href="node1.html">Node 1</a>
-            <a href="node2.html">Node 2</a>
-            <a href="node3.html">Node 3</a>
-            <a href="node4.html">Node 4</a>
-            <a href="node5.html">Node 5</a>
-            <a href="node6.html">Node 6</a>
+        <div class="button-container">
+            <a href="#" class="bay-btn">Bay 1</a>
+            <button class="dropdown-btn"><span class="arrow">▼</span></button>
+        
+            <div class="dropdown-container">
+                <a href="node1.html">Node 1</a>
+                <a href="node2.html">Node 2</a>
+                <a href="node3.html">Node 3</a>
+                <a href="node4.html">Node 4</a>
+                <a href="node5.html">Node 5</a>
+                <a href="node6.html">Node 6</a>
+            </div>
         </div>
+        
         <a href="#" class="dimmed">Bay 2</a>
         <a href="#" class="dimmed">Bay 3</a>
         <a href="#" class="dimmed">Bay 4</a>
@@ -61,6 +63,59 @@
                     <div class="node node5"></div>
                     <div class="node node6"></div>
                 </div>
+
+                <!-- Control Panel Section -->
+                <div class="control-panel-section">
+                    <div class="control-box">
+                        <h2>Fan Controls</h2>
+                        <div class="fan-control">
+                            Fan 1:
+                            <button id="fan1-auto" class="fan-button">Auto</button>
+                            <button id="fan1-on" class="fan-button">ON</button>
+                            <button id="fan1-off" class="fan-button">OFF</button>
+                        </div>
+                        <div class="fan-control">
+                            Fan 2:
+                            <button id="fan2-auto" class="fan-button">Auto</button>
+                            <button id="fan2-on" class="fan-button">ON</button>
+                            <button id="fan2-off" class="fan-button">OFF</button>
+                        </div>
+                        <div class="fan-control">
+                            Fan 3:
+                            <button id="fan3-auto" class="fan-button">Auto</button>
+                            <button id="fan3-on" class="fan-button">ON</button>
+                            <button id="fan3-off" class="fan-button">OFF</button>
+                        </div>
+                    </div>
+
+                    <div class="control-box">
+                        <h2>Water Controls</h2>
+                        <div class="water-control">
+                            Valve 1:
+                            <button id="valve1-auto" class="water-button">Auto</button>
+                            <button id="valve1-on" class="water-button">ON</button>
+                            <button id="valve1-off" class="water-button">OFF</button>
+                        </div>
+                        <div class="water-control">
+                            Valve 2:
+                            <button id="valve2-auto" class="water-button">Auto</button>
+                            <button id="valve2-on" class="water-button">ON</button>
+                            <button id="valve2-off" class="water-button">OFF</button>
+                        </div>
+                        <div class="water-control">
+                            Valve 3:
+                            <button id="valve3-auto" class="water-button">Auto</button>
+                            <button id="valve3-on" class="water-button">ON</button>
+                            <button id="valve3-off" class="water-button">OFF</button>
+                        </div>
+                        <div class="water-control">
+                            Water Mesh:
+                            <button id="water-mesh-auto" class="water-button">Auto</button>
+                            <button id="water-mesh-on" class="water-button">ON</button>
+                            <button id="water-mesh-off" class="water-button">OFF</button>
+                        </div>
+                    </div>
+                </div>
             </div>
 
             <div class="side-panel">
@@ -83,39 +138,9 @@
                     <div class="measurement-item">Soil Moisture: <span id="avg-soil-moisture">--</span>%</div>
                 </div>
 
-                <div class="section fan-controls">
-                    <h2>Fan Controls</h2>
-                    <div class="fan-control">
-                        Fan 1:
-                        <button id="fan1-auto" class="fan-button">Auto</button>
-                        <button id="fan1-on" class="fan-button">ON</button>
-                        <button id="fan1-off" class="fan-button">OFF</button>
-                    </div>
-                    <div class="fan-control">
-                        Fan 2:
-                        <button id="fan2-auto" class="fan-button">Auto</button>
-                        <button id="fan2-on" class="fan-button">ON</button>
-                        <button id="fan2-off" class="fan-button">OFF</button>
-                    </div>
-                    <div class="fan-control">
-                        Fan 3:
-                        <button id="fan3-auto" class="fan-button">Auto</button>
-                        <button id="fan3-on" class="fan-button">ON</button>
-                        <button id="fan3-off" class="fan-button">OFF</button>
-                    </div>
+                <div id="error-box" class="error-box" style="display: none;">
+                    <p id="error-message"></p>
                 </div>
-
-                <div class="section water-controls">
-                    <h2>Water Controls</h2>
-                    <div class="water-control">
-                        Valve:
-                        <button id="valve-auto" class="water-button">Auto</button>
-                        <button id="valve-on" class="water-button">ON</button>
-                        <button id="valve-off" class="water-button">OFF</button>
-                    </div>
-                </div>
-
-            
 
                 <div class="section set-values">
                     <h2>Set Values</h2>
@@ -126,7 +151,7 @@
                     </div>
                     <div class="set-value-widget">
                         <h3>Temperature</h3>
-                        <input type="number" id="temperature-input"class="large-inputbox" placeholder="Set temperature">
+                        <input type="number" id="temperature-input" class="large-inputbox" placeholder="Set temperature">
                         <button id="set-temperature-btn" class="set-button">Set</button>
                     </div>
                     <div class="set-value-widget">
@@ -142,14 +167,16 @@
     <div id="set-value-popup" class="set-value-popup">
         <div class="set-value-popup-content">
             <span class="set-value-close">&times;</span>
-            <p id="set-value-message"></p>
+            <p id="set-value-message">Value Set Successfully!</p>
         </div>
     </div>
     
+
     <div id="popup-node1" class="popup">
-        <div class="popup-arrow"></div>
+        <div class="popup-arrow popup-arrow-left"></div>
         <div id="popup-content-node1" class="popup-content"></div>
     </div>
+    
     <div id="popup-node2" class="popup">
         <div class="popup-arrow"></div>
         <div id="popup-content-node2" class="popup-content"></div>
@@ -171,6 +198,6 @@
         <div id="popup-content-node6" class="popup-content"></div>
     </div>
     
-    <script type="module" src="bay1.js"></script>
+<script type="module" src="bay1.js"></script>
 </body>
 </html>
