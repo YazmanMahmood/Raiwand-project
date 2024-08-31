@@ -8,8 +8,8 @@ body {
   background-color: #f0f0f0;
   transition: background-color 0.3s ease;
 }
-/* Sidebar styles */
 
+/* Sidebar styles */
 .sidebar {
   width: 200px;
   background-color: #000000;
@@ -24,14 +24,10 @@ body {
   transition: transform 0.3s ease-in-out, box-shadow 0.3s ease;
 }
 
-.sidebar.open {
-  transform: translateX(0);
-  box-shadow: 2px 0 15px rgba(0, 0, 0, 0.2);
-}
-
 .sidebar-header {
   margin-bottom: 20px;
 }
+
 .sidebar-header h3 {
   font-size: 18px;
   margin: 0;
@@ -161,6 +157,7 @@ body {
   transition: margin-left 0.3s ease;
 }
 
+
 .hamburger {
   display: none;
   position: fixed;
@@ -172,6 +169,8 @@ body {
   background: none;
   border: none;
   color: #1a237e;
+  transition: opacity 0.3s ease, visibility 0.3s ease;
+
 }
 
 .bar {
@@ -488,32 +487,32 @@ body {
   background-color: #5A91AD;
   transform: translateY(-2px);
 }
-
 @media screen and (max-width: 768px) {
+  .sidebar {
+    transform: translateX(-100%);
+    width: 70%;
   }
-    .sidebar a.dimmed {
-        color: #888;
-        pointer-events: none;
-    }
-    .sidebar {
-        transform: translateX(-100%);
-        width: 70%;
-    }
-  
-    .sidebar.open {
-        transform: translateX(0);
-        width: 200px !important; /* Ensure 200px width takes precedence */
-    }
-  
-    .main-content {
-        margin-left: 0;
-        padding-top: 60px;
-    }
-  
-    .hamburger {
-        display: block;
-    }
 
+  .sidebar.open {
+    transform: translateX(0);
+    width: 200px !important;
+  }
+
+  .main-content {
+    margin-left: 0;
+    padding-top: 60px;
+  }
+
+  .hamburger {
+    display: block;
+    opacity: 1;
+    visibility: visible;
+  }
+
+  .sidebar.open ~ .hamburger {
+    opacity: 0;
+    visibility: hidden;
+  }
   .widget {
     width: 100%;
   }
@@ -523,13 +522,21 @@ body {
   }
 }
 
-.sidebar a.dimmed {
-  color: #888;
-  pointer-events: none;
-}
 
-.widget:hover .gauge-container {
-  animation: pulse 1s infinite;
+
+
+@media screen and (min-width: 769px) {
+  .sidebar {
+    transform: translateX(0);
+  }
+
+  .main-content {
+    margin-left: 240px;
+  }
+
+  .hamburger {
+    display: none;
+  }
 }
 
 @keyframes pulse {
