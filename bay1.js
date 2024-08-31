@@ -10,9 +10,9 @@ document.addEventListener('DOMContentLoaded', () => {
     const elements = {
         sidebar: document.querySelector('.sidebar'),
         mainContent: document.querySelector('.main-content'),
-        popup: document.getElementById('popup'),
-        popupMessage: document.getElementById('popup-message'),
-        popupClose: document.getElementById('popup-close'),
+        popup: document.querySelector('.set-value-popup'),  // Updated for set value popup
+        popupMessage: document.getElementById('set-value-message'),
+        popupClose: document.querySelector('.set-value-close'),  // Corrected selector for close button
         nodes: document.querySelectorAll('.node'),
         fanStatusElement: document.getElementById('fan-status'),
         waterFlowStatusElement: document.getElementById('water-flow-status'),
@@ -24,7 +24,6 @@ document.addEventListener('DOMContentLoaded', () => {
         mobileToggle: document.querySelector('.mobile-toggle'),
         avgTemperature: document.getElementById('avg-temperature'),
         avgHumidity: document.getElementById('avg-humidity'),
-        
         avgSoilMoisture: document.getElementById('avg-soil-moisture'),
         hamburger: document.getElementById('hamburger-btn'),
     };
@@ -116,25 +115,39 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     function showPopup(message) {
-        const popup = document.getElementById('set-value-popup');
-        const messageElement = document.getElementById('set-value-message');
-        if (popup && messageElement) {
-            messageElement.textContent = message;
-            popup.style.display = 'block';
-            requestAnimationFrame(() => popup.classList.add('show'));
-        }
-    }
-    
-    // Function to hide popup
-    function hidePopup() {
-        const popup = document.getElementById('set-value-popup');
-        if (popup) {
-            popup.classList.remove('show');
-            setTimeout(() => popup.style.display = 'none', 300);
-        }
-    }
-    document.querySelector('.set-value-close').addEventListener('click', hidePopup);
+        if (elements.popup && elements.popupMessage) {
+            elements.popupMessage.textContent = message;
+            elements.popup.style.display = 'block';
+            requestAnimationFrame(() => elements.popup.classList.add('show'));
 
+            // Close popup when clicking outside of it
+            window.addEventListener('click', closePopupOnOutsideClick);
+        }
+    }
+
+    function hidePopup() {
+        if (elements.popup) {
+            elements.popup.classList.remove('show');
+            setTimeout(() => {
+                elements.popup.style.display = 'none';
+            }, 300);
+
+            // Remove the event listener for outside click to prevent memory leaks
+            window.removeEventListener('click', closePopupOnOutsideClick);
+        }
+    }
+
+    // Close the popup if clicking outside the popup content
+    function closePopupOnOutsideClick(event) {
+        if (elements.popup && !elements.popup.contains(event.target) && !elements.popupMessage.contains(event.target)) {
+            hidePopup();
+        }
+    }
+
+    // Event listener for close button
+    if (elements.popupClose) {
+        elements.popupClose.addEventListener('click', hidePopup);
+    }
 
     function showError(message) {
         elements.errorMessage.innerHTML = message;
@@ -257,7 +270,7 @@ document.addEventListener('DOMContentLoaded', () => {
         Object.keys(setValueButtons).forEach(valueType => {
             if (setValueButtons[valueType] && setValueInputs[valueType]) {
                 // Fetch initial values and set input fields
-                const setValueRef = ref(database, `bay 1/set values/${valueType}`);
+                const setValueRef = ref(database, `bay 1/set values/${valueType.toLowerCase()}`);
                 onValue(setValueRef, (snapshot) => {
                     const value = snapshot.val();
                     if (value !== null) {
@@ -271,7 +284,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     if (!isNaN(value) && value >= 0 && value <= 100) {
                         setValueForBay(valueType, value);
                     } else {
-                        showPopup(`Please enter valid ${valueType}  between 0 and 100`);
+                        showPopup(`Please enter a valid ${valueType} value between 0 and 100`);
                     }
                 });
             }
@@ -280,12 +293,12 @@ document.addEventListener('DOMContentLoaded', () => {
     
     function setValueForBay(valueType, value) {
         const setValuePaths = {
-            soilMoisture: 'bay 1/set values/soil_moisture',
-            temperature: 'bay 1/set values/temperature',
-            humidity: 'bay 1/set values/humidity'
+            soilMoisture: 'soil_moisture',
+            temperature: 'temperature',
+            humidity: 'humidity'
         };
 
-        const path = setValuePaths[valueType] || `bay 1/set values/${valueType}`;
+        const path = `bay 1/set values/${setValuePaths[valueType]}`;
         const setValueRef = ref(database, path);
 
         set(setValueRef, value)
@@ -523,6 +536,12 @@ document.addEventListener('DOMContentLoaded', () => {
                 elements.mainContent.style.marginLeft = isSidebarActive ? '50%' : '0';
             });
         }
+
+        // Start the session timer
+        import('./session-manager.js').then(module => {
+            const { startSessionTimer } = module;
+            startSessionTimer();
+        });
 
     } catch (error) {
         handleError(error, 'initializing the application');
