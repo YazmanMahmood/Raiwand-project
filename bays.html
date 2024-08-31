@@ -6,6 +6,7 @@
     <title>Greenhouse Bays</title>
     <h1>GreenHouse Monitoring</h1>
     <link rel="stylesheet" href="bays.css">
+    <script type="module" src="session-manager.js"></script>
 </head>
 <body>
     <div class="bay-container">
@@ -56,5 +57,20 @@
     </div>
 
     <script src="bays.js"></script>
+    <script type="module">
+        import { startSessionTimer, stopSessionTimer } from './session-manager.js';
+        
+        document.addEventListener('DOMContentLoaded', () => {
+          if (sessionStorage.getItem('loggedIn') !== 'true') {
+            window.location.href = 'login.html';
+          } else {
+            startSessionTimer();
+          }
+        });
+      
+        window.addEventListener('beforeunload', () => {
+          stopSessionTimer();
+        });
+      </script>
 </body>
 </html>
