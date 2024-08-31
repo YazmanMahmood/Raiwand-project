@@ -7,25 +7,25 @@
     <link rel="stylesheet" href="log.css">
 </head>
 <body>
-    <button id="sidebarToggle" class="hamburger">☰</button>
-
+    <button id="hamburger-btn" class="hamburger">☰</button>
     <div class="sidebar">
         <div class="sidebar-header">
-            <h2>Smart Agri</h2>
+            <h3>Smart Agri</h3>
         </div>
-
-        <a href="node1.html">Bay 1 - Node 1</a>
-
-        <button class="dropdown-btn">Bay 1 <span class="arrow">▼</span></button>
-        <div class="dropdown-container">
-            <a href="node1.html">Node 1</a>
-            <a href="node2.html">Node 2</a>
-            <a href="node3.html">Node 3</a>
-            <a href="node4.html">Node 4</a>
-            <a href="node5.html">Node 5</a>
-            <a href="node6.html">Node 6</a>
+        <div class="button-container">
+            <a href="bay1.html" class="bay-btn">Bay 1</a>
+            <button class="dropdown-btn"><span class="arrow">▼</span></button>
+        
+            <div class="dropdown-container">
+                <a href="node1.html">Node 1</a>
+                <a href="node2.html">Node 2</a>
+                <a href="node3.html">Node 3</a>
+                <a href="node4.html">Node 4</a>
+                <a href="node5.html">Node 5</a>
+                <a href="node6.html">Node 6</a>
+            </div>
         </div>
-
+        
         <a href="#" class="dimmed">Bay 2</a>
         <a href="#" class="dimmed">Bay 3</a>
         <a href="#" class="dimmed">Bay 4</a>
@@ -35,7 +35,6 @@
         <a href="#" class="dimmed">Bay 8</a>
         <a href="#" class="dimmed">Bay 9</a>
         <a href="#" class="dimmed">Bay 10</a>
-        <a href="log.html" class="active">Log</a>
         <a href="#">Settings</a>
     </div>
 
@@ -68,6 +67,6 @@
         </div>
     </div>
 
-    <script type="module" src="testlog.js"></script>
+    <script type="module" src="log.js"></script>
 </body>
 </html>
