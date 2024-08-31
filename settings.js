@@ -123,36 +123,47 @@ document.addEventListener('DOMContentLoaded', () => {
         elements.clearDataLogBtn.addEventListener('click', handleClearDataLog);
     }
 
-    // Sidebar functionality
-    if (elements.hamburger && elements.sidebar) {
-        elements.hamburger.addEventListener('click', () => {
-            elements.sidebar.classList.toggle('open');
-            elements.container.classList.toggle('shifted');
-        });
+    // Sidebar and Hamburger functionality from bay1.js
+    function toggleSidebar(e) {
+        e.stopPropagation();
+        elements.hamburger.classList.toggle('active');
+        elements.sidebar.classList.toggle('open');
+        elements.mainContent.classList.toggle('shifted');
     }
 
-    // Close sidebar when clicking outside
-    document.addEventListener('click', (event) => {
-        if (elements.sidebar && elements.hamburger &&
-            !elements.sidebar.contains(event.target) && !elements.hamburger.contains(event.target)) {
+    function closeSidebarOnOutsideClick(event) {
+        if (elements.sidebar.classList.contains('open') &&
+            !elements.sidebar.contains(event.target) &&
+            !elements.hamburger.contains(event.target)) {
+            elements.hamburger.classList.remove('active');
             elements.sidebar.classList.remove('open');
-            elements.container.classList.remove('shifted');
+            elements.mainContent.classList.remove('shifted');
         }
-    });
+    }
 
-    // Dropdown functionality for sidebar
-    elements.dropdownBtns.forEach((dropdownBtn) => {
-        dropdownBtn.addEventListener('click', function(e) {
-            e.stopPropagation();
-            this.classList.toggle('active');
-            const dropdownContainer = this.nextElementSibling;
-            if (dropdownContainer) {
-                if (dropdownContainer.style.maxHeight) {
-                    dropdownContainer.style.maxHeight = null;
-                } else {
-                    dropdownContainer.style.maxHeight = dropdownContainer.scrollHeight + "px";
-                }
-            }
-        });
-    });
+    function toggleDropdown(e) {
+        e.stopPropagation();
+        this.classList.toggle('active');
+        const dropdownContainer = this.nextElementSibling;
+        dropdownContainer.style.maxHeight = dropdownContainer.style.maxHeight ? null : `${dropdownContainer.scrollHeight}px`;
+    }
+
+    function closeDropdowns(event) {
+        if (!event.target.matches('.dropdown-btn')) {
+            document.querySelectorAll('.dropdown-container').forEach(dropdown => {
+                dropdown.style.maxHeight = null;
+                dropdown.previousElementSibling.classList.remove('active');
+            });
+        }
+    }
+
+    // Event Listeners for Sidebar and Dropdown
+    if (elements.hamburger && elements.sidebar) {
+        elements.hamburger.addEventListener('click', toggleSidebar);
+    }
+    document.addEventListener('click', closeSidebarOnOutsideClick);
+    elements.sidebar.addEventListener('click', (e) => e.stopPropagation());
+
+    elements.dropdownBtns.forEach(btn => btn.addEventListener('click', toggleDropdown));
+    document.addEventListener('click', closeDropdowns);
 });
