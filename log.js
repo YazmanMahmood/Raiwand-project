@@ -9,170 +9,236 @@ const database = getDatabase(app);
 console.log('Database object:', database); // Debug log
 
 document.addEventListener('DOMContentLoaded', () => {
-  const elements = {
-    hamburger: document.querySelector('#sidebarToggle'),
-    sidebar: document.querySelector('.sidebar'),
-    mainContent: document.querySelector('.main-content'),
-    setValuesButton: document.querySelector('.history-button'),
-    dropdownBtns: document.querySelectorAll('.dropdown-btn'),
-    tableBody: document.getElementById('log-table-body')
-  };
+    const elements = {
+        sidebar: document.querySelector('.sidebar'),
+        mainContent: document.querySelector('.main-content'),
+        setValuesButton: document.querySelector('.history-button'),
+        dropdownBtns: document.querySelectorAll('.dropdown-btn'),
+        tableBody: document.getElementById('log-table-body'),
+        sidePanelSections: document.querySelectorAll('.side-panel .section'),
+        errorBox: document.getElementById('error-box'),
+        errorMessage: document.getElementById('error-message'),
+        hamburger: document.getElementById('hamburger-btn'),
+    };
 
-  // Check connection to database
-  get(ref(database, '/')).then(() => {
-    console.log("Successfully connected to the database");
+    // Check connection to database
+    get(ref(database, '/')).then(() => {
+        console.log("Successfully connected to the database");
 
-    // Load historical logs
-    fetchHistoricalData();
+        // Load historical logs
+        fetchHistoricalData();
 
-    // Initialize the table and start periodic updates
-    setInterval(updateDataTable, 10000); // Update every 10 seconds
-  }).catch((error) => {
-    console.error("Failed to connect to the database:", error);
-  });
+        // Initialize the table and start periodic updates
+        setInterval(updateDataTable, 10000); // Update every 10 seconds
 
-  // Toggle sidebar on hamburger click
-  elements.hamburger?.addEventListener('click', toggleSidebar);
+        // Synchronize local data when the system is back online
+        window.addEventListener('online', synchronizeData);
+        synchronizeData(); // Check for offline data on load
+    }).catch((error) => {
+        console.error("Failed to connect to the database:", error);
+    });
 
-  // Close sidebar when clicking outside
-  document.addEventListener('click', handleOutsideClick);
+    // Sidebar functionality
+    elements.hamburger.addEventListener('click', toggleSidebar);
+    document.addEventListener('click', closeSidebarOnOutsideClick);
+    elements.sidebar.addEventListener('click', (e) => e.stopPropagation());
 
-  // Prevent sidebar from closing when clicking inside it
-  elements.sidebar?.addEventListener('click', (e) => e.stopPropagation());
+    // Redirect to log2.html on button click
+    elements.setValuesButton?.addEventListener('click', () => {
+        window.location.href = 'log2.html';
+    });
 
-  // Redirect to log2.html on button click
-  elements.setValuesButton?.addEventListener('click', () => {
-    window.location.href = 'log2.html';
-  });
+    // Dropdown functionality
+    elements.dropdownBtns.forEach(btn => btn.addEventListener('click', toggleDropdown));
+    document.addEventListener('click', closeDropdowns);
 
-  // Dropdown functionality for sidebar
-  elements.dropdownBtns.forEach(dropdownBtn => {
-    dropdownBtn.addEventListener('click', toggleDropdown);
-  });
+    // Responsive design
+    const debouncedResize = debounce(() => {
+        adjustForMobile();
+        adjustSidePanelHeights();
+        adjustTextSizes();
+    }, 250);
+    window.addEventListener('resize', debouncedResize);
 
-  // Close dropdowns when clicking outside
-  document.addEventListener("click", closeDropdowns);
-
-  // Mobile responsiveness
-  window.addEventListener('resize', adjustForMobile);
-  adjustForMobile(); // Call once on load
+    // Initialize controls
+    adjustSidePanelHeights();
+    adjustForMobile();
+    adjustTextSizes();
 });
 
-function toggleSidebar() {
-  const sidebar = document.querySelector('.sidebar');
-  const mainContent = document.querySelector('.main-content');
-  const hamburger = document.querySelector('#sidebarToggle');
-  
-  sidebar.classList.toggle('open');
-  mainContent.classList.toggle('shifted');
-  hamburger.classList.toggle('active');
+function toggleSidebar(e) {
+    e.stopPropagation();
+    const sidebar = document.querySelector('.sidebar');
+    const mainContent = document.querySelector('.main-content');
+    const hamburger = document.getElementById('hamburger-btn');
+    hamburger.classList.toggle('active');
+    sidebar.classList.toggle('open');
+    mainContent.classList.toggle('shifted');
 }
 
-function handleOutsideClick(event) {
-  const sidebar = document.querySelector('.sidebar');
-  const hamburger = document.querySelector('#sidebarToggle');
-  
-  if (sidebar && sidebar.classList.contains('open') &&
-      !sidebar.contains(event.target) && !hamburger.contains(event.target)) {
-    sidebar.classList.remove('open');
-    document.querySelector('.main-content')?.classList.remove('shifted');
-    hamburger.classList.remove('active');
-  }
+function closeSidebarOnOutsideClick(event) {
+    const sidebar = document.querySelector('.sidebar');
+    const hamburger = document.getElementById('hamburger-btn');
+    if (sidebar.classList.contains('open') &&
+        !sidebar.contains(event.target) &&
+        !hamburger.contains(event.target)) {
+        hamburger.classList.remove('active');
+        sidebar.classList.remove('open');
+        document.querySelector('.main-content').classList.remove('shifted');
+    }
 }
 
 function toggleDropdown(e) {
-  e.stopPropagation();
-  const dropdownContainer = this.nextElementSibling;
-  this.classList.toggle('active');
-  dropdownContainer.style.maxHeight = dropdownContainer.style.maxHeight ? null : `${dropdownContainer.scrollHeight}px`;
+    e.stopPropagation();
+    this.classList.toggle('active');
+    const dropdownContainer = this.nextElementSibling;
+    dropdownContainer.style.maxHeight = dropdownContainer.style.maxHeight ? null : `${dropdownContainer.scrollHeight}px`;
 }
 
 function closeDropdowns(event) {
-  if (!event.target.matches('.dropdown-btn')) {
-    document.querySelectorAll('.dropdown-container').forEach(dropdown => {
-      if (dropdown.style.maxHeight) {
-        dropdown.style.maxHeight = null;
-        dropdown.previousElementSibling.classList.remove('active');
-      }
+    if (!event.target.matches('.dropdown-btn')) {
+        document.querySelectorAll('.dropdown-container').forEach(dropdown => {
+            dropdown.style.maxHeight = null;
+            dropdown.previousElementSibling.classList.remove('active');
+        });
+    }
+}
+
+function adjustForMobile() {
+    const sidebar = document.querySelector('.sidebar');
+    const mainContent = document.querySelector('.main-content');
+    const isMobile = window.innerWidth <= 768;
+    document.body.classList.toggle('mobile', isMobile);
+    sidebar.style.width = isMobile ? '0' : '200px';
+    mainContent.style.marginLeft = isMobile ? '0' : '240px';
+}
+
+function adjustSidePanelHeights() {
+    const sidePanelSections = document.querySelectorAll('.side-panel .section');
+    sidePanelSections.forEach(section => {
+        const title = section.querySelector('h2');
+        const content = section.querySelector('.status-item, .measurement-item, .fan-control, .water-control, .set-value-widget');
+        if (title && content) {
+            section.style.minHeight = `${title.offsetHeight + content.offsetHeight + 40}px`;
+        }
     });
-  }
+}
+
+function adjustTextSizes() {
+    const sidePanelSections = document.querySelectorAll('.side-panel .section');
+    sidePanelSections.forEach(container => {
+        const containerWidth = container.offsetWidth;
+        const containerHeight = container.offsetHeight;
+        const fontSize = Math.min(containerWidth * 0.05, containerHeight * 0.1);
+        container.style.fontSize = `${fontSize}px`;
+    });
 }
 
 function updateDataTable() {
-    const paths = [
-        '/bay 1/node 1/soil_moisture',
-        '/bay 1/node 1/humidity',
-        '/bay 1/node 1/temperature',
-        '/bay 1/node 1/Battery',
-        '/bay 1/node 1/DHT_check',
-        '/bay 1/node 1/Power_1_status',
-        '/bay 1/node 1/RSSI',
-        '/bay 1/node 1/active',
-        '/Time_stamp/Time' // Path to fetch the timestamp
-    ];
+    if (!navigator.onLine) {
+        const data = {
+            timestamp: new Date().toISOString().replace(/[:.]/g, '-'),
+            temperature: 0,
+            soil_moisture: 0,
+            humidity: 0,
+            battery: 0,
+            dht_check: 0,
+            power_1_status: 0,
+            rssi: 0,
+            active: 0
+        };
+        saveToLocalStorage(data);
+    } else {
+        const paths = [
+            '/bay 1/node 1/soil_moisture',
+            '/bay 1/node 1/humidity',
+            '/bay 1/node 1/temperature',
+            '/bay 1/node 1/Battery',
+            '/bay 1/node 1/DHT_check',
+            '/bay 1/node 1/Power_1_status',
+            '/bay 1/node 1/RSSI',
+            '/bay 1/node 1/active',
+            '/Time_stamp/Time'
+        ];
 
-    Promise.all(paths.map(path => get(ref(database, path))))
-        .then(snapshots => {
-            const [
-                soil_moisture,
-                humidity,
-                temperature,
-                battery,
-                dht_check,
-                power_1_status,
-                rssi,
-                active,
-                timestamp
-            ] = snapshots.map(snapshot => snapshot.val());
+        Promise.all(paths.map(path => get(ref(database, path))))
+            .then(snapshots => {
+                const [
+                    soil_moisture,
+                    humidity,
+                    temperature,
+                    battery,
+                    dht_check,
+                    power_1_status,
+                    rssi,
+                    active,
+                    timestamp
+                ] = snapshots.map(snapshot => snapshot.val() ?? 0);
 
-            const tableBody = document.getElementById('log-table-body');
+                const tableBody = document.getElementById('log-table-body');
 
-            // Create new row HTML using the fetched timestamp
-            const newRow = `
-                <tr>
-                    <td>${timestamp}</td>
-                    <td>${temperature?.toFixed(1) ?? 'N/A'}</td>
-                    <td>${soil_moisture?.toFixed(1) ?? 'N/A'}</td>
-                    <td>${humidity?.toFixed(1) ?? 'N/A'}</td>
-                    <td>${battery ?? 'N/A'}</td>
-                    <td>${dht_check ?? 'N/A'}</td>
-                    <td>${power_1_status ?? 'N/A'}</td>
-                    <td>${rssi ?? 'N/A'}</td>
-                    <td>${active ?? 'N/A'}</td>
-                </tr>
-            `;
+                const newRow = `
+                    <tr>
+                        <td>${timestamp}</td>
+                        <td>${temperature?.toFixed(1) ?? 'N/A'}</td>
+                        <td>${soil_moisture?.toFixed(1) ?? 'N/A'}</td>
+                        <td>${humidity?.toFixed(1) ?? 'N/A'}</td>
+                        <td>${battery ?? 'N/A'}</td>
+                        <td>${dht_check ?? 'N/A'}</td>
+                        <td>${power_1_status ?? 'N/A'}</td>
+                        <td>${rssi ?? 'N/A'}</td>
+                        <td>${active ?? 'N/A'}</td>
+                    </tr>
+                `;
 
-            // Add new row at the top of the table
-            tableBody.insertAdjacentHTML('afterbegin', newRow);
+                tableBody.insertAdjacentHTML('afterbegin', newRow);
 
-            // Limit to 100 rows in the table
-            while (tableBody.children.length > 100) {
-                tableBody.lastElementChild.remove();
-            }
+                while (tableBody.children.length > 100) {
+                    tableBody.lastElementChild.remove();
+                }
 
-            // Prepare log data for Firebase
-            const logData = {
-                Timestamp: timestamp,
-                Humidity: humidity ?? 0,
-                Soil_moisture: soil_moisture ?? 0,
-                Temperature: temperature ?? 0,
-                Battery: battery ?? 0,
-                DHT_check: dht_check ?? 0,
-                Power_1_status: power_1_status ?? 0,
-                RSSI: rssi ?? 0,
-                Active: active ?? 0
-            };
+                const safeTimestamp = timestamp.replace(/[:.]/g, '-');
 
-            // Use the timestamp from Firebase as the key for the new log entry
-            const logsRef = ref(database, `bay 1/logs/node1/${timestamp}`);
-            return set(logsRef, logData); // Set data using the timestamp as the key
-        })
-        .then(() => {
-            console.log('Data logged successfully');
-        })
-        .catch(error => {
-            console.error('Error fetching or logging data:', error);
+                const logData = {
+                    Timestamp: timestamp,
+                    Humidity: humidity ?? 0,
+                    Soil_moisture: soil_moisture ?? 0,
+                    Temperature: temperature ?? 0,
+                    Battery: battery ?? 0,
+                    DHT_check: dht_check ?? 0,
+                    Power_1_status: power_1_status ?? 0,
+                    RSSI: rssi ?? 0,
+                    Active: active ?? 0
+                };
+
+                const logsRef = ref(database, `bay 1/logs/node1/${safeTimestamp}`);
+                return set(logsRef, logData);
+            })
+            .then(() => {
+                console.log('Data logged successfully');
+            })
+            .catch(error => {
+                console.error('Error fetching or logging data:', error);
+            });
+    }
+}
+
+function synchronizeData() {
+    if (navigator.onLine) {
+        let offlineData = JSON.parse(localStorage.getItem('offlineData')) || [];
+        offlineData.forEach(data => {
+            const safeTimestamp = data.timestamp.replace(/[:.]/g, '-');
+            const logsRef = ref(database, `bay 1/logs/node1/${safeTimestamp}`);
+            set(logsRef, data)
+                .then(() => {
+                    console.log('Data synchronized successfully');
+                })
+                .catch(error => {
+                    console.error('Error synchronizing data:', error);
+                });
         });
+        localStorage.removeItem('offlineData');
+    }
 }
 
 function fetchHistoricalData() {
@@ -181,38 +247,45 @@ function fetchHistoricalData() {
         const data = snapshot.val();
         if (data) {
             const tableBody = document.getElementById('log-table-body');
-            tableBody.innerHTML = ''; // Clear existing table rows
+            tableBody.innerHTML = '';
 
-            // Sort the entries by timestamp in descending order
             const sortedEntries = Object.entries(data).sort((a, b) => {
-                return new Date(b[0]) - new Date(a[0]); // Newest first
+                return new Date(b[0]) - new Date(a[0]);
             });
 
-            // Populate the table with the sorted entries
             sortedEntries.forEach(([timestamp, logData]) => {
-                const row = `
-                    <tr>
-                        <td>${timestamp ?? 'N/A'}</td>
-                        <td>${logData.Temperature?.toFixed(1) ?? 'N/A'}</td>
-                        <td>${logData.Soil_moisture?.toFixed(1) ?? 'N/A'}</td>
-                        <td>${logData.Humidity?.toFixed(1) ?? 'N/A'}</td>
-                        <td>${logData.Battery ?? 'N/A'}</td>
-                        <td>${logData.DHT_check ?? 'N/A'}</td>
-                        <td>${logData.Power_1_status ?? 'N/A'}</td>
-                        <td>${logData.RSSI ?? 'N/A'}</td>
-                        <td>${logData.Active ?? 'N/A'}</td>
-                    </tr>
+                const row = document.createElement('tr');
+                row.innerHTML = `
+                    <td>${timestamp}</td>
+                    <td>${logData.Temperature?.toFixed(1) ?? 'N/A'}</td>
+                    <td>${logData.Soil_moisture?.toFixed(1) ?? 'N/A'}</td>
+                    <td>${logData.Humidity?.toFixed(1) ?? 'N/A'}</td>
+                    <td>${logData.Battery ?? 'N/A'}</td>
+                    <td>${logData.DHT_check ?? 'N/A'}</td>
+                    <td>${logData.Power_1_status ?? 'N/A'}</td>
+                    <td>${logData.RSSI ?? 'N/A'}</td>
+                    <td>${logData.Active ?? 'N/A'}</td>
                 `;
-                // Insert each row at the top
-                tableBody.insertAdjacentHTML('afterbegin', row);
+                tableBody.appendChild(row);
             });
         }
-    }, (error) => {
-        console.error('Error fetching historical data:', error);
     });
 }
 
-function adjustForMobile() {
-  const isMobile = window.innerWidth <= 768;
-  document.body.classList.toggle('mobile', isMobile);
+function saveToLocalStorage(data) {
+    let offlineData = JSON.parse(localStorage.getItem('offlineData')) || [];
+    offlineData.push(data);
+    localStorage.setItem('offlineData', JSON.stringify(offlineData));
+}
+
+function debounce(func, wait) {
+    let timeout;
+    return function executedFunction(...args) {
+        const later = () => {
+            clearTimeout(timeout);
+            func(...args);
+        };
+        clearTimeout(timeout);
+        timeout = setTimeout(later, wait);
+    };
 }
