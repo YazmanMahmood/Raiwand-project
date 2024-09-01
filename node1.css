@@ -213,15 +213,17 @@ body {
     transform: translateY(0);
   }
 }
-
 .widgets {
   display: flex;
   justify-content: space-around;
-  flex-wrap: wrap;
+  flex-wrap: nowrap;
   margin-top: 20px;
+  overflow-x: auto;
+  padding-bottom: 20px;
 }
 
 .widget {
+  flex: 0 0 auto;
   width: 30%;
   min-width: 200px;
   padding: 10px;
@@ -239,7 +241,6 @@ body {
   transform: translateY(-5px);
   box-shadow: 0 4px 8px rgba(0,0,0,0.15);
 }
-
 @keyframes fadeIn {
   to {
     opacity: 1;
@@ -486,6 +487,22 @@ body {
 #popup-close:hover {
   background-color: #5A91AD;
   transform: translateY(-2px);
+
+}
+@media screen and (max-width: 1024px) {
+  .widgets {
+    flex-wrap: nowrap;
+    justify-content: flex-start;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    scroll-snap-type: x mandatory;
+  }
+
+  .widget {
+    flex: 0 0 auto;
+    width: 80%;
+    scroll-snap-align: center;
+  }
 }
 @media screen and (max-width: 768px) {
   .sidebar {
