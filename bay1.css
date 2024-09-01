@@ -519,6 +519,12 @@ h2 {
     .container { 
         padding: 15px; 
     }
+    .node.node1 { top: 62%; left: 16%; width: 97px; height: 128px; }
+    .node.node2 { top: 62%; left: 53%; width: 93px; height: 130px; }
+    .node.node3 { top: 41%; left: 21%; width: 80px; height: 85px; }
+    .node.node4 { top: 40%; left: 53%; width: 79px; height: 90px; }
+    .node.node5 { top: 23%; left: 24%; width: 67px; height: 68px; }
+    .node.node6 { top: 22%; left: 51%; width: 72px; height: 77px; }
     .sidebar {
         transform: translateX(-100%);
         width: 70%;
@@ -750,12 +756,7 @@ h2 {
         .sidebar a, .dropdown-container a {
             animation: none;
         }
-    .node.node1 { top: 62%; left: 16%; width: 97px; height: 128px; }
-    .node.node2 { top: 62%; left: 53%; width: 93px; height: 130px; }
-    .node.node3 { top: 41%; left: 21%; width: 80px; height: 85px; }
-    .node.node4 { top: 40%; left: 53%; width: 79px; height: 90px; }
-    .node.node5 { top: 23%; left: 24%; width: 67px; height: 68px; }
-    .node.node6 { top: 22%; left: 51%; width: 72px; height: 77px; }
+   
         .header h1 {
             font-size: 32px;
         }
