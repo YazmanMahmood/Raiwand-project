@@ -158,29 +158,27 @@ body {
 }
 
 
-.hamburger {
-  display: none;
-  position: fixed;
-  top: 15px;
-  left: 15px;
-  font-size: 24px;
-  cursor: pointer;
-  z-index: 9999;
-  background: none;
-  border: none;
-  color: #1a237e;
-  transition: opacity 0.3s ease, visibility 0.3s ease;
+ .hamburger {
+        display: none;
+        position: fixed;
+        top: 15px;
+        left: 15px;
+        font-size: 24px;
+        cursor: pointer;
+        z-index: 9999;
+        background: none;
+        border: none;
+        color: var(--primary-color);
+    }
 
-}
-
-.bar {
-  display: block;
-  width: 28px;
-  height: 3px;
-  margin: 6px auto;
-  transition: all 0.3s ease-in-out;
-  background-color: #1a237e;
-}
+    .bar {
+        display: block;
+        width: 28px;
+        height: 3px;
+        margin: 6px auto;
+        transition: all 0.3s ease-in-out;
+        background-color: var(--primary-color);
+    }
 
 
 .error-box {
