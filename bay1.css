@@ -302,7 +302,6 @@
    .sidebar a.dimmed {
     color: #bdc3c7;
     pointer-events: none;
-    margin-bottom: 10px; /* Adjust the value to increase/decrease the gap */
 }
 
 
