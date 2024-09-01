@@ -41,7 +41,7 @@ h1 {
     color: var(--primary-color);
     margin-top: 30px;
     font-weight: 700;
-    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1);
+    text-shadow: 2px 2px 4px rgba(0,0,0,0.1);
     transition: transform 0.3s ease;
 }
 
@@ -157,6 +157,7 @@ h2 {
     justify-content: space-between;
     margin-bottom: 10px;
     font-size: 14px;
+    
     min-height: 28px;
 }
 
@@ -174,7 +175,7 @@ h2 {
 }
 
 .fan-button, .water-button {
-    padding: 4px 8px; /* Reduced padding for smaller buttons */
+    padding: 6px 12px;
     background-color: var(--secondary-color);
     color: white;
     border: none;
@@ -182,8 +183,9 @@ h2 {
     cursor: pointer;
     transition: background-color 0.3s, transform 0.2s;
     font-weight: 600;
-    min-width: 40px; /* Reduced width for control buttons */
-    font-size: 16px; /* Smaller font size for buttons */
+    min-height: 20
+    px;
+    font-size: 14px;
 }
 
 .fan-button:hover, .water-button:hover {
@@ -250,10 +252,9 @@ h2 {
 
 .error-box p {
     margin: 5px 0;
-    color: var(--error-color); /* Ensures the error code text is red */
+    color: var(--error-color);
     font-weight: 600;
 }
-
 
 .sidebar {
     width: 220px;
@@ -440,7 +441,7 @@ h2 {
     top: 0;
     width: 100%;
     height: 100%;
-    background-color: rgba(0, 0, 0, 0.5);
+    background-color: rgba(0,0,0,0.5);
     opacity: 0;
     transition: opacity 0.3s ease;
 }
@@ -511,150 +512,168 @@ h2 {
     .content { 
         flex-direction: column; 
     }
-    .side-panel { 
-        width: 100%; 
+    @media screen and (max-width: 992px) {
+        .content { 
+            flex-direction: column; 
+        }
+        .side-panel { 
+            width: 100%; 
+        }
     }
-}
-
-@media screen and (max-width: 768px) {
-    .container { 
-        padding: 15px; 
+    
+    @media screen and (max-width: 768px) {
+        .container { 
+            padding: 15px; 
+        }
+        .sidebar {
+            transform: translateX(-100%);
+            width: 70%;
+            transition: transform 0.3s ease-in-out;
+        }
+      
+        .sidebar.open {
+            transform: translateX(0);
+            width: 220px !important;
+        }
+        .node.node1 { top: 62%; left: 16%; width: 97px; height: 128px; }
+    .node.node2 { top: 62%; left: 53%; width: 93px; height: 130px; }
+    .node.node3 { top: 41%; left: 21%; width: 80px; height: 85px; }
+    .node.node4 { top: 40%; left: 53%; width: 79px; height: 90px; }
+    .node.node5 { top: 23%; left: 24%; width: 67px; height: 68px; }
+    .node.node6 { top: 22%; left: 51%; width: 72px; height: 77px; }
+      
+        .main-content {
+            margin-left: 0;
+            padding-top: 60px;
+        }
+      
+        .hamburger {
+            display: block;
+        }
+      
+        .greenhouse { 
+            max-width: 100%; 
+        }
+      
+        .popup { 
+            width: 220px; 
+        }
+      
+        .control-panel-section {
+            flex-direction: column;
+        }
     }
-    .sidebar {
-        transform: translateX(-100%);
-        width: 70%;
-        transition: transform 0.3s ease-in-out;
+    
+    /* Animations */
+    @keyframes fadeInUp {
+        from { opacity: 0; transform: translateY(20px); }
+        to { opacity: 1; transform: translateY(0); }
     }
-    .sidebar.open {
-        transform: translateX(0);
-        width: 220px !important;
+    
+    @keyframes slideInLeft {
+        from { opacity: 0; transform: translateX(-20px); }
+        to { opacity: 1; transform: translateX(0); }
     }
-    .main-content {
-        margin-left: 0;
-        padding-top: 60px;
+    
+    /* Apply animations to elements */
+    .control-box, .panel-box {
+        animation: fadeInUp 0.5s ease-out;
     }
-    .hamburger {
-        display: block;
+    
+    .sidebar a, .dropdown-container a {
+        animation: slideInLeft 0.3s ease-out;
     }
-    .hamburger.active {
-        display: none; /* Hide hamburger when sidebar is open in mobile */
+    
+    /* Enhance existing styles */
+    .status-item,
+   {
+        transition: background-color 0.3s ease;
+        padding: 5px;
+        
+        border-radius: 4px;
     }
-    .greenhouse { 
-        max-width: 100%; 
+    .measurement-item {
+        transition: background-color 0.3s ease;
+        padding: 5px;
+        border-radius: 4px;
     }
-    .popup { 
-        width: 220px; 
+    
+    .status-item:hover,
+    .measurement-item:hover {
+        background-color: rgba(52, 152, 219, 0.1);
     }
-    .control-panel-section {
-        flex-direction: column;
+    
+    .fan-button, .water-button, .set-button {
+        position: relative;
+        overflow: hidden;
     }
-}
-
-/* Animations */
-@keyframes fadeInUp {
-    from { opacity: 0; transform: translateY(20px); }
-    to { opacity: 1; transform: translateY(0); }
-}
-
-@keyframes slideInLeft {
-    from { opacity: 0; transform: translateX(-20px); }
-    to { opacity: 1; transform: translateX(0); }
-}
-
-/* Apply animations to elements */
-.control-box, .panel-box {
-    animation: fadeInUp 0.5s ease-out;
-}
-
-.sidebar a, .dropdown-container a {
-    animation: slideInLeft 0.3s ease-out;
-}
-
-/* Enhance existing styles */
-.status-item,
-.measurement-item {
-    transition: background-color 0.3s ease;
-    padding: 5px;
-    font-weight: 700;
-    border-radius: 4px;
-}
-
-.status-item:hover,
-.measurement-item:hover {
-    background-color: rgba(52, 152, 219, 0.1);
-}
-
-.fan-button, .water-button, .set-button {
-    position: relative;
-    overflow: hidden;
-}
-
-.fan-button::after, .water-button::after, .set-button::after {
-    content: '';
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    width: 5px;
-    height: 5px;
-    background: rgba(255, 255, 255, .5);
-    opacity: 0;
-    border-radius: 100%;
-    transform: scale(1, 1) translate(-50%);
-    transform-origin: 50% 50%;
-}
-
-@keyframes ripple {
-    0% {
-        transform: scale(0, 0);
-        opacity: 1;
-    }
-    20% {
-        transform: scale(25, 25);
-        opacity: 1;
-    }
-    100% {
+    
+    .fan-button::after, .water-button::after, .set-button::after {
+        content: '';
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        width: 5px;
+        height: 5px;
+        background: rgba(255, 255, 255, .5);
         opacity: 0;
-        transform: scale(40, 40);
+        border-radius: 100%;
+        transform: scale(1, 1) translate(-50%);
+        transform-origin: 50% 50%;
     }
-}
-
-.fan-button:focus:not(:active)::after,
-.water-button:focus:not(:active)::after,
-.set-button:focus:not(:active)::after {
-    animation: ripple 1s ease-out;
-}
-
-/* Enhance tooltips */
-.popup {
-    transition: opacity 0.3s ease, transform 0.3s ease, box-shadow 0.3s ease;
-}
-
-.popup:hover {
-    box-shadow: 0 15px 40px rgba(0, 0, 0, 0.2);
-}
-
-/* Enhance hamburger menu */
-.hamburger {
-    transition: transform 0.3s ease;
-}
-
-.hamburger:hover {
-    transform: scale(1.1);
-}
-
-.bar {
-    transition: all 0.3s ease-in-out;
-}
-
-.hamburger.active .bar:nth-child(1) {
-    transform: translateY(8px) rotate(45deg);
-}
-
-.hamburger.active .bar:nth-child(2) {
-    opacity: 0;
-}
-
-.hamburger.active .bar:nth-child(3) {
+    
+    @keyframes ripple {
+        0% {
+            transform: scale(0, 0);
+            opacity: 1;
+        }
+        20% {
+            transform: scale(25, 25);
+            opacity: 1;
+        }
+        100% {
+            opacity: 0;
+            transform: scale(40, 40);
+        }
+    }
+    
+    .fan-button:focus:not(:active)::after,
+    .water-button:focus:not(:active)::after,
+    .set-button:focus:not(:active)::after {
+        animation: ripple 1s ease-out;
+    }
+    
+    /* Enhance tooltips */
+    .popup {
+        transition: opacity 0.3s ease, transform 0.3s ease, box-shadow 0.3s ease;
+    }
+    
+    .popup:hover {
+        box-shadow: 0 15px 40px rgba(0, 0, 0, 0.2);
+    }
+    
+    /* Enhance hamburger menu */
+    .hamburger {
+        transition: transform 0.3s ease;
+    }
+    
+    .hamburger:hover {
+        transform: scale(1.1);
+    }
+    
+    .bar {
+        transition: all 0.3s ease-in-out;
+    }
+    
+    .hamburger.active .bar:nth-child(1) {
+        transform: translateY(8px) rotate(45deg);
+    }
+    
+    .hamburger.active .bar:nth-child(2) {
+        opacity: 0;
+    }
+    
+    .hamburger.active .bar:nth-child(3) {
         transform: translateY(-8px) rotate(-45deg);
     }
     
