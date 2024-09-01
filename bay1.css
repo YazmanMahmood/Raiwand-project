@@ -299,10 +299,12 @@
         transform: translateX(5px);
     }
 
-    .sidebar a.dimmed {
-        color: #bdc3c7;
-        pointer-events: none;
-    }
+   .sidebar a.dimmed {
+    color: #bdc3c7;
+    pointer-events: none;
+    margin-bottom: 10px; /* Adjust the value to increase/decrease the gap */
+}
+
 
     .bay-row {
         display: flex;
