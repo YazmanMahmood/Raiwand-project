@@ -32,7 +32,9 @@ document.addEventListener('DOMContentLoaded', () => {
         hamburger: document.querySelector('.hamburger'),
         sidebar: document.querySelector('.sidebar'),
         mainContent: document.querySelector('.main-content'),
-        dataLogButton: document.getElementById('data-log-button')
+        dataLogButton: document.getElementById('data-log-button'),
+        dropdownBtns: document.querySelectorAll('.dropdown-btn'),
+        sidePanelSections: document.querySelectorAll('.side-panel .section')
     };
 
     // Sidebar functionality
@@ -44,6 +46,23 @@ document.addEventListener('DOMContentLoaded', () => {
     elements.dataLogButton.addEventListener('click', () => {
         window.location.href = 'log.html';
     });
+
+    // Dropdown functionality
+    elements.dropdownBtns.forEach(btn => btn.addEventListener('click', toggleDropdown));
+    document.addEventListener('click', closeDropdowns);
+
+    // Responsive design
+    const debouncedResize = debounce(() => {
+        adjustForMobile();
+        adjustSidePanelHeights();
+        adjustTextSizes();
+    }, 250);
+    window.addEventListener('resize', debouncedResize);
+
+    // Initialize controls
+    adjustSidePanelHeights();
+    adjustForMobile();
+    adjustTextSizes();
 
     // Initialize the table and start listening for set value changes
     updateSetValuesTable();
@@ -70,6 +89,64 @@ function closeSidebarOnOutsideClick(event) {
         sidebar.classList.remove('open');
         document.querySelector('.main-content').classList.remove('shifted');
     }
+}
+
+function toggleDropdown(e) {
+    e.stopPropagation();
+    this.classList.toggle('active');
+    const dropdownContainer = this.nextElementSibling;
+    dropdownContainer.style.maxHeight = dropdownContainer.style.maxHeight ? null : `${dropdownContainer.scrollHeight}px`;
+}
+
+function closeDropdowns(event) {
+    if (!event.target.matches('.dropdown-btn')) {
+        document.querySelectorAll('.dropdown-container').forEach(dropdown => {
+            dropdown.style.maxHeight = null;
+            dropdown.previousElementSibling.classList.remove('active');
+        });
+    }
+}
+
+function adjustForMobile() {
+    const sidebar = document.querySelector('.sidebar');
+    const mainContent = document.querySelector('.main-content');
+    const isMobile = window.innerWidth <= 768;
+    document.body.classList.toggle('mobile', isMobile);
+    sidebar.style.width = isMobile ? '0' : '200px';
+    mainContent.style.marginLeft = isMobile ? '0' : '240px';
+}
+
+function adjustSidePanelHeights() {
+    const sidePanelSections = document.querySelectorAll('.side-panel .section');
+    sidePanelSections.forEach(section => {
+        const title = section.querySelector('h2');
+        const content = section.querySelector('.status-item, .measurement-item, .fan-control, .water-control, .set-value-widget');
+        if (title && content) {
+            section.style.minHeight = `${title.offsetHeight + content.offsetHeight + 40}px`;
+        }
+    });
+}
+
+function adjustTextSizes() {
+    const sidePanelSections = document.querySelectorAll('.side-panel .section');
+    sidePanelSections.forEach(container => {
+        const containerWidth = container.offsetWidth;
+        const containerHeight = container.offsetHeight;
+        const fontSize = Math.min(containerWidth * 0.05, containerHeight * 0.1);
+        container.style.fontSize = `${fontSize}px`;
+    });
+}
+
+function debounce(func, wait) {
+    let timeout;
+    return function executedFunction(...args) {
+        const later = () => {
+            clearTimeout(timeout);
+            func(...args);
+        };
+        clearTimeout(timeout);
+        timeout = setTimeout(later, wait);
+    };
 }
 
 function updateSetValuesTable() {
