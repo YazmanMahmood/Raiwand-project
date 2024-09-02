@@ -1,5 +1,5 @@
 import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.12.3/firebase-app.js';
-import { getDatabase, ref, onValue, push } from 'https://www.gstatic.com/firebasejs/10.12.3/firebase-database.js';
+import { getDatabase, ref, onValue, push, get } from 'https://www.gstatic.com/firebasejs/10.12.3/firebase-database.js';
 
 // Your Firebase configuration
 const firebaseConfig = {
@@ -38,14 +38,14 @@ document.addEventListener('DOMContentLoaded', () => {
     function updateSetValuesTable() {
         console.log('Updating set values table');
         const tableBody = document.getElementById('log-table-body');
-
+    
         if (!tableBody) {
             console.error("Table body element not found");
             return;
         }
-
-        const logsRef = ref(database, 'bay 1/node 1/set_values_log');
-
+    
+        const logsRef = ref(database, 'bay 1/set_value_log');
+    
         onValue(logsRef, (snapshot) => {
             console.log('Received set values data:', snapshot.val());
             const logs = [];
@@ -56,11 +56,14 @@ document.addEventListener('DOMContentLoaded', () => {
                     logs.push(log);
                 }
             });
-
+    
             logs.sort((a, b) => b.timestamp - a.timestamp);
-            tableBody.innerHTML = '';
             const limitedLogs = logs.slice(0, 100);
-
+    
+            // Clear existing rows
+            tableBody.innerHTML = '';
+    
+            // Add new rows at the top
             limitedLogs.forEach((log) => {
                 const row = document.createElement('tr');
                 row.innerHTML = `
@@ -69,49 +72,36 @@ document.addEventListener('DOMContentLoaded', () => {
                     <td>${log.soil_moisture !== undefined ? log.soil_moisture : 'N/A'}</td>
                     <td>${log.humidity !== undefined ? log.humidity : 'N/A'}</td>
                 `;
-                tableBody.appendChild(row);
+                tableBody.insertBefore(row, tableBody.firstChild);
             });
             console.log('Table updated with', limitedLogs.length, 'entries');
         }, (error) => {
             console.error('Error fetching set values logs:', error);
         });
     }
-
     // Listen for value changes and update the set values log
     function listenForSetValueChanges() {
-        const humidityRef = ref(database, 'bay 1/node 1/set values/humidity');
-        const soilMoistureRef = ref(database, 'bay 1/node 1/set values/soil_moisture');
-        const temperatureRef = ref(database, 'bay 1/node 1/set values/temperature');
+        const setValuesRef = ref(database, 'bay 1/set values');
 
-        function logValueChange(snapshot, type) {
-            const value = snapshot.val();
+        onValue(setValuesRef, async (snapshot) => {
+            const setValues = snapshot.val();
+            if (!setValues) return;
+
+            const timeRef = ref(database, 'Time_stamp/Time');
+            const timeSnapshot = await get(timeRef);
+            const timestamp = timeSnapshot.val() || Date.now();
+
             const logEntry = {
-                timestamp: Date.now(),
-                temperature: type === 'temperature' ? value : null,
-                soil_moisture: type === 'soil_moisture' ? value : null,
-                humidity: type === 'humidity' ? value : null
+                timestamp: timestamp,
+                temperature: setValues.temperature || null,
+                soil_moisture: setValues.soil_moisture || null,
+                humidity: setValues.humidity || null
             };
 
-            const logRef = ref(database, 'bay 1/node 1/set_values_log');
+            const logRef = ref(database, 'bay 1/set_value_log');
             push(logRef, logEntry);
-        }
-
-        onValue(humidityRef, (snapshot) => {
-            logValueChange(snapshot, 'humidity');
         }, (error) => {
-            console.error('Error listening for humidity value changes:', error);
-        });
-
-        onValue(soilMoistureRef, (snapshot) => {
-            logValueChange(snapshot, 'soil_moisture');
-        }, (error) => {
-            console.error('Error listening for soil moisture value changes:', error);
-        });
-
-        onValue(temperatureRef, (snapshot) => {
-            logValueChange(snapshot, 'temperature');
-        }, (error) => {
-            console.error('Error listening for temperature value changes:', error);
+            console.error('Error listening for set value changes:', error);
         });
     }
 
