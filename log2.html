@@ -63,5 +63,23 @@
     </div>
 
     <script type="module" src="log2.js"></script>
+    <script type="module">
+        import { startSessionTimer, stopSessionTimer } from './session-manager.js';
+        
+        document.addEventListener('DOMContentLoaded', () => {
+          if (sessionStorage.getItem('loggedIn') !== 'true') {
+            window.location.href = 'login.html';
+          } else {
+            startSessionTimer();
+          }
+        });
+      
+        window.addEventListener('beforeunload', () => {
+          stopSessionTimer();
+        });
+      </script>
+    
+
+    <script>
 </body>
 </html>
