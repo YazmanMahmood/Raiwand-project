@@ -35,75 +35,10 @@ document.addEventListener('DOMContentLoaded', () => {
         dataLogButton: document.getElementById('data-log-button')
     };
 
-    function updateSetValuesTable() {
-        console.log('Updating set values table');
-        const tableBody = document.getElementById('log-table-body');
-    
-        if (!tableBody) {
-            console.error("Table body element not found");
-            return;
-        }
-    
-        const logsRef = ref(database, 'bay 1/set_value_log');
-    
-        onValue(logsRef, (snapshot) => {
-            console.log('Received set values data:', snapshot.val());
-            const logs = [];
-            snapshot.forEach((childSnapshot) => {
-                const log = childSnapshot.val();
-                if (log && log.timestamp) {
-                    log.timestamp = new Date(log.timestamp);
-                    logs.push(log);
-                }
-            });
-    
-            logs.sort((a, b) => b.timestamp - a.timestamp);
-            const limitedLogs = logs.slice(0, 100);
-    
-            // Clear existing rows
-            tableBody.innerHTML = '';
-    
-            // Add new rows at the top
-            limitedLogs.forEach((log) => {
-                const row = document.createElement('tr');
-                row.innerHTML = `
-                    <td>${log.timestamp.toLocaleString()}</td>
-                    <td>${log.temperature !== undefined ? log.temperature : 'N/A'}</td>
-                    <td>${log.soil_moisture !== undefined ? log.soil_moisture : 'N/A'}</td>
-                    <td>${log.humidity !== undefined ? log.humidity : 'N/A'}</td>
-                `;
-                tableBody.insertBefore(row, tableBody.firstChild);
-            });
-            console.log('Table updated with', limitedLogs.length, 'entries');
-        }, (error) => {
-            console.error('Error fetching set values logs:', error);
-        });
-    }
-    // Listen for value changes and update the set values log
-    function listenForSetValueChanges() {
-        const setValuesRef = ref(database, 'bay 1/set values');
-
-        onValue(setValuesRef, async (snapshot) => {
-            const setValues = snapshot.val();
-            if (!setValues) return;
-
-            const timeRef = ref(database, 'Time_stamp/Time');
-            const timeSnapshot = await get(timeRef);
-            const timestamp = timeSnapshot.val() || Date.now();
-
-            const logEntry = {
-                timestamp: timestamp,
-                temperature: setValues.temperature || null,
-                soil_moisture: setValues.soil_moisture || null,
-                humidity: setValues.humidity || null
-            };
-
-            const logRef = ref(database, 'bay 1/set_value_log');
-            push(logRef, logEntry);
-        }, (error) => {
-            console.error('Error listening for set value changes:', error);
-        });
-    }
+    // Sidebar functionality
+    elements.hamburger.addEventListener('click', toggleSidebar);
+    document.addEventListener('click', closeSidebarOnOutsideClick);
+    elements.sidebar.addEventListener('click', (e) => e.stopPropagation());
 
     // Add event listener to the button
     elements.dataLogButton.addEventListener('click', () => {
@@ -114,3 +49,107 @@ document.addEventListener('DOMContentLoaded', () => {
     updateSetValuesTable();
     listenForSetValueChanges();
 });
+
+function toggleSidebar(e) {
+    e.stopPropagation();
+    const sidebar = document.querySelector('.sidebar');
+    const mainContent = document.querySelector('.main-content');
+    const hamburger = document.getElementById('hamburger-btn');
+    hamburger.classList.toggle('active');
+    sidebar.classList.toggle('open');
+    mainContent.classList.toggle('shifted');
+}
+
+function closeSidebarOnOutsideClick(event) {
+    const sidebar = document.querySelector('.sidebar');
+    const hamburger = document.getElementById('hamburger-btn');
+    if (sidebar.classList.contains('open') &&
+        !sidebar.contains(event.target) &&
+        !hamburger.contains(event.target)) {
+        hamburger.classList.remove('active');
+        sidebar.classList.remove('open');
+        document.querySelector('.main-content').classList.remove('shifted');
+    }
+}
+
+function updateSetValuesTable() {
+    console.log('Updating set values table');
+    const tableBody = document.getElementById('log-table-body');
+
+    if (!tableBody) {
+        console.error("Table body element not found");
+        return;
+    }
+
+    const logsRef = ref(database, 'bay 1/set_value_log');
+
+    onValue(logsRef, (snapshot) => {
+        console.log('Received set values data:', snapshot.val());
+        const logs = [];
+        snapshot.forEach((childSnapshot) => {
+            const log = childSnapshot.val();
+            if (log && log.timestamp) {
+                log.timestamp = new Date(log.timestamp);
+                logs.push(log);
+            }
+        });
+
+        logs.sort((a, b) => b.timestamp - a.timestamp);
+        const limitedLogs = logs.slice(0, 100);
+
+        // Clear existing rows
+        tableBody.innerHTML = '';
+
+        // Add new rows at the top
+        limitedLogs.forEach((log) => {
+            const row = document.createElement('tr');
+            row.innerHTML = `
+                <td>${log.timestamp.toLocaleString()}</td>
+                <td>${log.temperature !== undefined ? log.temperature : 'N/A'}</td>
+                <td>${log.soil_moisture !== undefined ? log.soil_moisture : 'N/A'}</td>
+                <td>${log.humidity !== undefined ? log.humidity : 'N/A'}</td>
+            `;
+            tableBody.insertBefore(row, tableBody.firstChild); // Insert at the top
+        });
+        console.log('Table updated with', limitedLogs.length, 'entries');
+    }, (error) => {
+        console.error('Error fetching set values logs:', error);
+    });
+}
+
+// Listen for value changes and update the set values log
+function listenForSetValueChanges() {
+    const setValuesRef = ref(database, 'set values'); // Updated path
+
+    onValue(setValuesRef, async (snapshot) => {
+        const setValues = snapshot.val();
+        if (!setValues) return;
+
+        const timeRef = ref(database, 'Time_stamp/Time');
+        const timeSnapshot = await get(timeRef);
+        const timestamp = timeSnapshot.val() || Date.now();
+
+        const logEntry = {
+            timestamp: timestamp,
+            temperature: setValues.temperature || null,
+            soil_moisture: setValues.soil_moisture || null,
+            humidity: setValues.humidity || null
+        };
+
+        const logRef = ref(database, 'bay 1/set_value_log');
+        push(logRef, logEntry).then(() => {
+            // Prepend new log entry to the table
+            const tableBody = document.getElementById('log-table-body');
+            const row = document.createElement('tr');
+            row.innerHTML = `
+                <td>${new Date(logEntry.timestamp).toLocaleString()}</td>
+                <td>${logEntry.temperature !== undefined ? logEntry.temperature : 'N/A'}</td>
+                <td>${logEntry.soil_moisture !== undefined ? logEntry.soil_moisture : 'N/A'}</td>
+                <td>${logEntry.humidity !== undefined ? logEntry.humidity : 'N/A'}</td>
+            `;
+            tableBody.insertBefore(row, tableBody.firstChild); // Insert at the top
+        });
+    }, (error) => {
+        console.error('Error listening for set value changes:', error);
+    });
+}
