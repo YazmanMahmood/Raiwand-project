@@ -41,15 +41,14 @@
 
     <div class="container">
         <div class="header">
-            <h1>Greenhouse Monitoring - Bay 1</h1>
+            <h1>Bay 1</h1>
         </div>
 
         <div class="content">
             <div class="main-content" role="main">
                 <div class="greenhouse">
                     <img src="GreenHouseBay.png" alt="Greenhouse Bay" class="greenhouse-image">
-                    <div class="node node1" onclick="navigateToNode1()">
-                    </div>
+                    <div class="node node1" onclick="navigateToNode1()"></div>
                     <div class="node node2"></div>
                     <div class="node node3"></div>
                     <div class="node node4"></div>
@@ -85,21 +84,21 @@
                         <h2>Water Controls</h2>
                         <div class="water-control">
                             Valve 1:
-                            <button id="valve1-auto" class="water-button">Auto</button>
-                            <button id="valve1-on" class="water-button">ON</button>
-                            <button id="valve1-off" class="water-button">OFF</button>
+                            <button id="water1-auto" class="water-button">Auto</button>
+                            <button id="water1-on" class="water-button">ON</button>
+                            <button id="water1-off" class="water-button">OFF</button>
                         </div>
                         <div class="water-control">
                             Valve 2:
-                            <button id="valve2-auto" class="water-button">Auto</button>
-                            <button id="valve2-on" class="water-button">ON</button>
-                            <button id="valve2-off" class="water-button">OFF</button>
+                            <button id="water2-auto" class="water-button">Auto</button>
+                            <button id="water2-on" class="water-button">ON</button>
+                            <button id="water2-off" class="water-button">OFF</button>
                         </div>
                         <div class="water-control">
                             Valve 3:
-                            <button id="valve3-auto" class="water-button">Auto</button>
-                            <button id="valve3-on" class="water-button">ON</button>
-                            <button id="valve3-off" class="water-button">OFF</button>
+                            <button id="water3-auto" class="water-button">Auto</button>
+                            <button id="water3-on" class="water-button">ON</button>
+                            <button id="water3-off" class="water-button">OFF</button>
                         </div>
                         <div class="water-control">
                             Water Mesh:
@@ -119,8 +118,12 @@
                         <span id="fan-status">--</span>
                     </div>
                     <div class="status-item">
-                        <span class="status-label">Water Flow:</span>
-                        <span id="water-flow-status">OFF</span>
+                        <span class="status-label">Water Valve:</span> <!-- Changed from Water Flow -->
+                        <span id="water-valve-status">OFF</span> <!-- Changed from water-flow-status -->
+                    </div>
+                    <div class="status-item">
+                        <span class="status-label">Water Mesh:</span>
+                        <span id="water-mesh-status">OFF</span>
                     </div>
                 </div>
 
@@ -132,7 +135,7 @@
                 </div>
 
                 <div id="error-box" class="error-box" style="display: none;">
-                    <p id="error-message"></p>
+                    <p id="error-message" class="error-message"></p>
                 </div>
 
                 <div class="section set-values">
