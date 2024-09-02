@@ -33,7 +33,6 @@ body {
   margin: 0;
 }
 
-
 .bay-row {
   display: flex;
   align-items: center;
@@ -104,7 +103,6 @@ body {
   padding: 8px 0;
 }
 
-
 .dropdown-container a {
   display: block;
   padding: 8px 16px;
@@ -113,6 +111,7 @@ body {
   font-size: 14px;
   transition: background-color 0.2s ease;
 }
+
 .dropdown-container::-webkit-scrollbar-track {
   background: #f1f1f1;
 }
@@ -157,7 +156,6 @@ body {
   transition: margin-left 0.3s ease;
 }
 
-
 .hamburger {
   display: none;
   position: fixed;
@@ -170,7 +168,6 @@ body {
   border: none;
   color: #1a237e;
   transition: opacity 0.3s ease, visibility 0.3s ease;
-
 }
 
 .bar {
@@ -181,7 +178,6 @@ body {
   transition: all 0.3s ease-in-out;
   background-color: #1a237e;
 }
-
 
 .error-box {
   background-color: #ffdddd;
@@ -194,11 +190,10 @@ body {
   margin: 0;
   color: #f44336;
 }
+
 #error-message {
   white-space: pre-line;
 }
-
-
 
 .header h1, .header p {
   margin: 0;
@@ -213,17 +208,15 @@ body {
     transform: translateY(0);
   }
 }
+
 .widgets {
   display: flex;
   justify-content: space-around;
-  flex-wrap: nowrap;
+  flex-wrap: wrap;
   margin-top: 20px;
-  overflow-x: auto;
-  padding-bottom: 20px;
 }
 
 .widget {
-  flex: 0 0 auto;
   width: 30%;
   min-width: 200px;
   padding: 10px;
@@ -241,6 +234,7 @@ body {
   transform: translateY(-5px);
   box-shadow: 0 4px 8px rgba(0,0,0,0.15);
 }
+
 @keyframes fadeIn {
   to {
     opacity: 1;
@@ -345,7 +339,6 @@ body {
   background-color: #3E8CB1;
 }
 
-
 .summary {
   position: relative;
   padding-top: 20px;
@@ -376,7 +369,6 @@ body {
 .chart-container:hover {
   transform: scale(1.02);
 }
-
 
 .comment-section {
   margin-top: 40px;
@@ -487,23 +479,8 @@ body {
 #popup-close:hover {
   background-color: #5A91AD;
   transform: translateY(-2px);
-
 }
-@media screen and (max-width: 1024px) {
-  .widgets {
-    flex-wrap: nowrap;
-    justify-content: flex-start;
-    overflow-x: auto;
-    -webkit-overflow-scrolling: touch;
-    scroll-snap-type: x mandatory;
-  }
 
-  .widget {
-    flex: 0 0 auto;
-    width: 80%;
-    scroll-snap-align: center;
-  }
-}
 @media screen and (max-width: 768px) {
   .sidebar {
     transform: translateX(-100%);
@@ -530,6 +507,7 @@ body {
     opacity: 0;
     visibility: hidden;
   }
+
   .widget {
     width: 100%;
   }
@@ -538,9 +516,6 @@ body {
     width: 100%;
   }
 }
-
-
-
 
 @media screen and (min-width: 769px) {
   .sidebar {
@@ -553,6 +528,15 @@ body {
 
   .hamburger {
     display: none;
+  }
+
+  .widgets {
+    flex-wrap: nowrap;
+  }
+
+  .widget {
+    width: auto;
+    flex: 1;
   }
 }
 
