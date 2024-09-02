@@ -6,7 +6,9 @@
         --background-color: #f8f9fa;
         --text-color: #333;
         --sidebar-color: #000000;
-        --error-color: #000000;
+        --error-color: #ff0000;
+                color: var(--error-color);
+
     }
 
     * {
@@ -29,6 +31,7 @@
         margin: 0 auto;
         padding: 20px;
         transition: margin-left 0.3s ease;
+        text-align: center; /* Center the h1 heading */
     }
 
     .header {
@@ -38,7 +41,7 @@
 
     h1 {
         font-size: 42px;
-        color: var(--primary-color);
+        color: #3498db;
         margin-top: 30px;
         font-weight: 700;
         text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1);
@@ -83,7 +86,7 @@
 
     .node {
         position: absolute;
-        background-color: rgba(138, 134, 134, 0.1);
+        background-color: rgba(138, 134, 134, 0.03);
         border-radius: 10px;
         cursor: pointer;
         transition: transform 0.3s ease, box-shadow 0.3s ease, background-color 0.3s ease;
@@ -126,7 +129,7 @@
         display: flex;
         justify-content: center;
         flex-wrap: wrap;
-        gap: 20px;
+        gap: 5px;
         margin-top: 20px;
     }
 
@@ -135,7 +138,7 @@
         max-width: 280px;
         background-color: #fff;
         border-radius: 12px;
-        padding: 20px;
+        padding: 10px;
         box-shadow: 0 8px 20px rgba(0, 0, 0, 0.08);
         transition: transform 0.3s ease;
     }
@@ -178,11 +181,12 @@
         background-color: var(--secondary-color);
         color: white;
         border: none;
+        
         border-radius: 6px;
         cursor: pointer;
         transition: background-color 0.3s, transform 0.2s;
         font-weight: 600;
-        min-width: 50px; /* Reduced width for control buttons */
+        min-width: 47px; /* Reduced width for control buttons */
         font-size: 12px; /* Smaller font size for buttons */
     }
 
@@ -253,6 +257,10 @@
         color: var(--error-color);
         font-weight: 600;
     }
+    .error-message {
+        color: red;
+      }
+      
 
     .sidebar {
         width: 220px;
@@ -299,11 +307,10 @@
         transform: translateX(5px);
     }
 
-   .sidebar a.dimmed {
-    color: #bdc3c7;
-    pointer-events: none;
-}
-
+    .sidebar a.dimmed {
+        color: #bdc3c7;
+        pointer-events: none;
+    }
 
     .bay-row {
         display: flex;
@@ -497,7 +504,10 @@
     }
 
     .popup-content {
-        font-size: 15px;
+        display: flex;
+        flex-direction: column;
+        align-items: center; /* Center align the values */
+        gap: 10px; /* Add some space between the values */
     }
 
     @keyframes fadeIn {
@@ -685,7 +695,7 @@
         
         /* Enhance the header */
         .header h1 {
-            position: relative;
+            position: middle;
             display: inline-block;
         }
         
