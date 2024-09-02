@@ -1,5 +1,5 @@
 import { initializeApp } from 'https://www.gstatic.com/firebasejs/9.6.10/firebase-app.js';
-import { getDatabase, ref, set, onValue, off } from 'https://www.gstatic.com/firebasejs/9.6.10/firebase-database.js';
+import { getDatabase, ref, set, onValue } from 'https://www.gstatic.com/firebasejs/9.6.10/firebase-database.js';
 import { firebaseConfig } from './firebase-config.js';
 
 // Initialize Firebase
@@ -10,12 +10,13 @@ document.addEventListener('DOMContentLoaded', () => {
     const elements = {
         sidebar: document.querySelector('.sidebar'),
         mainContent: document.querySelector('.main-content'),
-        popup: document.querySelector('.set-value-popup'),  // Updated for set value popup
+        popup: document.querySelector('.set-value-popup'),
         popupMessage: document.getElementById('set-value-message'),
-        popupClose: document.querySelector('.set-value-close'),  // Corrected selector for close button
+        popupClose: document.querySelector('.set-value-close'),
         nodes: document.querySelectorAll('.node'),
         fanStatusElement: document.getElementById('fan-status'),
-        waterFlowStatusElement: document.getElementById('water-flow-status'),
+        waterFlowStatusElement: document.getElementById('water-valve-status'),
+        waterMeshStatusElement: document.getElementById('water-mesh-status'),
         dropdownBtns: document.querySelectorAll('.dropdown-btn'),
         sidePanelSections: document.querySelectorAll('.side-panel .section'),
         settingsLink: document.querySelector('a[href="settings.html"]'),
@@ -48,6 +49,7 @@ document.addEventListener('DOMContentLoaded', () => {
     // Initialize controls and popups
     const fanControls = initializeFanControls();
     const waterControls = initializeWaterControls();
+    const waterMeshControl = initializeWaterMeshControls();
     initializeSetValueControls();
     initializeAllPopups();
 
@@ -209,7 +211,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Water controls
     function initializeWaterControls() {
-        return ['valve1', 'valve2', 'valve3'].map(valveId => {
+        return ['water1', 'water2', 'water3'].map(valveId => {
             const control = {
                 auto: document.getElementById(`${valveId}-auto`),
                 on: document.getElementById(`${valveId}-on`),
@@ -245,12 +247,51 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     function updateWaterFlowStatus() {
-        const waterFlowRef = ref(database, 'bay 1/controls/water_flow');
-        onValue(waterFlowRef, (snapshot) => {
-            if (elements.waterFlowStatusElement) {
-                elements.waterFlowStatusElement.textContent = snapshot.val() || 'OFF';
-            }
-        });
+        if (elements.waterFlowStatusElement) {
+            elements.waterFlowStatusElement.innerHTML = waterControls.map((control, index) =>
+                `Valve ${index + 1}: ${control.status}`).join('<br>');
+        }
+    }
+
+    // Water Mesh controls
+    function initializeWaterMeshControls() {
+        const waterMeshControl = {
+            auto: document.getElementById('water-mesh-auto'),
+            on: document.getElementById('water-mesh-on'),
+            off: document.getElementById('water-mesh-off'),
+            status: 'OFF'
+        };
+
+        if (waterMeshControl.auto && waterMeshControl.on && waterMeshControl.off) {
+            ['auto', 'on', 'off'].forEach(state => {
+                waterMeshControl[state].addEventListener('click', () => setWaterMeshState(state.charAt(0).toUpperCase() + state.slice(1)));
+            });
+
+            const waterMeshRef = ref(database, `bay 1/controls/water_mesh`);
+            onValue(waterMeshRef, (snapshot) => {
+                waterMeshControl.status = snapshot.val() || 'Off';
+                updateWaterMeshButton(waterMeshControl);
+                updateWaterMeshStatus();
+            });
+        }
+
+        return waterMeshControl;
+    }
+
+    function setWaterMeshState(status) {
+        const waterMeshRef = ref(database, `bay 1/controls/water_mesh`);
+        set(waterMeshRef, status).catch((error) => handleError(error, 'setting water mesh state'));
+    }
+
+    function updateWaterMeshButton(control) {
+        ['auto', 'on', 'off'].forEach(state =>
+            control[state].classList.toggle('active', control.status.toLowerCase() === state));
+    }
+
+    function updateWaterMeshStatus() {
+        if (elements.waterMeshStatusElement) {
+            elements.waterMeshStatusElement.textContent = `Water Mesh: ${waterMeshControl.status}`;
+        }
     }
 
     // Set value controls
@@ -274,13 +315,13 @@ document.addEventListener('DOMContentLoaded', () => {
                 onValue(setValueRef, (snapshot) => {
                     const value = snapshot.val();
                     if (value !== null) {
-                        setValueInputs[valueType].value = value;
+                        setValueInputs[valueType].value = Math.floor(value); // Remove decimal points
                     }
                 });
     
                 // Set new values to Firebase when button is clicked
                 setValueButtons[valueType].addEventListener('click', () => {
-                    const value = parseFloat(setValueInputs[valueType].value);
+                    const value = Math.floor(parseFloat(setValueInputs[valueType].value));
                     if (!isNaN(value) && value >= 0 && value <= 100) {
                         setValueForBay(valueType, value);
                     } else {
@@ -387,7 +428,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     if (data) {
                         ['temperature', 'humidity', 'soil_moisture'].forEach(type => {
                             const value = data[type];
-                            let displayValue = value !== null && !isNaN(value) ? parseFloat(value).toFixed(2) : 'N/A';
+                            let displayValue = value !== null && !isNaN(value) ? Math.floor(value) : 'N/A'; // Remove decimal points
                             if (type === 'temperature') {
                                 displayValue += '°C';
                             } else if (type === 'humidity' || type === 'soil_moisture') {
@@ -422,7 +463,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 if (nodeData.Power_1_status === 0 && nodeData.DHT_check === 0 && nodeData.Battery === 0) nodeErrors.push('008');
                 else if (nodeData.Battery === 0 && nodeData.Power_1_status === 0) nodeErrors.push('007');
                 else if (nodeData.DHT_check === 0 && nodeData.Power_1_status === 0) nodeErrors.push('006');
-                else if (nodeData.DHT_check === 0 && nodeData.Battery === 0) nodeErrors.push('005');
+                else if (nodeData.DHT_check === 0 && nodeData.Battery  === 0 && nodeData.Battery === 0) nodeErrors.push('005');
                 else if (nodeData.active === 0) nodeErrors.push('004');
                 else if (nodeData.Battery === 0) nodeErrors.push('003');
                 else if (nodeData.DHT_check === 0) nodeErrors.push('002');
@@ -450,7 +491,7 @@ document.addEventListener('DOMContentLoaded', () => {
             const nodeData = data[`node ${i}`];
             if (nodeData) {
                 ['temperature', 'humidity', 'soil_moisture'].forEach(type => {
-                    const value = parseFloat(nodeData[type]);
+                    const value = Math.floor(parseFloat(nodeData[type])); // Remove decimal points
                     if (!isNaN(value)) {
                         total[type] += value;
                         count[type]++;
@@ -461,7 +502,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
         ['temperature', 'humidity', 'soil_moisture'].forEach(type => {
             if (count[type] > 0) {
-                const avgValue = (total[type] / count[type]).toFixed(2);
+                const avgValue = Math.floor(total[type] / count[type]); // Remove decimal points
                 const avgElement = document.getElementById(`avg-${type.replace('_', '-')}`);
                 if (avgElement) {
                     avgElement.textContent = `${avgValue}${type === 'temperature' ? '°C' : '%'}`;
@@ -496,6 +537,9 @@ document.addEventListener('DOMContentLoaded', () => {
                 controlFansAutomatically(data.temperature);
             }
         });
+
+        // Initialize the water mesh controls
+        initializeWaterMeshControls();
     }
 
     // Debounce function
