@@ -33,7 +33,6 @@ body {
   margin: 0;
 }
 
-
 .bay-row {
   display: flex;
   align-items: center;
@@ -104,7 +103,6 @@ body {
   padding: 8px 0;
 }
 
-
 .dropdown-container a {
   display: block;
   padding: 8px 16px;
@@ -113,6 +111,7 @@ body {
   font-size: 14px;
   transition: background-color 0.2s ease;
 }
+
 .dropdown-container::-webkit-scrollbar-track {
   background: #f1f1f1;
 }
@@ -157,29 +156,28 @@ body {
   transition: margin-left 0.3s ease;
 }
 
+.hamburger {
+  display: none;
+  position: fixed;
+  top: 15px;
+  left: 15px;
+  font-size: 24px;
+  cursor: pointer;
+  z-index: 9999;
+  background: none;
+  border: none;
+  color: #1a237e;
+  transition: opacity 0.3s ease, visibility 0.3s ease;
+}
 
- .hamburger {
-        display: none;
-        position: fixed;
-        top: 15px;
-        left: 15px;
-        font-size: 24px;
-        cursor: pointer;
-        z-index: 9999;
-        background: none;
-        border: none;
-        color: var(--primary-color);
-    }
-
-    .bar {
-        display: block;
-        width: 28px;
-        height: 3px;
-        margin: 6px auto;
-        transition: all 0.3s ease-in-out;
-        background-color: var(--primary-color);
-    }
-
+.bar {
+  display: block;
+  width: 28px;
+  height: 3px;
+  margin: 6px auto;
+  transition: all 0.3s ease-in-out;
+  background-color: #1a237e;
+}
 
 .error-box {
   background-color: #ffdddd;
@@ -192,11 +190,10 @@ body {
   margin: 0;
   color: #f44336;
 }
+
 #error-message {
   white-space: pre-line;
 }
-
-
 
 .header h1, .header p {
   margin: 0;
@@ -342,7 +339,6 @@ body {
   background-color: #3E8CB1;
 }
 
-
 .summary {
   position: relative;
   padding-top: 20px;
@@ -373,7 +369,6 @@ body {
 .chart-container:hover {
   transform: scale(1.02);
 }
-
 
 .comment-section {
   margin-top: 40px;
@@ -485,6 +480,7 @@ body {
   background-color: #5A91AD;
   transform: translateY(-2px);
 }
+
 @media screen and (max-width: 768px) {
   .sidebar {
     transform: translateX(-100%);
@@ -511,6 +507,7 @@ body {
     opacity: 0;
     visibility: hidden;
   }
+
   .widget {
     width: 100%;
   }
@@ -519,9 +516,6 @@ body {
     width: 100%;
   }
 }
-
-
-
 
 @media screen and (min-width: 769px) {
   .sidebar {
@@ -534,6 +528,15 @@ body {
 
   .hamburger {
     display: none;
+  }
+
+  .widgets {
+    flex-wrap: nowrap;
+  }
+
+  .widget {
+    width: auto;
+    flex: 1;
   }
 }
 
