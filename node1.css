@@ -85,18 +85,18 @@ body {
 }
 
 .dropdown-container {
-  max-height: 0;
-  overflow-y: auto;
-  transition: max-height 0.3s ease;
-  background-color: #66a6a4;
-  border-radius: 0 0 6px 6px;
-  margin-top: 5px;
-  width: 100%;
-  position: absolute;
-  top: 100%;
-  left: 0;
-  z-index: 999;
-}
+        max-height: 0;
+        overflow-y: auto;
+        transition: max-height 0.3s ease;
+        background-color: #34495e;
+        border-radius: 0 0 6px 6px;
+        margin-top: 5px;
+        width: 100%;
+        position: absolute;
+        top: 100%;
+        left: 0;
+        z-index: 999;
+    }
 
 .dropdown-container.show {
   max-height: 150px;
