@@ -313,7 +313,7 @@ document.addEventListener('DOMContentLoaded', () => {
         Object.keys(setValueButtons).forEach(valueType => {
             if (setValueButtons[valueType] && setValueInputs[valueType]) {
                 // Fetch initial values and set input fields
-                const setValueRef = ref(database, `bay 1/set values/${valueType.toLowerCase()}`);
+                const setValueRef = ref(database, `bay1/set values/${valueType.toLowerCase()}`);
                 onValue(setValueRef, (snapshot) => {
                     const value = snapshot.val();
                     if (value !== null) {
