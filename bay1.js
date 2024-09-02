@@ -290,11 +290,11 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     function updateWaterMeshStatus() {
-    if (elements.waterMeshStatusElement) {
-        elements.waterMeshStatusElement.textContent = `${waterMeshControl.status}`;
+        if (elements.waterMeshStatusElement) {
+            elements.waterMeshStatusElement.textContent = `${waterMeshControl.status}`;
+        }
     }
-}
-
+    
 
     // Set value controls
     function initializeSetValueControls() {
@@ -313,7 +313,7 @@ document.addEventListener('DOMContentLoaded', () => {
         Object.keys(setValueButtons).forEach(valueType => {
             if (setValueButtons[valueType] && setValueInputs[valueType]) {
                 // Fetch initial values and set input fields
-                const setValueRef = ref(database, `bay1/set values/${valueType.toLowerCase()}`);
+                const setValueRef = ref(database, `bay1/set_values/${valueType.toLowerCase()}`);
                 onValue(setValueRef, (snapshot) => {
                     const value = snapshot.val();
                     if (value !== null) {
@@ -341,7 +341,7 @@ document.addEventListener('DOMContentLoaded', () => {
             humidity: 'humidity'
         };
 
-        const path = `bay 1/set values/${setValuePaths[valueType]}`;
+        const path = `bay1/set_values/${setValuePaths[valueType]}`;
         const setValueRef = ref(database, path);
 
         set(setValueRef, value)
@@ -424,7 +424,7 @@ document.addEventListener('DOMContentLoaded', () => {
             if (popupContent) {
                 popupContent.innerHTML = '';
                 const nodeNumber = nodeId.replace('node', '');
-                const dataRef = ref(database, `bay 1/node ${nodeNumber}`);
+                const dataRef = ref(database, `bay1/node${nodeNumber}`);
                 onValue(dataRef, snapshot => {
                     const data = snapshot.val();
                     if (data) {
@@ -498,7 +498,7 @@ document.addEventListener('DOMContentLoaded', () => {
         let count = { temperature: 0, humidity: 0, soil_moisture: 0 };
 
         for (let i = 1; i <= 6; i++) {
-            const nodeData = data[`node ${i}`];
+            const nodeData = data[`node${i}`];
             if (nodeData) {
                 ['temperature', 'humidity', 'soil_moisture'].forEach(type => {
                     const value = Math.floor(parseFloat(nodeData[type])); // Remove decimal points
@@ -538,7 +538,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Firebase listeners
     function initializeFirebaseListeners() {
-        const bayRef = ref(database, 'bay 1');
+        const bayRef = ref(database, 'bay1');
         onValue(bayRef, (snapshot) => {
             const data = snapshot.val();
             if (data) {
@@ -601,3 +601,4 @@ document.addEventListener('DOMContentLoaded', () => {
         handleError(error, 'initializing the application');
     }
 });
+                       
