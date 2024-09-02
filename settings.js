@@ -89,7 +89,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Clear Set Values History
     const handleClearSetValues = () => {
-        const setValuesLogRef = ref(database, '/bay 1/node 1/set_values_log');
+        const setValuesLogRef = ref(database, '/bay 1/set_value_log');
         showPopup("Are you sure you want to clear all set values history?", async () => {
             try {
                 await remove(setValuesLogRef);
