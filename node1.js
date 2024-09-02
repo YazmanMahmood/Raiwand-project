@@ -54,7 +54,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
   const initializeFirebase = () => {
     nodeRef = ref(database, 'bay 1/node 1');
-    commentsRef = ref(database, 'bay 1/Comments/node1');
+    commentsRef = ref(database, 'bay1/comments'); // Updated path
 
     setupFirebaseListeners();
   };
@@ -77,6 +77,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     setupListener(commentsRef, (snapshot) => {
       const comments = snapshot.val();
+      console.log('Fetched comments:', comments); // Debugging log
       displayComments(comments);
     }, 'Error fetching comments:');
   };
@@ -273,7 +274,7 @@ document.addEventListener('DOMContentLoaded', () => {
   elements.commentsContainer.addEventListener('click', (event) => {
     if (event.target.classList.contains('delete-comment')) {
       const commentKey = event.target.getAttribute('data-key');
-      const commentRef = ref(database, `bay 1/Comments/node1/${commentKey}`);
+      const commentRef = ref(database, `bay1/comments/${commentKey}`); // Updated path
       remove(commentRef)
         .then(() => showPopup('Comment deleted successfully'))
         .catch((error) => {
