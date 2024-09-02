@@ -153,6 +153,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     function showError(message) {
         elements.errorMessage.innerHTML = message;
+        elements.errorMessage.style.color = '#FF0000'; // Set error message color to red
         elements.errorBox.style.display = 'block';
     }
 
@@ -180,8 +181,8 @@ document.addEventListener('DOMContentLoaded', () => {
                     control[state].addEventListener('click', () => setFanState(fanId, state.charAt(0).toUpperCase() + state.slice(1)));
                 });
 
-                const fanRef = ref(database, `bay 1/controls/${fanId}`);
-                onValue(fanRef, (snapshot) => {
+                const fanRef = ref(database, `bay1/controls/${fanId}`);
+                onValue(fanRef, (snapshot) => { 
                     control.status = snapshot.val() || 'Off';
                     updateFanButton(control);
                     updateFanStatus();
@@ -193,7 +194,7 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     function setFanState(fanId, status) {
-        const fanRef = ref(database, `bay 1/controls/${fanId}`);
+        const fanRef = ref(database, `bay1/controls/${fanId}`);
         set(fanRef, status).catch((error) => handleError(error, `setting fan state for ${fanId}`));
     }
 
@@ -224,7 +225,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     control[state].addEventListener('click', () => setWaterState(valveId, state.charAt(0).toUpperCase() + state.slice(1)));
                 });
 
-                const valveRef = ref(database, `bay 1/controls/${valveId}`);
+                const valveRef = ref(database, `bay1/controls/${valveId}`);
                 onValue(valveRef, (snapshot) => {
                     control.status = snapshot.val() || 'Off';
                     updateWaterButton(control);
@@ -237,7 +238,7 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     function setWaterState(valveId, status) {
-        const valveRef = ref(database, `bay 1/controls/${valveId}`);
+        const valveRef = ref(database, `bay1/controls/${valveId}`);
         set(valveRef, status).catch((error) => handleError(error, `setting water state for ${valveId}`));
     }
 
@@ -267,7 +268,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 waterMeshControl[state].addEventListener('click', () => setWaterMeshState(state.charAt(0).toUpperCase() + state.slice(1)));
             });
 
-            const waterMeshRef = ref(database, `bay 1/controls/water_mesh`);
+            const waterMeshRef = ref(database, `bay1/controls/water_mesh`);
             onValue(waterMeshRef, (snapshot) => {
                 waterMeshControl.status = snapshot.val() || 'Off';
                 updateWaterMeshButton(waterMeshControl);
@@ -279,7 +280,7 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     function setWaterMeshState(status) {
-        const waterMeshRef = ref(database, `bay 1/controls/water_mesh`);
+        const waterMeshRef = ref(database, `bay1/controls/water_mesh`);
         set(waterMeshRef, status).catch((error) => handleError(error, 'setting water mesh state'));
     }
 
@@ -289,10 +290,11 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     function updateWaterMeshStatus() {
-        if (elements.waterMeshStatusElement) {
-            elements.waterMeshStatusElement.textContent = `Water Mesh: ${waterMeshControl.status}`;
-        }
+    if (elements.waterMeshStatusElement) {
+        elements.waterMeshStatusElement.textContent = `${waterMeshControl.status}`;
     }
+}
+
 
     // Set value controls
     function initializeSetValueControls() {
@@ -434,7 +436,7 @@ document.addEventListener('DOMContentLoaded', () => {
                             } else if (type === 'humidity' || type === 'soil_moisture') {
                                 displayValue += '%';
                             }
-                            popupContent.innerHTML += `<p><strong>${type.charAt(0).toUpperCase() + type.slice(1)}:</strong> ${displayValue}</p>`;
+                            popupContent.innerHTML += `<p><strong>${type.replace('_', ' ').charAt(0).toUpperCase() + type.replace('_', ' ').slice(1)}:</strong> ${displayValue}</p>`;
                         });
                     }
                 }, {
@@ -447,28 +449,36 @@ document.addEventListener('DOMContentLoaded', () => {
     // Error checking
     function checkForErrors(data) {
         const errorCodes = {
-            '001': { message: 'Power supply loss', color: '#FF9800' },
-            '002': { message: 'DHT sensor down', color: '#F44336' },
-            '003': { message: 'Battery low', color: '#FFC107' },
-            '004': { message: 'Connection lost', color: '#9C27B0' },
-            '005': { message: 'Sensor + low battery', color: '#E91E63' },
-            '006': { message: 'Sensor + power supply', color: '#673AB7' },
-            '007': { message: 'Low battery + power supply', color: '#3F51B5' },
-            '008': { message: 'Sensor + battery + power supply', color: '#2196F3' }
+            '001': { message: 'Power supply loss', color: '#FF0000' },
+            '002': { message: 'DHT sensor down', color: '#FF0000' },
+            '003': { message: 'Battery low', color: '#FF0000' },
+            '004': { message: 'Connection lost', color: '#FF0000' },
+            '005': { message: 'Sensor + low battery', color: '#FF0000' },
+            '006': { message: 'Sensor + power supply', color: '#FF0000' },
+            '007': { message: 'Low battery + power supply', color: '#FF0000' },
+            '008': { message: 'Sensor + battery + power supply', color: '#FF0000' }
         };
 
         const allErrorMessages = Object.entries(data).reduce((acc, [nodeName, nodeData]) => {
             if (nodeData && nodeName.startsWith('node ')) {
                 const nodeErrors = [];
-                if (nodeData.Power_1_status === 0 && nodeData.DHT_check === 0 && nodeData.Battery === 0) nodeErrors.push('008');
-                else if (nodeData.Battery === 0 && nodeData.Power_1_status === 0) nodeErrors.push('007');
-                else if (nodeData.DHT_check === 0 && nodeData.Power_1_status === 0) nodeErrors.push('006');
-                else if (nodeData.DHT_check === 0 && nodeData.Battery  === 0 && nodeData.Battery === 0) nodeErrors.push('005');
-                else if (nodeData.active === 0) nodeErrors.push('004');
-                else if (nodeData.Battery === 0) nodeErrors.push('003');
-                else if (nodeData.DHT_check === 0) nodeErrors.push('002');
-                else if (nodeData.Power_1_status === 0) nodeErrors.push('001');
-
+                if (nodeData.active === 1) {
+                    if (nodeData.Power_1_status === 1) {
+                        if (nodeData.DHT_check === 0) {
+                            nodeErrors.push('002');
+                        }
+                    } else {
+                        if (nodeData.Battery === 0) {
+                            nodeErrors.push('003');
+                        }
+                    }
+                } else {
+                    if (nodeData.Battery === 0) {
+                        nodeErrors.push('003');
+                    } else {
+                        nodeErrors.push('Node down');
+                    }
+                }
                 if (nodeErrors.length) {
                     const errorLinks = nodeErrors.map(code =>
                         `<a href="${nodeName.replace(' ', '')}.html" style="color: ${errorCodes[code].color};">Error: ${code}</a>`
