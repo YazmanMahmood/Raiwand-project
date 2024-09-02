@@ -1,5 +1,5 @@
 import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.12.3/firebase-app.js';
-import { getDatabase, ref, get, set, onValue } from 'https://www.gstatic.com/firebasejs/10.12.3/firebase-database.js';
+import { getDatabase, ref, get, onValue } from 'https://www.gstatic.com/firebasejs/10.12.3/firebase-database.js';
 import { firebaseConfig } from './firebase-config.js';
 
 // Initialize Firebase
@@ -28,14 +28,12 @@ document.addEventListener('DOMContentLoaded', () => {
         // Load historical logs
         fetchHistoricalData();
 
-        // Initialize the table and start periodic updates
-        setInterval(updateDataTable, 10000); // Update every 10 seconds
-
         // Synchronize local data when the system is back online
         window.addEventListener('online', synchronizeData);
         synchronizeData(); // Check for offline data on load
     }).catch((error) => {
         console.error("Failed to connect to the database:", error);
+        showError("Failed to connect to the database. Please check your internet connection and try again.");
     });
 
     // Sidebar functionality
@@ -134,95 +132,6 @@ function adjustTextSizes() {
     });
 }
 
-function updateDataTable() {
-    if (!navigator.onLine) {
-        const data = {
-            timestamp: new Date().toISOString().replace(/[:.]/g, '-'),
-            temperature: 0,
-            soil_moisture: 0,
-            humidity: 0,
-            battery: 0,
-            dht_check: 0,
-            power_1_status: 0,
-            rssi: 0,
-            active: 0
-        };
-        saveToLocalStorage(data);
-    } else {
-        const paths = [
-            '/bay 1/node 1/soil_moisture',
-            '/bay 1/node 1/humidity',
-            '/bay 1/node 1/temperature',
-            '/bay 1/node 1/Battery',
-            '/bay 1/node 1/DHT_check',
-            '/bay 1/node 1/Power_1_status',
-            '/bay 1/node 1/RSSI',
-            '/bay 1/node 1/active',
-            '/Time_stamp/Time'
-        ];
-
-        Promise.all(paths.map(path => get(ref(database, path))))
-            .then(snapshots => {
-                const [
-                    soil_moisture,
-                    humidity,
-                    temperature,
-                    battery,
-                    dht_check,
-                    power_1_status,
-                    rssi,
-                    active,
-                    timestamp
-                ] = snapshots.map(snapshot => snapshot.val() ?? 0);
-
-                const tableBody = document.getElementById('log-table-body');
-
-                const newRow = `
-                    <tr>
-                        <td>${timestamp}</td>
-                        <td>${temperature?.toFixed(1) ?? 'N/A'}</td>
-                        <td>${soil_moisture?.toFixed(1) ?? 'N/A'}</td>
-                        <td>${humidity?.toFixed(1) ?? 'N/A'}</td>
-                        <td>${battery ?? 'N/A'}</td>
-                        <td>${dht_check ?? 'N/A'}</td>
-                        <td>${power_1_status ?? 'N/A'}</td>
-                        <td>${rssi ?? 'N/A'}</td>
-                        <td>${active ?? 'N/A'}</td>
-                    </tr>
-                `;
-
-                tableBody.insertAdjacentHTML('afterbegin', newRow);
-
-                while (tableBody.children.length > 100) {
-                    tableBody.lastElementChild.remove();
-                }
-
-                const safeTimestamp = timestamp.replace(/[:.]/g, '-');
-
-                const logData = {
-                    Timestamp: timestamp,
-                    Humidity: humidity ?? 0,
-                    Soil_moisture: soil_moisture ?? 0,
-                    Temperature: temperature ?? 0,
-                    Battery: battery ?? 0,
-                    DHT_check: dht_check ?? 0,
-                    Power_1_status: power_1_status ?? 0,
-                    RSSI: rssi ?? 0,
-                    Active: active ?? 0
-                };
-
-                const logsRef = ref(database, `bay 1/logs/node1/${safeTimestamp}`);
-                return set(logsRef, logData);
-            })
-            .then(() => {
-                console.log('Data logged successfully');
-            })
-            .catch(error => {
-                console.error('Error fetching or logging data:', error);
-            });
-    }
-}
-
 function synchronizeData() {
     if (navigator.onLine) {
         let offlineData = JSON.parse(localStorage.getItem('offlineData')) || [];
@@ -235,6 +144,7 @@ function synchronizeData() {
                 })
                 .catch(error => {
                     console.error('Error synchronizing data:', error);
+                    showError("Failed to synchronize offline data. Please try again later.");
                 });
         });
         localStorage.removeItem('offlineData');
@@ -244,38 +154,64 @@ function synchronizeData() {
 function fetchHistoricalData() {
     const logsRef = ref(database, '/bay 1/logs/node1');
     onValue(logsRef, (snapshot) => {
-        const data = snapshot.val();
-        if (data) {
-            const tableBody = document.getElementById('log-table-body');
-            tableBody.innerHTML = '';
+        try {
+            const data = snapshot.val();
+            if (data) {
+                const tableBody = document.getElementById('log-table-body');
+                tableBody.innerHTML = '';
 
-            const sortedEntries = Object.entries(data).sort((a, b) => {
-                return new Date(b[0]) - new Date(a[0]);
-            });
+                const sortedEntries = Object.entries(data).sort((a, b) => {
+                    return new Date(b[0]) - new Date(a[0]);
+                }).reverse(); // Reverse the sorted entries
 
-            sortedEntries.forEach(([timestamp, logData]) => {
-                const row = document.createElement('tr');
-                row.innerHTML = `
-                    <td>${timestamp}</td>
-                    <td>${logData.Temperature?.toFixed(1) ?? 'N/A'}</td>
-                    <td>${logData.Soil_moisture?.toFixed(1) ?? 'N/A'}</td>
-                    <td>${logData.Humidity?.toFixed(1) ?? 'N/A'}</td>
-                    <td>${logData.Battery ?? 'N/A'}</td>
-                    <td>${logData.DHT_check ?? 'N/A'}</td>
-                    <td>${logData.Power_1_status ?? 'N/A'}</td>
-                    <td>${logData.RSSI ?? 'N/A'}</td>
-                    <td>${logData.Active ?? 'N/A'}</td>
-                `;
-                tableBody.appendChild(row);
-            });
+                sortedEntries.forEach(([timestamp, logData]) => {
+                    const row = document.createElement('tr');
+                    row.innerHTML = `
+                        <td>${timestamp}</td>
+                        <td>${formatValue(logData.Temperature)}</td>
+                        <td>${formatValue(logData.Soil_moisture)}</td>
+                        <td>${formatValue(logData.Humidity)}</td>
+                        <td>${formatValue(logData.Battery)}</td>
+                        <td>${formatValue(logData.DHT_check)}</td>
+                        <td>${formatValue(logData.Power_1_status)}</td>
+                        <td>${formatValue(logData.RSSI)}</td>
+                        <td>${formatValue(logData.Active)}</td>
+                    `;
+                    tableBody.appendChild(row);
+                });
+            }
+        } catch (error) {
+            console.error('Error processing historical data:', error);
+            showError("Failed to process historical data. Please refresh the page and try again.");
         }
+    }, (error) => {
+        console.error('Error fetching historical data:', error);
+        showError("Failed to fetch historical data. Please check your internet connection and try again.");
     });
 }
 
-function saveToLocalStorage(data) {
-    let offlineData = JSON.parse(localStorage.getItem('offlineData')) || [];
-    offlineData.push(data);
-    localStorage.setItem('offlineData', JSON.stringify(offlineData));
+function formatValue(value) {
+    if (typeof value === 'number') {
+        return value.toFixed(1);
+    } else if (value === undefined || value === null) {
+        return 'N/A';
+    } else {
+        return value.toString();
+    }
+}
+
+function showError(message) {
+    const errorBox = document.getElementById('error-box');
+    const errorMessage = document.getElementById('error-message');
+    if (errorBox && errorMessage) {
+        errorMessage.textContent = message;
+        errorBox.style.display = 'block';
+        setTimeout(() => {
+            errorBox.style.display = 'none';
+        }, 5000);
+    } else {
+        console.error('Error displaying message:', message);
+    }
 }
 
 function debounce(func, wait) {
