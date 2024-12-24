@@ -30,33 +30,6 @@ document.addEventListener('DOMContentLoaded', () => {
     };
 
     // Sidebar functionality
-    elements.hamburger.addEventListener('click', toggleSidebar);
-    document.addEventListener('click', closeSidebarOnOutsideClick);
-    elements.sidebar.addEventListener('click', (e) => e.stopPropagation());
-
-    // Dropdown functionality
-    elements.dropdownBtns.forEach(btn => btn.addEventListener('click', toggleDropdown));
-    document.addEventListener('click', closeDropdowns);
-
-    // Responsive design
-    const debouncedResize = debounce(() => {
-        adjustForMobile();
-        adjustSidePanelHeights();
-        adjustTextSizes();
-    }, 250);
-    window.addEventListener('resize', debouncedResize);
-
-    // Initialize controls and popups
-    const fanControls = initializeFanControls();
-    const waterControls = initializeWaterControls();
-    const waterMeshControl = initializeWaterMeshControls();
-    initializeSetValueControls();
-    initializeAllPopups();
-
-    // Firebase listeners
-    initializeFirebaseListeners();
-
-    // Utility functions
     function toggleSidebar(e) {
         e.stopPropagation();
         elements.hamburger.classList.toggle('active');
@@ -74,6 +47,7 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     }
 
+    // Dropdown functionality
     function toggleDropdown(e) {
         e.stopPropagation();
         this.classList.toggle('active');
@@ -90,6 +64,7 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     }
 
+    // Responsive design functions
     function adjustForMobile() {
         const isMobile = window.innerWidth <= 768;
         document.body.classList.toggle('mobile', isMobile);
@@ -116,13 +91,12 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
+    // Popup management
     function showPopup(message) {
         if (elements.popup && elements.popupMessage) {
             elements.popupMessage.textContent = message;
             elements.popup.style.display = 'block';
             requestAnimationFrame(() => elements.popup.classList.add('show'));
-
-            // Close popup when clicking outside of it
             window.addEventListener('click', closePopupOnOutsideClick);
         }
     }
@@ -133,27 +107,20 @@ document.addEventListener('DOMContentLoaded', () => {
             setTimeout(() => {
                 elements.popup.style.display = 'none';
             }, 300);
-
-            // Remove the event listener for outside click to prevent memory leaks
             window.removeEventListener('click', closePopupOnOutsideClick);
         }
     }
 
-    // Close the popup if clicking outside the popup content
     function closePopupOnOutsideClick(event) {
         if (elements.popup && !elements.popup.contains(event.target) && !elements.popupMessage.contains(event.target)) {
             hidePopup();
         }
     }
 
-    // Event listener for close button
-    if (elements.popupClose) {
-        elements.popupClose.addEventListener('click', hidePopup);
-    }
-
+    // Error handling
     function showError(message) {
         elements.errorMessage.innerHTML = message;
-        elements.errorMessage.style.color = '#FF0000'; // Set error message color to red
+        elements.errorMessage.style.color = '#FF0000';
         elements.errorBox.style.display = 'block';
     }
 
@@ -164,6 +131,73 @@ document.addEventListener('DOMContentLoaded', () => {
     function handleError(error, context) {
         console.error(`Error in ${context}:`, error);
         showPopup(`An error occurred while ${context}. Please try again or contact support.`);
+    }
+
+    // Value controls
+    function initializeSetValueControls() {
+        const setValueInputs = {
+            soilMoisture: document.getElementById('soil-moisture-input'),
+            temperature: document.getElementById('temperature-input'),
+            humidity: document.getElementById('humidity-input')
+        };
+    
+        const setValueButtons = {
+            soilMoisture: document.getElementById('set-soil-moisture-btn'),
+            temperature: document.getElementById('set-temperature-btn'),
+            humidity: document.getElementById('set-humidity-btn')
+        };
+    
+        Object.keys(setValueButtons).forEach(valueType => {
+            if (setValueButtons[valueType] && setValueInputs[valueType]) {
+                // Get correct path for each value type
+                const setValuePaths = {
+                    soilMoisture: 'bay 1/set values/soil_moisture',
+                    temperature: 'bay 1/set values/temperature',
+                    humidity: 'bay 1/set values/humidity'
+                };
+                
+                const path = setValuePaths[valueType];
+                const setValueRef = ref(database, path);
+                
+                // Initialize with current values
+                onValue(setValueRef, (snapshot) => {
+                    const value = snapshot.val();
+                    if (value !== null) {
+                        setValueInputs[valueType].value = Math.floor(value);
+                    }
+                });
+    
+                // Set up button click handlers
+                setValueButtons[valueType].addEventListener('click', () => {
+                    const value = Math.floor(parseFloat(setValueInputs[valueType].value));
+                    if (!isNaN(value) && value >= 0 && value <= 100) {
+                        setValueForBay(valueType, value);
+                    } else {
+                        showPopup(`Please enter a valid ${valueType} value between 0 and 100`);
+                    }
+                });
+            }
+        });
+    }
+    
+    function setValueForBay(valueType, value) {
+        const setValuePaths = {
+            soilMoisture: 'bay 1/set values/soil_moisture',
+            temperature: 'bay 1/set values/temperature',
+            humidity: 'bay 1/set values/humidity'
+        };
+
+        const path = setValuePaths[valueType];
+        const setValueRef = ref(database, path);
+
+        set(setValueRef, value)
+            .then(() => {
+                showPopup(`${valueType.charAt(0).toUpperCase() + valueType.slice(1)} set to ${value} for Bay 1`);
+            })
+            .catch((error) => {
+                handleError(error, `setting ${valueType}`);
+                showPopup(`Error setting ${valueType}. Please try again.`);
+            });
     }
 
     // Fan controls
@@ -198,9 +232,9 @@ document.addEventListener('DOMContentLoaded', () => {
         set(fanRef, status).catch((error) => handleError(error, `setting fan state for ${fanId}`));
     }
 
-    function updateFanButton(fanControl) {
+    function updateFanButton(control) {
         ['auto', 'on', 'off'].forEach(state => 
-            fanControl[state].classList.toggle('active', fanControl.status.toLowerCase() === state));
+            control[state].classList.toggle('active', control.status.toLowerCase() === state));
     }
 
     function updateFanStatus() {
@@ -265,10 +299,11 @@ document.addEventListener('DOMContentLoaded', () => {
 
         if (waterMeshControl.auto && waterMeshControl.on && waterMeshControl.off) {
             ['auto', 'on', 'off'].forEach(state => {
-                waterMeshControl[state].addEventListener('click', () => setWaterMeshState(state.charAt(0).toUpperCase() + state.slice(1)));
+                waterMeshControl[state].addEventListener('click', () => 
+                    setWaterMeshState(state.charAt(0).toUpperCase() + state.slice(1)));
             });
 
-            const waterMeshRef = ref(database, `bay1/controls/water_mesh`);
+            const waterMeshRef = ref(database, 'bay1/controls/water_mesh');
             onValue(waterMeshRef, (snapshot) => {
                 waterMeshControl.status = snapshot.val() || 'Off';
                 updateWaterMeshButton(waterMeshControl);
@@ -280,7 +315,7 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     function setWaterMeshState(status) {
-        const waterMeshRef = ref(database, `bay1/controls/water_mesh`);
+        const waterMeshRef = ref(database, 'bay1/controls/water_mesh');
         set(waterMeshRef, status).catch((error) => handleError(error, 'setting water mesh state'));
     }
 
@@ -290,75 +325,12 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     function updateWaterMeshStatus() {
-    if (elements.waterMeshStatusElement) {
-        elements.waterMeshStatusElement.textContent = `${waterMeshControl.status}`;
-    }
-}
-
-
-    // Set value controls
-    function initializeSetValueControls() {
-        const setValueInputs = {
-            soilMoisture: document.getElementById('soil-moisture-input'),
-            temperature: document.getElementById('temperature-input'),
-            humidity: document.getElementById('humidity-input')
-        };
-    
-        const setValueButtons = {
-            soilMoisture: document.getElementById('set-soil-moisture-btn'),
-            temperature: document.getElementById('set-temperature-btn'),
-            humidity: document.getElementById('set-humidity-btn')
-        };
-    
-        Object.keys(setValueButtons).forEach(valueType => {
-            if (setValueButtons[valueType] && setValueInputs[valueType]) {
-                // Updated path for soil moisture and other values
-                const path = valueType === 'soilMoisture' ? 
-                    'bay 1/set values/soil_moisture' : 
-                    `set values/${valueType.toLowerCase()}`;
-                
-                const setValueRef = ref(database, path);
-                onValue(setValueRef, (snapshot) => {
-                    const value = snapshot.val();
-                    if (value !== null) {
-                        setValueInputs[valueType].value = Math.floor(value);
-                    }
-                });
-    
-                setValueButtons[valueType].addEventListener('click', () => {
-                    const value = Math.floor(parseFloat(setValueInputs[valueType].value));
-                    if (!isNaN(value) && value >= 0 && value <= 100) {
-                        setValueForBay(valueType, value);
-                    } else {
-                        showPopup(`Please enter a valid ${valueType} value between 0 and 100`);
-                    }
-                });
-            }
-        });
-    }
-    
-    ffunction setValueForBay(valueType, value) {
-        // Updated path mapping for set values
-        const setValuePaths = {
-            soilMoisture: 'bay 1/set values/soil_moisture',
-            temperature: 'set values/temperature',
-            humidity: 'set values/humidity'
-        };
-
-        const path = setValuePaths[valueType];
-        const setValueRef = ref(database, path);
-
-        set(setValueRef, value)
-            .then(() => {
-                showPopup(`${valueType.charAt(0).toUpperCase() + valueType.slice(1)} set to ${value} for Bay 1`);
-            })
-            .catch((error) => {
-                handleError(error, `setting ${valueType}`);
-                showPopup(`Error setting ${valueType}. Please try again.`);
-            });
+        if (elements.waterMeshStatusElement) {
+            elements.waterMeshStatusElement.textContent = waterMeshControl.status;
+        }
     }
 
-    // Node popups
+    // Node management
     function initializeAllPopups() {
         for (let i = 1; i <= 6; i++) {
             handleNodeInteraction(`node${i}`);
@@ -371,6 +343,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
         if (node && popup) {
             let hideTimeout;
+            
             node.addEventListener('mouseenter', () => {
                 if (!isMobileView()) {
                     clearTimeout(hideTimeout);
@@ -401,8 +374,6 @@ document.addEventListener('DOMContentLoaded', () => {
                 event.preventDefault();
                 window.location.href = `${nodeId}.html`;
             });
-        } else {
-            console.error(`Node or popup not found for ${nodeId}`);
         }
     }
 
@@ -446,7 +417,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     if (data) {
                         ['temperature', 'humidity', 'soil_moisture'].forEach(type => {
                             const value = data[type];
-                            let displayValue = value !== null && !isNaN(value) ? Math.floor(value) : 'N/A'; // Remove decimal points
+                            let displayValue = value !== null && !isNaN(value) ? Math.floor(value) : 'N/A';
                             if (type === 'temperature') {
                                 displayValue += '°C';
                             } else if (type === 'humidity' || type === 'soil_moisture') {
@@ -497,7 +468,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 }
                 if (nodeErrors.length) {
                     const errorLinks = nodeErrors.map(code =>
-                        `<a href="${nodeName.replace(' ', '')}.html" style="color: ${errorCodes[code].color};">Error: ${code}</a>`
+                        `<a href="${nodeName.replace(' ', '')}.html" style="color: ${errorCodes[code] ? errorCodes[code].color : '#FF0000'};">${code ? 'Error: ' + code : 'Error'}</a>`
                     );
                     acc.push(`<strong>${nodeName.charAt(0).toUpperCase() + nodeName.slice(1)}</strong>: ${errorLinks.join(', ')}`);
                 }
@@ -517,7 +488,7 @@ document.addEventListener('DOMContentLoaded', () => {
             const nodeData = data[`node ${i}`];
             if (nodeData) {
                 ['temperature', 'humidity', 'soil_moisture'].forEach(type => {
-                    const value = Math.floor(parseFloat(nodeData[type])); // Remove decimal points
+                    const value = Math.floor(parseFloat(nodeData[type]));
                     if (!isNaN(value)) {
                         total[type] += value;
                         count[type]++;
@@ -528,7 +499,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
         ['temperature', 'humidity', 'soil_moisture'].forEach(type => {
             if (count[type] > 0) {
-                const avgValue = Math.floor(total[type] / count[type]); // Remove decimal points
+                const avgValue = Math.floor(total[type] / count[type]);
                 const avgElement = document.getElementById(`avg-${type.replace('_', '-')}`);
                 if (avgElement) {
                     avgElement.textContent = `${avgValue}${type === 'temperature' ? '°C' : '%'}`;
@@ -552,7 +523,7 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
-    // Firebase listeners
+    // Initialize Firebase listeners
     function initializeFirebaseListeners() {
         const bayRef = ref(database, 'bay 1');
         onValue(bayRef, (snapshot) => {
@@ -564,7 +535,6 @@ document.addEventListener('DOMContentLoaded', () => {
             }
         });
 
-        // Initialize the water mesh controls
         initializeWaterMeshControls();
     }
 
@@ -581,11 +551,31 @@ document.addEventListener('DOMContentLoaded', () => {
         };
     }
 
+    // Event listeners
+    elements.hamburger.addEventListener('click', toggleSidebar);
+    document.addEventListener('click', closeSidebarOnOutsideClick);
+    elements.sidebar.addEventListener('click', (e) => e.stopPropagation());
+    elements.dropdownBtns.forEach(btn => btn.addEventListener('click', toggleDropdown));
+    document.addEventListener('click', closeDropdowns);
+
+    // Window resize handling
+    const debouncedResize = debounce(() => {
+        adjustForMobile();
+        adjustSidePanelHeights();
+        adjustTextSizes();
+    }, 250);
+    window.addEventListener('resize', debouncedResize);
+
     // Initialize application
     try {
         adjustSidePanelHeights();
         adjustForMobile();
         adjustTextSizes();
+        initializeSetValueControls();
+        initializeFanControls();
+        initializeWaterControls();
+        initializeAllPopups();
+        initializeFirebaseListeners();
 
         if (elements.settingsLink) {
             elements.settingsLink.addEventListener('click', (event) => {
@@ -617,3 +607,4 @@ document.addEventListener('DOMContentLoaded', () => {
         handleError(error, 'initializing the application');
     }
 });
+
