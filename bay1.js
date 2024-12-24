@@ -312,16 +312,19 @@ document.addEventListener('DOMContentLoaded', () => {
     
         Object.keys(setValueButtons).forEach(valueType => {
             if (setValueButtons[valueType] && setValueInputs[valueType]) {
-                // Fetch initial values and set input fields
-                const setValueRef = ref(database, `set values/${valueType.toLowerCase()}`);
+                // Updated path for soil moisture and other values
+                const path = valueType === 'soilMoisture' ? 
+                    'bay 1/set values/soil_moisture' : 
+                    `set values/${valueType.toLowerCase()}`;
+                
+                const setValueRef = ref(database, path);
                 onValue(setValueRef, (snapshot) => {
                     const value = snapshot.val();
                     if (value !== null) {
-                        setValueInputs[valueType].value = Math.floor(value); // Remove decimal points
+                        setValueInputs[valueType].value = Math.floor(value);
                     }
                 });
     
-                // Set new values to Firebase when button is clicked
                 setValueButtons[valueType].addEventListener('click', () => {
                     const value = Math.floor(parseFloat(setValueInputs[valueType].value));
                     if (!isNaN(value) && value >= 0 && value <= 100) {
@@ -334,14 +337,15 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
     
-    function setValueForBay(valueType, value) {
+    ffunction setValueForBay(valueType, value) {
+        // Updated path mapping for set values
         const setValuePaths = {
-            soilMoisture: 'soil_moisture',
-            temperature: 'temperature',
-            humidity: 'humidity'
+            soilMoisture: 'bay 1/set values/soil_moisture',
+            temperature: 'set values/temperature',
+            humidity: 'set values/humidity'
         };
 
-        const path = `set values/${setValuePaths[valueType]}`;
+        const path = setValuePaths[valueType];
         const setValueRef = ref(database, path);
 
         set(setValueRef, value)
