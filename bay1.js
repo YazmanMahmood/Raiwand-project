@@ -29,6 +29,10 @@ document.addEventListener('DOMContentLoaded', () => {
         hamburger: document.getElementById('hamburger-btn'),
     };
 
+    let fanControls = [];
+    let waterControls = [];
+    let waterMeshControl = {};
+
     // Sidebar functionality
     function toggleSidebar(e) {
         e.stopPropagation();
@@ -202,7 +206,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Fan controls
     function initializeFanControls() {
-        return ['fan1', 'fan2', 'fan3'].map(fanId => {
+        fanControls = ['fan1', 'fan2', 'fan3'].map(fanId => {
             const control = {
                 auto: document.getElementById(`${fanId}-auto`),
                 on: document.getElementById(`${fanId}-on`),
@@ -246,7 +250,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Water controls
     function initializeWaterControls() {
-        return ['water1', 'water2', 'water3'].map(valveId => {
+        waterControls = ['water1', 'water2', 'water3'].map(valveId => {
             const control = {
                 auto: document.getElementById(`${valveId}-auto`),
                 on: document.getElementById(`${valveId}-on`),
@@ -290,7 +294,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Water Mesh controls
     function initializeWaterMeshControls() {
-        const waterMeshControl = {
+        waterMeshControl = {
             auto: document.getElementById('water-mesh-auto'),
             on: document.getElementById('water-mesh-on'),
             off: document.getElementById('water-mesh-off'),
@@ -607,4 +611,3 @@ document.addEventListener('DOMContentLoaded', () => {
         handleError(error, 'initializing the application');
     }
 });
-
